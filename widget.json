@@ -14,7 +14,8 @@
       "fliplet-datasources"
     ],
     "assets": [
-      "js/interface.js"
+      "js/interface.js",
+      "css/interface.css"
     ]
   },
   "build": {

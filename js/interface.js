@@ -1,29 +1,14 @@
-var data = Fliplet.Widget.getData();
+var data = Fliplet.Widget.getData() || {};
+var widgetId = Fliplet.Widget.getDefaultId();
 
-$('form').submit(function (event) {
-  event.preventDefault();
 
-  Fliplet.Widget.save({
-    dataSourceId: $('select').val()
-  }).then(function () {
-    Fliplet.Widget.complete();
-  });
-});
+data.dataSources = [{id: 1, name: 'A data source', columns: ['city', 'age']}];
+var dataDirectoryForm = new DataDirectoryForm(data);
 
 // Fired from Fliplet Studio when the external save button is clicked
 Fliplet.Widget.onSaveRequest(function () {
-  $('form').submit();
-});
-
-Fliplet.DataSources.get().then(function (datasources) {
-  console.log('datasources', datasources)
-
-  datasources.forEach(function (d) {
-    $('select').append('<option value="' + d.id + '">' + d.name + '</option>')
+  dataDirectoryForm.saveDataDirectoryForm_();
+  Fliplet.Widget.save(dataDirectoryForm.directoryConfig).then(function () {
+    Fliplet.Widget.complete();
   });
-
-  if (data) {
-    $('select').val(data.dataSourceId);
-  }
-  //todo: append to select
-})
+});

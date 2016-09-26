@@ -207,7 +207,7 @@
 </div>
 
 <!-- Handlebars templates -->
-<template id="data-source-options-template"><option>&mdash; Select a table &mdash;</option>{{#each this}}<option value="{{id}}">{{name}}</option>{{/each}}</template>
+<template id="data-source-options-template"><option>&mdash; Select a table &mdash;</option>\{{#each this}}<option value="\{{id}}">\{{name}}</option>\{{/each}}</template>
 <template id="data-browse-configurations-template">
 	<table class="table table-hover">
 		<thead>
@@ -219,14 +219,14 @@
 			</tr>
 		</thead>
 		<tbody>
-			{{#each this}}
+			\{{#each this}}
 			<tr>
-				<td>{{this}}</td>
-				<td>{{{filterCheckbox this}}}</td>
-				<td>{{{searchCheckbox this}}}</td>
-				<td>{{{typeSelector this}}}</td>
+				<td>\{{this}}</td>
+				<td>\{{{filterCheckbox this}}}</td>
+				<td>\{{{searchCheckbox this}}}</td>
+				<td>\{{{typeSelector this}}}</td>
 			</tr>
-			{{/each}}
+			\{{/each}}
 		</tbody>
 	</table>
 </template>
@@ -243,24 +243,24 @@
 </template>
 <template id="data-alaphabetical-field-template">
 	<select class="hidden-select form-control" name="alphabetical_field" id="data-alphabetical-fields-select">
-		{{#each this}}
-		<option value="{{this}}">{{this}}</option>
-		{{/each}}
+		\{{#each this}}
+		<option value="\{{this}}">\{{this}}</option>
+		\{{/each}}
 	</select>
 </template>
 <template id="data-tags-field-template">
 	<select class="hidden-select form-control" name="tags_field" id="data-tags-fields-select">
-		{{#each this}}
-		<option value="{{this}}">{{this}}</option>
-		{{/each}}
+		\{{#each this}}
+		<option value="\{{this}}">\{{this}}</option>
+		\{{/each}}
 	</select>
 </template>
 <template id="data-thumbnail-field-template">
 	<select class="hidden-select form-control" name="thumbnail_field" id="data-thumbnail-fields-select">
 		<option value="">Choose a field (optional)</option>
-		{{#each this}}
-		<option value="{{this}}">{{this}}</option>
-		{{/each}}
+		\{{#each this}}
+		<option value="\{{this}}">\{{this}}</option>
+		\{{/each}}
 	</select>
 </template>
 <!-- End of Handlebars templates -->

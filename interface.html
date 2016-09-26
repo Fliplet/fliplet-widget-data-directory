@@ -10,7 +10,7 @@
     <p>Select a data source for your directory.</p>
   </div>
 
-  <div class="form-group">
+  <div class="form-group clearfix">
     <div class="col-sm-4 control-label">
       <label for="data-sources">Which table do you want to use for your directory?</label>
     </div>
@@ -28,7 +28,7 @@
     <p>Your data will be displayed in a list. You can set up how it's displayed and configure how users can search/filter your data.</p>
   </div>
 
-  <div class="form-group">
+  <div class="form-group clearfix">
     <div class="col-sm-4 control-label">
       <label for="directory-browse-label">How do you want your data displayed in the main list?</label>
     </div>
@@ -38,7 +38,7 @@
     </div>
   </div>
 
-  <div class="form-group">
+  <div class="form-group clearfix">
     <div class="col-sm-4 control-label">
       <label for="show_subtitle">Show a subtitle in the main list?</label>
     </div>
@@ -50,7 +50,7 @@
         </label>
       </div>
       <div class="show-subtitle">
-        <div class="form-group">
+        <div class="form-group clearfix">
           <div class="col-xs-12">
             <label for="directory-browse-subtitle">How do you want your subtitle displayed in the main list?</label>
           </div>
@@ -63,7 +63,7 @@
     </div>
   </div>
 
-  <div class="form-group">
+  <div class="form-group clearfix">
     <div class="col-sm-4 control-label">
       <label for="show_tags">Show tags in the main list?</label>
     </div>
@@ -75,7 +75,7 @@
         </label>
       </div>
       <div class="show-tags">
-        <div class="form-group">
+        <div class="form-group clearfix">
           <div class="col-xs-12">
             <label for="directory-browse-tags-select">In which field can the tags be found?</label>
           </div>
@@ -92,7 +92,7 @@
     </div>
   </div>
 
-  <div class="form-group">
+  <div class="form-group clearfix">
     <div class="col-sm-4 control-label">
       <label>In what order do you want do display your data?</label>
     </div>
@@ -119,7 +119,7 @@
     </div>
   </div>
 
-  <div class="form-group">
+  <div class="form-group clearfix">
     <div class="col-sm-4 control-label">
       <label>How do you want to use the information in each field?</label>
     </div>
@@ -157,7 +157,7 @@
             <td>
               <label for="data-tags-fields-select" class="select-proxy-display">
                 <span class="icon fa fa-chevron-down"></span>
-                <span class="select-value-proxy">Hugo Miguel Maia Carneiro</span>
+                <span class="select-value-proxy">Display as text</span>
                 <select data-field="Name" data-type="type" class="hidden-select form-control">
                   <option value="text" selected="selected">Display as text</option>
                   <option value="tel">Tap to dial the number</option>
@@ -182,7 +182,7 @@
     <p>Users will see your data in detail in a side panel or overlay depending on the device they are on. Configure below what they will see in the detailed view.</p>
   </div>
 
-  <div class="form-group">
+  <div class="form-group clearfix">
     <div class="col-sm-4 control-label">
       <label for="data-thumbnail-fields-select">Select a field to use as the thumbnail URL</label>
     </div>
@@ -195,7 +195,7 @@
       <p class="help-block">Make sure the field is pointing at an image URL.</p>
     </div>
   </div>
-  <div class="form-group">
+  <div class="form-group clearfix">
     <div class="col-sm-4 control-label">
       <label for="data-detail-fields">Which field(s) do you want them to see?</label>
     </div>
@@ -231,15 +231,19 @@
 	</table>
 </template>
 <template id="data-type-selector-template">
-	<select class="hidden-select form-control">
-		<option value="text">Display as text</option>
-		<option value="tel">Tap to dial the number</option>
-		<option value="email">Tap to send an email</option>
-		<option value="url">Tap to visit webpage</option>
-		<!-- <<option value="address">Address</option> -->
-		<option value="image">Display as an image</option>
-		<!-- <option value="datetime">Date/time</option> -->
-	</select>
+  <label class="select-proxy-display">
+    <span class="icon fa fa-chevron-down"></span>
+    <span class="select-value-proxy">Display as text</span>
+  	<select class="hidden-select form-control">
+  		<option value="text">Display as text</option>
+  		<option value="tel">Tap to dial the number</option>
+  		<option value="email">Tap to send an email</option>
+  		<option value="url">Tap to visit webpage</option>
+  		<!-- <<option value="address">Address</option> -->
+  		<option value="image">Display as an image</option>
+  		<!-- <option value="datetime">Date/time</option> -->
+  	</select>
+  </label>
 </template>
 <template id="data-alaphabetical-field-template">
 	<select class="hidden-select form-control" name="alphabetical_field" id="data-alphabetical-fields-select">

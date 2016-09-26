@@ -93,9 +93,10 @@ var DataDirectoryForm = (function() {
     parseSelectedTable : function(tableID, autoConfigure){
       if (tableID !== '') {
         for (var i = 0, l = _this.tables.length; i < l; i++) {
-          if ( _this.tables[i].hasOwnProperty('id') && _this.tables[i].id === tableID ) {
+          if ( _this.tables[i].hasOwnProperty('id') && _this.tables[i].id == tableID ) {
             _this.source = _this.tables[i].id;
             _this.columns = _this.tables[i].columns;
+            _this.rows = _this.tables[i].rows;
 
             if (autoConfigure) {
               _this.autoConfigureSearch();
@@ -114,7 +115,8 @@ var DataDirectoryForm = (function() {
       var dataSourceTemplate = Handlebars.compile( $('#data-source-options-template').html() );
       $('#data-sources').html( dataSourceTemplate(_this.tables) );
 
-      var dataAlphabeticalFieldTemplate = Handlebars.compile( $('#data-alaphabetical-field-template').html() );
+      var dataAlphabeticalFieldTemplate = Handlebars.compile($('#data-alaphabetical-field-template').html());
+
       $('#data-alphabetical-fields').html( dataAlphabeticalFieldTemplate(_this.columns) );
 
       var dataTagsFieldTemplate = Handlebars.compile( $('#data-tags-field-template').html() );
@@ -268,6 +270,9 @@ var DataDirectoryForm = (function() {
 
     dataSourceChanged_ : function(e){
       if ( _this.source === "" || confirm("Are you sure you want to change the data source? This will reset your previous configuration for the directory.") ) {
+        var selectedText = $(e.target).find('option:selected').text();
+        $(e.target).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
+
         _this.parseSelectedTable( $(e.target).val(), true );
         _this.loadDataDirectoryForm();
         // $('a[href="#data-browse"]').tab('show');

@@ -66,9 +66,8 @@ DataDirectory.prototype.initialiseHandlebars = function(){
     var firstCharacterOfTitle = entryTitleTemplate( this )[0].toUpperCase();
     if ( "1234567890".indexOf(firstCharacterOfTitle) > -1 ) firstCharacterOfTitle = '#';
     if ( firstCharacterOfTitle !== lastAlphabetIndex ) {
-      var alaphabetDividerTemplate = Handlebars.compile($('#directory-list-divider-template').html().replace(/&gt;/g, function () { return '>' }));
       lastAlphabetIndex = firstCharacterOfTitle;
-      return alaphabetDividerTemplate(firstCharacterOfTitle);
+      return Handlebars.templates.directoryListDivider(firstCharacterOfTitle);
     }
   });
 
@@ -172,8 +171,6 @@ DataDirectory.prototype.verifyConfig = function(){
 
 DataDirectory.prototype.renderEntries = function(){
   var _this = this;
-
-  var directoryListEntryTemplate = Handlebars.compile( $('#directory-list-entries-template').html().replace(/&gt;/g, function () { return '>' }) );
   var listData = [];
 
   if ( !this.config.is_alphabetical ) {
@@ -191,7 +188,7 @@ DataDirectory.prototype.renderEntries = function(){
   }
   this.data = listData;
 
-  var directoryListHTML = directoryListEntryTemplate({
+  var directoryListHTML = Handlebars.templates.directoryListEntries({
     show_subtitle: this.config.show_subtitle ? this.config.show_subtitle : false,
     show_tags: this.config.show_tags ? this.config.show_tags : false,
     entries: this.data
@@ -254,8 +251,7 @@ DataDirectory.prototype.renderFilters = function(){
 
   if ( this.config.filter_fields.length ) {
     // 1 or more filter fields configured
-    var directoryFilterTemplate = Handlebars.compile( $('#directory-filter-template').html().replace(/&gt;/g, function () { return '>' }) );
-    var directoryFilterHTML = directoryFilterTemplate( this.config.filter_fields );
+    var directoryFilterHTML = Handlebars.templates.directoryFilter(this.config.filter_fields);
     $('#filter-list').html(directoryFilterHTML);
   } else {
     // No filter field configured
@@ -293,7 +289,7 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
   data = { filter : filter.trim(), values : values, dataType: (tags_field === filter) ? 'filter-value-tag' : 'filter-value'};
 
   if ( inOverlay ) {
-    var directoryFilterOverlayTemplate = Handlebars.compile( $('#directory-filter-overlay-template').html().replace(/&gt;/g, function () { return '>' }) );
+    var directoryFilterOverlayTemplate = Handlebars.compile( $('#directory-filter-overlay-template').html() );
     var overlayContent = directoryFilterOverlayTemplate( data );
     this.filterOverlay = new Overlay(overlayContent,{
       title: 'Filter by ' + filter,
@@ -306,7 +302,7 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
       }
     });
   } else {
-    var directoryFilterValueTemplate = Handlebars.compile( $('#directory-filter-value-template').html().replace(/&gt;/g, function () { return '>' }) );
+    var directoryFilterValueTemplate = Handlebars.compile( $('#directory-filter-value-template').html() );
     var directoryFilterValuesHTML = directoryFilterValueTemplate( data );
     $('#filter-value-list').html(directoryFilterValuesHTML);
     $('#filter-selected').html(filter);
@@ -503,9 +499,8 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
       detailData.fields.push( fieldObj );
     }
   }
-
-  var detailTemplate = Handlebars.compile( $('#directory-details-template').html().replace(/&gt;/g, function () { return '>' }) );
-  var detailHTML = detailTemplate(detailData);
+  
+  var detailHTML = Handlebars.templates.directoryDetailsTemplate(detailData);
 
   if ( type === 'search-result-entry' ) {
     this.switchMode('search-result-entry');
@@ -653,7 +648,7 @@ DataDirectory.prototype.getEntryField = function( entryIndex, fieldIndex, type )
   }
 
   if ( (typeof value === 'object' && value.value.length) || (typeof value === 'string' && value.length) ) {
-    var valueTemplate = Handlebars.compile( $('#directory-field-type-' + fieldType + '-template').html().replace(/&gt;/g, function () { return '>' }) );
+    var valueTemplate = Handlebars.compile( $('#directory-field-type-' + fieldType + '-template').html() );
     var valueHTML = valueTemplate(value);
   } else {
     var valueHTML = '';
@@ -693,7 +688,6 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
   };
 
   this.switchMode('search-result');
-  var directorySearchResultTemplate = Handlebars.compile( $('#directory-search-result-template').html().replace(/&gt;/g, function () { return '>' }) );
   var data = {
     show_subtitle: this.config.show_subtitle ? this.config.show_subtitle : false,
     show_tags: this.config.show_tags ? this.config.show_tags : false,
@@ -740,10 +734,8 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
   }
 
   this.searchResultData = data.result;
-
-  var directorySearchResultHTML = directorySearchResultTemplate(data);
+  var directorySearchResultHTML = Handlebars.templates.directorySearchResult(data);
   $('#search-result').html(directorySearchResultHTML).scrollTop(0);
-
   if (typeof callback === 'function') setTimeout(callback, 0);
 };
 

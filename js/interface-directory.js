@@ -112,18 +112,10 @@ var DataDirectoryForm = (function() {
     },
 
     loadDataDirectoryForm : function(){
-      var dataSourceTemplate = Handlebars.compile( $('#data-source-options-template').html() );
-      $('#data-sources').html( dataSourceTemplate(_this.tables) );
-
-      var dataAlphabeticalFieldTemplate = Handlebars.compile($('#data-alaphabetical-field-template').html());
-
-      $('#data-alphabetical-fields').html( dataAlphabeticalFieldTemplate(_this.columns) );
-
-      var dataTagsFieldTemplate = Handlebars.compile( $('#data-tags-field-template').html() );
-      $('#data-tags-fields').html( dataTagsFieldTemplate(_this.columns) );
-
-      var dataThumbnailFieldTemplate = Handlebars.compile( $('#data-thumbnail-field-template').html() );
-      $('#data-thumbnail-fields').html( dataThumbnailFieldTemplate(_this.columns) );
+      $('#data-sources').html(Handlebars.templates.dataSourceOptions(_this.tables));
+      $('#data-alphabetical-fields').html(Handlebars.templates.dataSourceOptions(_this.columns));
+      $('#data-tags-fields').html(Handlebars.templates.dataTagsField(_this.columns));
+      $('#data-thumbnail-fields').html(Handlebars.templates.dataThumbnailField(_this.columns));
 
       if (!_this.tables.length) {
         $('#no-data-source-prompt').removeClass('hidden');
@@ -163,9 +155,8 @@ var DataDirectoryForm = (function() {
       $('#data-sources option[value=""]').remove();
       $('a[href="#data-source"][data-toggle="tab"]').html('Change data source');
       $('.nav.nav-stacked li.disabled').removeClass('disabled');
-
-      var browseConfigurationTemplate = Handlebars.compile( $('#data-browse-configurations-template').html() );
-      $('#data-browse-configurations').html( browseConfigurationTemplate(_this.columns) );
+      
+      $('#data-browse-configurations').html(Handlebars.templates.dataBrowseConfigurations(_this.columns));
 
       $('#directory-browse-label').val( _this.directoryConfig.label_template );
 

@@ -1,0 +1,20 @@
+<table class="table table-hover">
+<thead>
+<tr>
+    <th>Fields</th>
+    <th class="text-center">Use as filter</th>
+    <th class="text-center">Use for search</th>
+    <th>Display option</th>
+</tr>
+</thead>
+<tbody>
+{{#each this}}
+    <tr>
+        <td>{{this}}</td>
+        <td>{{{filterCheckbox this}}}</td>
+        <td>{{{searchCheckbox this}}}</td>
+        <td>{{{typeSelector this}}}</td>
+    </tr>
+{{/each}}
+</tbody>
+</table>

@@ -360,7 +360,7 @@
 .directory-detail-title span.thumbnail {
     display: none;
 }
-directory-detail-title.has-thumbnail span.thumbnail {
+.directory-detail-title.has-thumbnail span.thumbnail {
     display: block;
     width: 90px;
     height: 90px;

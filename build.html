@@ -43,101 +43,101 @@
 </div>
 
 <template id="directory-filter-template">
-  <ul>\{{#each this}}
-    <li class="linked data-linked" data-type="filter" data-filter="\{{this}}">
+  <ul>{{#each this}}
+    <li class="linked data-linked" data-type="filter" data-filter="{{this}}">
       <span class="icon icon-nav-arrow-right"></span>
       <div class="list-desc">
-        <p class="list-title">\{{this}}</p>
+        <p class="list-title">{{this}}</p>
       </div>
       <span class="buttonControl"></span>
     </li>
-  \{{/each}}</ul>
+  {{/each}}</ul>
 </template>
 
 <template id="directory-filter-value-template">
-  <ul>\{{#each values}}
-    <li class="linked data-linked" data-type="\{{../dataType}}" data-filter="\{{../filter}}" data-value="\{{this}}">
+  <ul>{{#each values}}
+    <li class="linked data-linked" data-type="{{../dataType}}" data-filter="{{../filter}}" data-value="{{this}}">
       <span class="icon icon-nav-arrow-right"></span>
       <div class="list-desc">
-        <p class="list-title">\{{this}}</p>
+        <p class="list-title">{{this}}</p>
       </div>
       <span class="buttonControl"></span>
     </li>
-  \{{/each}}</ul>
+  {{/each}}</ul>
 </template>
 
 <template id="directory-filter-overlay-template">
   <div class="list-default">
-    \{{> directory_filter_values}}
+    {{> directory_filter_values}}
   </div>
 </template>
 
 <template id="directory-list-divider-template">
-  <li class="divider" data-letter="\{{this}}">\{{this}}</li>
+  <li class="divider" data-letter="{{this}}">{{this}}</li>
 </template>
 
 <template id="directory-list-entries-template">
-  <ul>\{{#each entries}}
-    \{{{alphabet_divider}}}
-    <li class="linked data-linked" data-type="entry" data-index="\{{@index}}">
+  <ul>{{#each entries}}
+    {{{alphabet_divider}}}
+    <li class="linked data-linked" data-type="entry" data-index="{{@index}}">
       <span class="icon icon-nav-arrow-right"></span>
       <div class="list-image"></div>
       <div class="list-desc">
-        <p class="list-title">\{{> entry_title}}</p>
+        <p class="list-title">{{> entry_title}}</p>
         {{#if ../show_subtitle}}
-        <p class="list-title">\{{> entry_subtitle}}</p>
+        <p class="list-title">{{> entry_subtitle}}</p>
         {{/if}}
       </div>
-      \{{#if ../show_tags}}
+      {{#if ../show_tags}}
       <div class="list-tags">
-        \{{entry_tags this}}
+        {{entry_tags this}}
       </div>
-      \{{/if}}
+      {{/if}}
       <span class="buttonControl"></span>
     </li>
-  \{{/each}}</ul>
+  {{/each}}</ul>
 </template>
 
 <template id="directory-search-result-template">
   <div id="search-result-header-container">
-    <div id="search-result-header" data-type="\{{type}}">
-      <a href="#" class="btn btn-link pull-right" id="search-result-clear">\{{search_result_clear this}}</a>
-      <h5>\{{{search_result_header this}}}</h5>
+    <div id="search-result-header" data-type="{{type}}">
+      <a href="#" class="btn btn-link pull-right" id="search-result-clear">{{search_result_clear this}}</a>
+      <h5>{{{search_result_header this}}}</h5>
     </div>
   </div>
-  <ul>\{{#each result}}
-    <li class="linked data-linked" data-type="search-result-entry" data-index="\{{@index}}">
+  <ul>{{#each result}}
+    <li class="linked data-linked" data-type="search-result-entry" data-index="{{@index}}">
       <span class="icon icon-nav-arrow-right"></span>
       <div class="list-image"></div>
       <div class="list-desc">
-        <p class="list-title">\{{> entry_title}}</p>
-        \{{#if ../show_subtitle}}
-        <p class="list-title">\{{> entry_subtitle}}</p>
-        \{{/if}}
+        <p class="list-title">{{> entry_title}}</p>
+        {{#if ../show_subtitle}}
+        <p class="list-title">{{> entry_subtitle}}</p>
+        {{/if}}
       </div>
-      \{{#if ../show_tags}}
+      {{#if ../show_tags}}
       <div class="list-tags">
-        \{{entry_tags this}}
+        {{entry_tags this}}
       </div>
-      \{{/if}}
+      {{/if}}
       <span class="buttonControl"></span>
     </li>
-  \{{/each}}</ul>
+  {{/each}}</ul>
 </template>
 
 <template id="directory-details-template">
-  <div class="directory-detail-title \{{#if has_thumbnail}}has-thumbnail\{{/if}}">\{{#if has_thumbnail}}<span class="thumbnail"><span class="helper"></span><span class="img-wrapper"><img class="img-responsive center-block" src="\{{thumbnail}}" onError="this.onerror=null;this.src='theme/images/data-directory-placeholder.png';" /></span></span>\{{/if}}\{{title}}</div>
-  \{{#each fields}}
-    <div class="directory-detail-label">\{{label}}</div>
-    <div class="directory-detail-value">\{{{value}}}</div>
-  \{{/each}}
+  <div class="directory-detail-title {{#if has_thumbnail}}has-thumbnail{{/if}}">{{#if has_thumbnail}}<span class="thumbnail"><span class="helper"></span><span class="img-wrapper"><img class="img-responsive center-block" src="{{thumbnail}}" onError="this.onerror=null;this.src='theme/images/data-directory-placeholder.png';" /></span></span>{{/if}}{{title}}</div>
+  {{#each fields}}
+    <div class="directory-detail-label">{{label}}</div>
+    <div class="directory-detail-value">{{{value}}}</div>
+  {{/each}}
 </template>
 
-<template id="directory-field-type-text-template">\{{{this}}}</template>
-<template id="directory-field-type-filter-template"><a href="#" class="data-linked" data-type="filter-value" data-filter="\{{filter}}" data-value="\{{value}}"><span class="glyphicon glyphicon-filter"></span> \{{value}}</a></template>
-<template id="directory-field-type-tel-template"><a href="tel:\{{this}}"><span class="glyphicon glyphicon-earphone"></span> \{{this}}</a></template>
-<template id="directory-field-type-email-template"><a href="mailto:\{{this}}"><span class="glyphicon glyphicon-envelope"></span> \{{this}}</a></template>
-<template id="directory-field-type-address-template">\{{{this}}}</template>
-<template id="directory-field-type-url-template"><span class="glyphicon glyphicon-new-window"></span> <a href="\{{this}}">View online</a></template>
-<template id="directory-field-type-image-template"><img src="\{{this}}" onError="this.onerror=null;this.src='theme/images/data-directory-placeholder.png';" /></template>
-<template id="directory-field-type-datetime-template">\{{this}}</template>
+<template id="directory-field-type-text-template">{{{this}}}</template>
+<template id="directory-field-type-filter-template"><a href="#" class="data-linked" data-type="filter-value" data-filter="{{filter}}" data-value="{{value}}"><span class="glyphicon glyphicon-filter"></span> {{value}}</a></template>
+<template id="directory-field-type-tel-template"><a href="tel:{{this}}"><span class="glyphicon glyphicon-earphone"></span> {{this}}</a></template>
+<template id="directory-field-type-email-template"><a href="mailto:{{this}}"><span class="glyphicon glyphicon-envelope"></span> {{this}}</a></template>
+<template id="directory-field-type-address-template">{{{this}}}</template>
+<template id="directory-field-type-url-template"><span class="glyphicon glyphicon-new-window"></span> <a href="{{this}}">View online</a></template>
+<template id="directory-field-type-image-template"><img src="{{this}}" onError="this.onerror=null;this.src='theme/images/data-directory-placeholder.png';" /></template>
+<template id="directory-field-type-datetime-template">{{this}}</template>

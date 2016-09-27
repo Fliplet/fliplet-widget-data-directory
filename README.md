@@ -1,6 +1,20 @@
 # fliplet-widget-data-directory
 
-To develop widgets, please follow our [widget development guide](https://github.com/WebooOnline/fliplet-cli).
+When update handlebars templates you need:
+Install handlebars package
+```
+npm install handlebars -g
+```
+
+Precompile templates
+```
+handlebars templates/build/*.handlebars -m -f ../../js/build-templates.js
+handlebars templates/interface/*.handlebars -m -f ../../js/interface-templates.js
+```
+
+---
+
+To develop widgets, please follow our [widget development guide](https://github.com/Fliplet/fliplet-cli).
 
 ---
 

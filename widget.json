@@ -19,7 +19,8 @@
       "lodash"
     ],
     "assets": [
-      "js/directory-interface.js",
+      "js/interface-templates.js",
+      "js/interface-directory.js",
       "js/interface.js",
       "css/interface.css"
     ]
@@ -37,7 +38,8 @@
     "assets": [
       "vendor/overlay.js",
       "vendor/jsonselect.js",
-      "js/directory-build.js",
+      "js/build-templates.js",
+      "js/build-directory.js",
       "js/build.js",
       "css/build.css",
       "vendor/overlay.css"

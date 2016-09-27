@@ -11,7 +11,7 @@
         </div>
       </div>
       <form id="directory-search">
-        <span class="glyphicon glyphicon-search"></span>
+        <span class="fa fa-search"></span>
         <input id="search" type="search" placeholder="Search or Filter" />
         <a href="#" class="btn btn-link" id="search-cancel">Cancel</a>
       </form>
@@ -134,10 +134,10 @@
 </template>
 
 <template id="directory-field-type-text-template">{{{this}}}</template>
-<template id="directory-field-type-filter-template"><a href="#" class="data-linked" data-type="filter-value" data-filter="{{filter}}" data-value="{{value}}"><span class="glyphicon glyphicon-filter"></span> {{value}}</a></template>
-<template id="directory-field-type-tel-template"><a href="tel:{{this}}"><span class="glyphicon glyphicon-earphone"></span> {{this}}</a></template>
-<template id="directory-field-type-email-template"><a href="mailto:{{this}}"><span class="glyphicon glyphicon-envelope"></span> {{this}}</a></template>
+<template id="directory-field-type-filter-template"><a href="#" class="data-linked" data-type="filter-value" data-filter="{{filter}}" data-value="{{value}}"><span class="fa fa-filter"></span> {{value}}</a></template>
+<template id="directory-field-type-tel-template"><a href="tel:{{this}}"><span class="fa fa-phone"></span> {{this}}</a></template>
+<template id="directory-field-type-email-template"><a href="mailto:{{this}}"><span class="fa fa-envelope"></span> {{this}}</a></template>
 <template id="directory-field-type-address-template">{{{this}}}</template>
-<template id="directory-field-type-url-template"><span class="glyphicon glyphicon-new-window"></span> <a href="{{this}}">View online</a></template>
+<template id="directory-field-type-url-template"><span class="fa fa-external-link"></span> <a href="{{this}}">View online</a></template>
 <template id="directory-field-type-image-template"><img src="{{this}}" onError="this.onerror=null;this.src='theme/images/data-directory-placeholder.png';" /></template>
 <template id="directory-field-type-datetime-template">{{this}}</template>

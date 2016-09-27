@@ -26,12 +26,13 @@
   },
   "build": {
     "dependencies": [
-      "handlebars",
-      "jquery",
-      "bootstrap",
       "fliplet-core",
+      "bootstrap-css",
+      "jquery",
+      "handlebars",
       "fliplet-datasources",
-      "bootstrap"
+      "bootstrap",
+      "font-awesome"
     ],
     "assets": [
       "vendor/overlay.js",

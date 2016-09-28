@@ -500,7 +500,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     }
   }
   
-  var detailHTML = Handlebars.templates.directoryDetailsTemplate(detailData);
+  var detailHTML = Handlebars.templates.directoryDetails(detailData);
 
   if ( type === 'search-result-entry' ) {
     this.switchMode('search-result-entry');

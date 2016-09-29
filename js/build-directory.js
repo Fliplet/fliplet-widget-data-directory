@@ -21,7 +21,6 @@ var DataDirectory = function ( data, config ) {
     data_fields : [],
     filter_fields : [],
     search_fields : [],
-    detail_fields : [],
     field_types : "" // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
   }, config);
   this.deviceIsTablet = ( window.innerWidth >= 640 );

@@ -179,16 +179,11 @@ var DataDirectoryForm = (function() {
       }
       $('[name=is_alphabetical][value="' + (_this.directoryConfig.is_alphabetical ? 'true' : 'false') + '"]').attr('checked',true);
 
-      var detailFields = "";
-      if ( _this.directoryConfig.detail_fields.constructor.name === "Array" ) {
-        detailFields = JSON.stringify(_this.directoryConfig.detail_fields);
-        detailFields = detailFields.substring(1, detailFields.length-1);
-      }
 
       $('#data-thumbnail-fields-select').val( _this.directoryConfig.thumbnail_field );
       updateSelectText($('#data-thumbnail-fields-select'));
 
-      $('#data-detail-fields').val(detailFields);
+      $('#data-detail-fields').val(_this.directoryConfig.detail_fields.join(','));
 
       if (_this.directoryConfig.show_subtitle) {
         $('#show_subtitle').prop('checked', true);

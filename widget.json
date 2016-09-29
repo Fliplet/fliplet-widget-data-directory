@@ -33,7 +33,8 @@
       "handlebars",
       "fliplet-datasources",
       "bootstrap",
-      "font-awesome"
+      "font-awesome",
+      "animate-css"
     ],
     "assets": [
       "vendor/overlay.js",

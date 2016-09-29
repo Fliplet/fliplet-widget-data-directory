@@ -479,8 +479,9 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
   if ( typeof type === 'undefined' ) type = 'entry';
   if ( typeof trackEvent === 'undefined' ) trackEvent = true;
 
-  var $entry = $('li[data-type="' + type + '"][data-index=' + entryIndex + '] .list-title');
-  var title = $entry.text().trim();
+  var $listEntry = $('li[data-type="' + type + '"][data-index=' + entryIndex + ']');
+  var $entrytitle = $('li[data-type="' + type + '"][data-index=' + entryIndex + '] .list-title');
+  var title = $entrytitle.text().trim();
   var detailData = {
     title : title,
     has_thumbail : false,
@@ -498,7 +499,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
       detailData.fields.push( fieldObj );
     }
   }
-  
+
   var detailHTML = Handlebars.templates.directoryDetails(detailData);
 
   if ( type === 'search-result-entry' ) {
@@ -564,7 +565,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     after_render();
     setTimeout(function(){
       $('li[data-type=' + type + '].active').removeClass('active');
-      $entry.addClass('active');
+      $listEntry.addClass('active');
     },0);
   } else {
     this.entryOverlay = new Overlay( detailHTML, {

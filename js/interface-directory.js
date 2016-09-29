@@ -3,6 +3,11 @@
 /*****************  DataDirectoryForm  *****************/
 
 var DataDirectoryForm = (function() {
+  function updateSelectText($el) {
+    var selectedText = $el.find('option:selected').text();
+    $el.parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
+  }
+
   // this reference
   var _this;
 
@@ -113,7 +118,7 @@ var DataDirectoryForm = (function() {
 
     loadDataDirectoryForm : function(){
       $('#data-sources').html(Handlebars.templates.dataSourceOptions(_this.tables));
-      $('#data-alphabetical-fields').html(Handlebars.templates.dataSourceOptions(_this.columns));
+      $('#data-alphabetical-fields').html(Handlebars.templates.dataAlphabeticalField(_this.columns));
       $('#data-tags-fields').html(Handlebars.templates.dataTagsField(_this.columns));
       $('#data-thumbnail-fields').html(Handlebars.templates.dataThumbnailField(_this.columns));
 
@@ -122,7 +127,9 @@ var DataDirectoryForm = (function() {
       }
 
       if (_this.source !== '') {
-        $('#data-sources').val(_this.source);
+        $dataSources = $('#data-sources');
+        $dataSources.val(_this.source);
+        updateSelectText($dataSources);
         _this.loadConfigurations_();
       }
 
@@ -157,10 +164,15 @@ var DataDirectoryForm = (function() {
       $('.nav.nav-stacked li.disabled').removeClass('disabled');
       
       $('#data-browse-configurations').html(Handlebars.templates.dataBrowseConfigurations(_this.columns));
+      $('#data-browse-configurations select').each(function() {
+        updateSelectText($(this));
+      });
+
 
       $('#directory-browse-label').val( _this.directoryConfig.label_template );
 
       $('#data-alphabetical-fields-select').val( _this.directoryConfig.alphabetical_field );
+      updateSelectText($('#data-alphabetical-fields-select'));
 
       if ( typeof _this.directoryConfig.is_alphabetical === 'string' ) {
         _this.directoryConfig.is_alphabetical = ( _this.directoryConfig.is_alphabetical.toLowerCase().trim() === 'true' );
@@ -174,27 +186,28 @@ var DataDirectoryForm = (function() {
       }
 
       $('#data-thumbnail-fields-select').val( _this.directoryConfig.thumbnail_field );
+      updateSelectText($('#data-thumbnail-fields-select'));
 
       $('#data-detail-fields').val(detailFields);
 
       if (_this.directoryConfig.show_subtitle) {
         $('#show_subtitle').prop('checked', true);
         $('#directory-browse-subtitle').val( _this.directoryConfig.subtitle );
+        updateSelectText($('#directory-browse-subtitle'));
         $('.show-subtitle').show();
       }
 
       if (_this.directoryConfig.show_tags) {
         $('#show_tags').prop('checked', true);
         $('#data-tags-fields-select').val( _this.directoryConfig.tags_field );
+        updateSelectText($('#data-tags-fields-select'));
         $('.show-tags').show();
       }
     },
 
     attachObservers_ : function(){
       $(document).on( "click", "#save-link", _this.saveDataDirectoryForm_ );
-
       $('#data-sources').on( 'change', $.proxy(_this.dataSourceChanged_,this) );
-
       $('.nav.nav-stacked').on( 'click', 'li.disabled', function(){
         return false;
       } );
@@ -213,6 +226,10 @@ var DataDirectoryForm = (function() {
         } else {
           $('.show-tags').hide();
         }
+      });
+
+      $('#data-tags-fields-select, #data-alphabetical-fields-select, #data-sources, #data-thumbnail-fields-select, #data-browse-configurations select').on('change', function () {
+        updateSelectText($(this));
       });
     },
 
@@ -241,16 +258,18 @@ var DataDirectoryForm = (function() {
       });
 
       $('[data-type="type"]').each(function(){
-        data.field_types[$(this).data('field')] = $(this).val();
+        data.field_types[$(this).data('field')] = $(this).find('select').val();
       });
       data.field_types = JSON.stringify(data.field_types);
 
       var detailFields = $('#data-detail-fields').val().trim();
       if (detailFields !== "") {
-        detailFields = detailFields.split(",");
-        for (var i = 0, l = detailFields.length; i < l; i++) {
-          detailFields[i] = detailFields[i].substring(1, detailFields[i].length-1);
-        }
+        detailFields = detailFields.split(",").map(function (field) {
+          return field.trim();
+        }).filter(function (field) {
+          return !(field.trim() === '');
+
+        });
       } else {
         detailFields = [];
       }
@@ -261,9 +280,6 @@ var DataDirectoryForm = (function() {
 
     dataSourceChanged_ : function(e){
       if ( _this.source === "" || confirm("Are you sure you want to change the data source? This will reset your previous configuration for the directory.") ) {
-        var selectedText = $(e.target).find('option:selected').text();
-        $(e.target).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
-
         _this.parseSelectedTable( $(e.target).val(), true );
         _this.loadDataDirectoryForm();
         // $('a[href="#data-browse"]').tab('show');

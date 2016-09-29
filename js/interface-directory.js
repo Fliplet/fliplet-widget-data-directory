@@ -233,6 +233,7 @@ var DataDirectoryForm = (function() {
         source: $("#data-sources").val(),
         filter_fields: [],
         search_fields: [],
+        data_fields: this.columns,
         field_types: {},
         label_template: $('#directory-browse-label').val(),
         show_subtitle: $("#show_subtitle").is(':checked'),
@@ -269,6 +270,7 @@ var DataDirectoryForm = (function() {
         detailFields = [];
       }
       data.detail_fields = detailFields;
+      data.rows = this.rows;
 
       this.directoryConfig = data;
     },

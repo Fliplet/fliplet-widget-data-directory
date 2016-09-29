@@ -11,7 +11,9 @@ Fliplet.DataSources.get()
           return source.find();
         })
         .then(function (rows) {
-          dataSource.rows = rows;
+          dataSource.rows = rows.map(function (row) {
+            return row.data;
+          });
           return Promise.resolve(dataSource);
         });
     }))

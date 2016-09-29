@@ -12,8 +12,8 @@ var messageTimeout,
   messageDelay = 5000,        // "Loading..." text delay to display
   loadingOverlayDelay = 1000; // Time it takes to display the loading overlay after a click
 
-var DataDirectory = function ( data, config ) {
-  this.data = data;
+var DataDirectory = function (config ) {
+  this.data = config.rows;
   this.config = $.extend({
     is_alphabetical : false,
     alphabetical_field : "",
@@ -172,7 +172,7 @@ DataDirectory.prototype.renderEntries = function(){
   var _this = this;
   var listData = [];
 
-  if ( !this.config.is_alphabetical ) {
+  if ( !this.config.is_alphabetical) {
     listData = this.data;
   } else {
     listData = this.data.sort( function(a,b){

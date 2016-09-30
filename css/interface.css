@@ -267,3 +267,7 @@ table .checkbox label {
 .table > tbody > tr > td {
     vertical-align: middle;
 }
+
+.options {
+    display: none;
+}

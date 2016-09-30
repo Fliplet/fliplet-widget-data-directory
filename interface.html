@@ -16,144 +16,148 @@
     <div class="col-sm-8">
       <label for="data-sources" class="select-proxy-display">
         <span class="icon fa fa-chevron-down"></span>
-        <span class="select-value-proxy"></span>
-        <select id="data-sources" data-label="select" class="hidden-select form-control"></select>
+        <span class="select-value-proxy">Select a table</span>
+        <select id="data-sources" data-label="select" class="hidden-select form-control">
+          <option>&mdash; Select a table &mdash;</option>
+        </select>
       </label>
     </div>
   </div>
 
-  <div class="title-header">
-    <p>Browse options</p>
-    <p>Your data will be displayed in a list. You can set up how it's displayed and configure how users can search/filter your data.</p>
-  </div>
+  <div class="options">
+    <div class="title-header">
+      <p>Browse options</p>
+      <p>Your data will be displayed in a list. You can set up how it's displayed and configure how users can search/filter your data.</p>
+    </div>
 
-  <div class="form-group clearfix">
-    <div class="col-sm-4 control-label">
-      <label for="directory-browse-label">How do you want your data displayed in the main list?</label>
-    </div>
-    <div class="col-sm-8">
-      <input type="text" class="form-control" id="directory-browse-label" placeholder="Enter field names">
-      <p class="help-block">Use <code>\{{*}}</code> to wrap around a field name, e.g. <code>\{{Name}}, \{{Company}}</code>.</p>
-    </div>
-  </div>
-
-  <div class="form-group clearfix">
-    <div class="col-sm-4 control-label">
-      <label for="show_subtitle">Show a subtitle in the main list?</label>
-    </div>
-    <div class="col-sm-8">
-      <div class="checkbox">
-        <input type="checkbox" id="show_subtitle">
-        <label for="show_subtitle">
-          <span class="check"><i class="fa fa-check"></i></span> Yes, please
-        </label>
+    <div class="form-group clearfix">
+      <div class="col-sm-4 control-label">
+        <label for="directory-browse-label">How do you want your data displayed in the main list?</label>
       </div>
-      <div class="show-subtitle">
-        <div class="form-group clearfix">
-          <div class="col-xs-12">
-            <label for="directory-browse-subtitle">How do you want your subtitle displayed in the main list?</label>
-          </div>
-          <div class="col-xs-12">
-            <input type="text" class="form-control" id="directory-browse-subtitle" placeholder="Enter field names">
-            <p class="help-block">Use <code>\{{*}}</code> to wrap around the field names, e.g. <code>\{{About}}</code>.</p>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="directory-browse-label" placeholder="Enter field names">
+        <p class="help-block">Use <code>\{{*}}</code> to wrap around a field name, e.g. <code>\{{Name}}, \{{Company}}</code>.</p>
+      </div>
+    </div>
+
+    <div class="form-group clearfix">
+      <div class="col-sm-4 control-label">
+        <label for="show_subtitle">Show a subtitle in the main list?</label>
+      </div>
+      <div class="col-sm-8">
+        <div class="checkbox">
+          <input type="checkbox" id="show_subtitle">
+          <label for="show_subtitle">
+            <span class="check"><i class="fa fa-check"></i></span> Yes, please
+          </label>
+        </div>
+        <div class="show-subtitle">
+          <div class="form-group clearfix">
+            <div class="col-xs-12">
+              <label for="directory-browse-subtitle">How do you want your subtitle displayed in the main list?</label>
+            </div>
+            <div class="col-xs-12">
+              <input type="text" class="form-control" id="directory-browse-subtitle" placeholder="Enter field names">
+              <p class="help-block">Use <code>\{{*}}</code> to wrap around the field names, e.g. <code>\{{About}}</code>.</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="form-group clearfix">
-    <div class="col-sm-4 control-label">
-      <label for="show_tags">Show tags in the main list?</label>
-    </div>
-    <div class="col-sm-8">
-      <div class="checkbox">
-        <input type="checkbox" id="show_tags">
-        <label for="show_tags">
-          <span class="check"><i class="fa fa-check"></i></span> Yes, please
-        </label>
+    <div class="form-group clearfix">
+      <div class="col-sm-4 control-label">
+        <label for="show_tags">Show tags in the main list?</label>
       </div>
-      <div class="show-tags">
-        <div class="form-group clearfix">
-          <div class="col-xs-12">
-            <label for="directory-browse-tags-select">In which field can the tags be found?</label>
+      <div class="col-sm-8">
+        <div class="checkbox">
+          <input type="checkbox" id="show_tags">
+          <label for="show_tags">
+            <span class="check"><i class="fa fa-check"></i></span> Yes, please
+          </label>
+        </div>
+        <div class="show-tags">
+          <div class="form-group clearfix">
+            <div class="col-xs-12">
+              <label for="directory-browse-tags-select">In which field can the tags be found?</label>
+            </div>
+            <div class="col-xs-12">
+              <label for="data-tags-fields-select" class="select-proxy-display">
+                <span class="icon fa fa-chevron-down"></span>
+                <span class="select-value-proxy"></span>
+                <span id="data-tags-fields"></span>
+              </label>
+              <p class="help-block">Tags will be separated by commas <code>,</code> and will work as filters.</p>
+            </div>
           </div>
-          <div class="col-xs-12">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group clearfix">
+      <div class="col-sm-4 control-label">
+        <label>In what order do you want do display your data?</label>
+      </div>
+      <div class="col-sm-8">
+        <div class="radio">
+          <input type="radio" id="alphabetical" name="is_alphabetical" value="true" checked>
+          <label for="alphabetical">
+            <span class="check"><i class="fa fa-circle"></i></span> Alphabetically by
+          </label>
+          <div class="select-holder">
             <label for="data-tags-fields-select" class="select-proxy-display">
               <span class="icon fa fa-chevron-down"></span>
               <span class="select-value-proxy"></span>
-              <span id="data-tags-fields"></span>
+              <span id="data-alphabetical-fields"></span>
             </label>
-            <p class="help-block">Tags will be separated by commas <code>,</code> and will work as filters.</p>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="form-group clearfix">
-    <div class="col-sm-4 control-label">
-      <label>In what order do you want do display your data?</label>
-    </div>
-    <div class="col-sm-8">
-      <div class="radio">
-        <input type="radio" id="alphabetical" name="is_alphabetical" value="true" checked>
-        <label for="alphabetical">
-          <span class="check"><i class="fa fa-circle"></i></span> Alphabetically by
-        </label>
-        <div class="select-holder">
-          <label for="data-tags-fields-select" class="select-proxy-display">
-            <span class="icon fa fa-chevron-down"></span>
-            <span class="select-value-proxy"></span>
-            <span id="data-alphabetical-fields"></span>
+        <div class="radio">
+          <input type="radio" id="order" name="is_alphabetical" value="false">
+          <label for="order">
+            <span class="check"><i class="fa fa-circle"></i></span> In the order as loaded
           </label>
         </div>
       </div>
-      <div class="radio">
-        <input type="radio" id="order" name="is_alphabetical" value="false">
-        <label for="order">
-          <span class="check"><i class="fa fa-circle"></i></span> In the order as loaded
-        </label>
+    </div>
+
+    <div class="form-group clearfix">
+      <div class="col-sm-4 control-label">
+        <label>How do you want to use the information in each field?</label>
+      </div>
+      <div class="col-xs-12" id="data-browse-configurations">
+
       </div>
     </div>
-  </div>
 
-  <div class="form-group clearfix">
-    <div class="col-sm-4 control-label">
-      <label>How do you want to use the information in each field?</label>
+    <div class="title-header">
+      <p>Detail options</p>
+      <p>Users will see your data in detail in a side panel or overlay depending on the device they are on. Configure below what they will see in the detailed view.</p>
     </div>
-    <div class="col-xs-12" id="data-browse-configurations">
 
+    <div class="form-group clearfix">
+      <div class="col-sm-4 control-label">
+        <label for="data-thumbnail-fields-select">Select a field to use as the thumbnail URL</label>
+      </div>
+      <div class="col-sm-8">
+        <label for="data-tags-fields-select" class="select-proxy-display">
+          <span class="icon fa fa-chevron-down"></span>
+          <span class="select-value-proxy"></span>
+          <span id="data-thumbnail-fields"></span>
+        </label>
+        <p class="help-block">Make sure the field is pointing at an image URL.</p>
+      </div>
+    </div>
+    <div class="form-group clearfix">
+      <div class="col-sm-4 control-label">
+        <label for="data-detail-fields">Which field(s) do you want them to see?</label>
+      </div>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="data-detail-fields" placeholder="Enter field names">
+        <p class="help-block">Separate multiple fields with commas (<code>,</code>). Fields will be displayed in the order provided.</p>
+      </div>
+    </div>
 
-    </div>
-  </div>
-
-  <div class="title-header">
-    <p>Detail options</p>
-    <p>Users will see your data in detail in a side panel or overlay depending on the device they are on. Configure below what they will see in the detailed view.</p>
-  </div>
-
-  <div class="form-group clearfix">
-    <div class="col-sm-4 control-label">
-      <label for="data-thumbnail-fields-select">Select a field to use as the thumbnail URL</label>
-    </div>
-    <div class="col-sm-8">
-      <label for="data-tags-fields-select" class="select-proxy-display">
-        <span class="icon fa fa-chevron-down"></span>
-        <span class="select-value-proxy"></span>
-        <span id="data-thumbnail-fields"></span>
-      </label>
-      <p class="help-block">Make sure the field is pointing at an image URL.</p>
-    </div>
-  </div>
-  <div class="form-group clearfix">
-    <div class="col-sm-4 control-label">
-      <label for="data-detail-fields">Which field(s) do you want them to see?</label>
-    </div>
-    <div class="col-sm-8">
-      <input type="text" class="form-control" id="data-detail-fields" placeholder="Enter field names">
-      <p class="help-block">Separate multiple fields with commas (<code>,</code>). Fields will be displayed in the order provided.</p>
-    </div>
   </div>
 </div>
 

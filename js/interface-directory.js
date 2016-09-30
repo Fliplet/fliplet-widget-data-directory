@@ -16,8 +16,11 @@ var DataDirectoryForm = (function() {
     _this = this;
 
     this.tables = configuration.dataSources;
-    this.source = (configuration.source) ? configuration.source : '';
-
+    this.source = '';
+    if (configuration.source) {
+      this.source = configuration.source;
+      $('.options').show();
+    }
     delete configuration.dataSources;
 
     this.directoryConfig = $.extend( {
@@ -209,6 +212,9 @@ var DataDirectoryForm = (function() {
 
       $('#show_subtitle').on('change', function() {
         if ($(this).is(":checked")) {
+          var tagsField = _this.directoryConfig.tags_field ? _this.directoryConfig.tags_field : _this.columns[0];
+          $('#data-tags-fields-select').val(tagsField);
+          updateSelectText($('#data-tags-fields-select'));
           $('.show-subtitle').fadeIn();
         } else {
           $('.show-subtitle').hide();
@@ -277,6 +283,7 @@ var DataDirectoryForm = (function() {
 
     dataSourceChanged_ : function(e){
       if ( _this.source === "" || confirm("Are you sure you want to change the data source? This will reset your previous configuration for the directory.") ) {
+        $('.options').show();
         _this.parseSelectedTable( $(e.target).val(), true );
         _this.loadDataDirectoryForm();
         // $('a[href="#data-browse"]').tab('show');

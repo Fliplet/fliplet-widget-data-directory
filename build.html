@@ -1,43 +1,45 @@
 <div class="container-fluid" id="data-directory" data-mode="default" data-directory-id="{{id}}">
   <div class="row">
-    <div id="directory-list">
-      <div class="directory-loading">
-        <div class="directory-loading-screen"></div>
-        <div class="directory-loading-body">
-          <div class="loader-wrapper">
-            <div class="loader"></div>
+    <div class="directory-wrapper">
+      <div id="directory-list">
+        <div class="directory-loading">
+          <div class="directory-loading-screen"></div>
+          <div class="directory-loading-body">
+            <div class="loader-wrapper">
+              <div class="loader"></div>
+            </div>
+            <p class="loading-text"></p>
           </div>
-          <p class="loading-text"></p>
         </div>
+        <form id="directory-search">
+          <span class="fa fa-search"></span>
+          <input id="search" type="search" placeholder="Search or Filter" />
+          <a href="#" class="btn btn-link" id="search-cancel">Cancel</a>
+        </form>
+        <div id="directory-filters">
+          <div id="filters">
+            <label>Type to search or select a filter</label>
+            <h3>Filter by <span id="filter-selected"></span></h3>
+            <div class="list-default" id="filter-list"></div>
+            <div class="list-default" id="filter-value-list"></div>
+          </div>
+        </div>
+        <div class="list-default" id="directory-entries"></div>
+        <div class="list-default" id="search-result"></div>
       </div>
-      <form id="directory-search">
-        <span class="fa fa-search"></span>
-        <input id="search" type="search" placeholder="Search or Filter" />
-        <a href="#" class="btn btn-link" id="search-cancel">Cancel</a>
-      </form>
-      <div id="directory-filters">
-        <div id="filters">
-          <label>Type to search or select a filter</label>
-          <h3>Filter by <span id="filter-selected"></span></h3>
-          <div class="list-default" id="filter-list"></div>
-          <div class="list-default" id="filter-value-list"></div>
-        </div>
+      <div id="directory-details">
+        <div class="directory-loading">
+          <div class="directory-loading-screen"></div>
+          <div class="directory-loading-body">
+            <div class="loader-wrapper">
+              <div class="loader"></div>
+            </div>
+            <p class="loading-text"></p>
+          </div>
+            </div>
+        <div class="directory-details-content"></div>
       </div>
-      <div class="list-default" id="directory-entries"></div>
-      <div class="list-default" id="search-result"></div>
+      <div id="directory-screen"></div>
     </div>
-    <div id="directory-details">
-      <div class="directory-loading">
-        <div class="directory-loading-screen"></div>
-        <div class="directory-loading-body">
-          <div class="loader-wrapper">
-            <div class="loader"></div>
-          </div>
-          <p class="loading-text"></p>
-        </div>
-          </div>
-      <div class="directory-details-content"></div>
-    </div>
-    <div id="directory-screen"></div>
   </div>
 </div>

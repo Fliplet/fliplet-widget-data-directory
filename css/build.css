@@ -4,6 +4,14 @@
 #directory-list {
     height: 100%;
 }
+.directory-wrapper {
+    position: absolute;
+    top: 44px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+}
 #directory-details {
     float: left;
     overflow: auto;
@@ -23,6 +31,9 @@
     font-size: 13px;
 }
 @media screen and (min-width: 640px) {
+    .directory-wrapper {
+        top: 55px;
+    }
     #directory-list ul {
         font-size: 16px;
         line-height: 1.5;
@@ -165,7 +176,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 10;
+    z-index: 15;
     overflow: hidden;
 }
 #directory-filters {

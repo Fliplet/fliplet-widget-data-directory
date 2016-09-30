@@ -126,7 +126,7 @@ DataDirectory.prototype.initialiseHandlebars = function(){
     });
   }
 
-  Handlebars.registerPartial('directory_filter_values', $('#directory-filter-value-template').html());
+  Handlebars.registerPartial('directory_filter_values', Handlebars.templates.directoryFilterValue);
 };
 
 DataDirectory.prototype.init = function(){
@@ -288,8 +288,7 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
   data = { filter : filter.trim(), values : values, dataType: (tags_field === filter) ? 'filter-value-tag' : 'filter-value'};
 
   if ( inOverlay ) {
-    var directoryFilterOverlayTemplate = Handlebars.compile( $('#directory-filter-overlay-template').html() );
-    var overlayContent = directoryFilterOverlayTemplate( data );
+    var overlayContent = Handlebars.templates.directoryFilterOverlay(data);
     this.filterOverlay = new Overlay(overlayContent,{
       title: 'Filter by ' + filter,
       showOnInit: true,
@@ -301,8 +300,7 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
       }
     });
   } else {
-    var directoryFilterValueTemplate = Handlebars.compile( $('#directory-filter-value-template').html() );
-    var directoryFilterValuesHTML = directoryFilterValueTemplate( data );
+    var directoryFilterValuesHTML = Handlebars.templates.directoryFilterValue(data);
     $('#filter-value-list').html(directoryFilterValuesHTML);
     $('#filter-selected').html(filter);
     $('#directory-filters')[0].scrollTop = 0;
@@ -648,8 +646,7 @@ DataDirectory.prototype.getEntryField = function( entryIndex, fieldIndex, type )
   }
 
   if ( (typeof value === 'object' && value.value.length) || (typeof value === 'string' && value.length) ) {
-    var valueTemplate = Handlebars.compile( $('#directory-field-type-' + fieldType + '-template').html() );
-    var valueHTML = valueTemplate(value);
+    var valueHTML = Handlebars.templates['directoryFieldType' + fieldType](value);
   } else {
     var valueHTML = '';
   }

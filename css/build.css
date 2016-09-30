@@ -47,6 +47,10 @@
     padding: 10px 10px 10px 0;
     position: relative;
 }
+#directory-list li.linked,
+.overlayPanel li.linked {
+    padding: 10px 44px 10px 0;
+}
 #directory-list {
     padding: 0;
     width: 100%;
@@ -88,6 +92,7 @@
 #directory-list .list-default ul > li .list-title + p,
 .overlayPanel .list-default ul > li .list-title + p {
     margin: 0;
+    font-size: 12px;
 }
 @media screen and (min-width:640px) {
     #directory-list {

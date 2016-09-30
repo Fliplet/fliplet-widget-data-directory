@@ -28,6 +28,9 @@ Fliplet.DataSources.get({ organizationId: organizationId })
         });
     }))
       .then(function (dataSources) {
+        if (!dataSources.length) {
+          $('.no-data-source-prompt').show();
+        }
         data.dataSources = dataSources;
         dataDirectoryForm = new DataDirectoryForm(data);
       });

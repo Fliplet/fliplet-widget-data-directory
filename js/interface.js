@@ -41,6 +41,7 @@ Fliplet.DataSources.get({ organizationId: organizationId })
 Fliplet.Widget.onSaveRequest(function () {
   dataDirectoryForm.saveDataDirectoryForm_();
   Fliplet.Widget.save(dataDirectoryForm.directoryConfig).then(function () {
+    Fliplet.Studio.emit('reload-page-preview');
     Fliplet.Widget.complete();
   });
 });

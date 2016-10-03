@@ -8,8 +8,8 @@ npm install handlebars -g
 
 Precompile templates
 ```
-handlebars templates/build/*.handlebars -m -f ../../js/build-templates.js
-handlebars templates/interface/*.handlebars -m -f ../../js/interface-templates.js
+handlebars templates/build/*.handlebars -m -f js/build-templates.js
+handlebars templates/interface/*.handlebars -m -f js/interface-templates.js
 ```
 
 ---

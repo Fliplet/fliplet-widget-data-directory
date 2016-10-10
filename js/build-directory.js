@@ -645,10 +645,22 @@ DataDirectory.prototype.getEntryField = function( entryIndex, fieldIndex, type )
     };
   }
 
+  var valueHTML;
   if ( (typeof value === 'object' && value.value.length) || (typeof value === 'string' && value.length) ) {
-    var valueHTML = Handlebars.templates['directoryFieldType' + fieldType](value);
+    if (this.config.show_tags && this.config.tags_field === label && fieldType === 'filter') {
+      valueHTML = value.value.split(",").map(function (tag) {
+        tag = tag.trim();
+        if (tag !== '') {
+          return '<a class="data-linked" data-type="filter-value-tag" data-value="'+tag+'" data-filter="'+value.filter+'" href="#">'+tag+'</a>';
+        }
+
+        return '';
+      }).join(', ')
+    } else {
+      valueHTML = Handlebars.templates['directoryFieldType' + fieldType](value);
+    }
   } else {
-    var valueHTML = '';
+    valueHTML = '';
   }
 
   return {

@@ -342,7 +342,7 @@ DataDirectory.prototype.isMode = function(mode){
 DataDirectory.prototype.attachObservers = function(){
   var _this = this;
 
-  $(document).on( 'click', '.data-linked', $.proxy( this.dataLinkClicked, this ) );
+  $('#directory-entries').on( 'click', '.data-linked', $.proxy( this.dataLinkClicked, this ) );
   $(window).on( 'resize', function(){
     _this.deviceIsTablet = window.innerWidth >= 640;
     _this.resizeSearch();

@@ -1,5 +1,6 @@
-var config = Fliplet.Widget.getData($('[data-directory-id]').data('directory-id'));
-if (config.source) {
-  new DataDirectory(config);
-}
-
+$('[data-directory-id]').each(function(){
+  var config = Fliplet.Widget.getData($(this).data('directory-id'));
+  if (config.source) {
+    new DataDirectory(config, this);
+  }
+});

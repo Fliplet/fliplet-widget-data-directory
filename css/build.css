@@ -1,30 +1,30 @@
-#data-directory,
-#data-directory > .row,
-#directory-details,
-#directory-list {
+[data-directory],
+[data-directory] > .row,
+.directory-details,
+.directory-list {
     height: 100%;
 }
 .directory-wrapper {
     position: absolute;
-    top: 44px;
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     overflow: hidden;
 }
-#directory-details {
+.directory-details {
     float: left;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     position: relative;
 }
-#directory-list .list-default,
+.directory-list .list-default,
 .overlayPanel .list-default {
     height: 100%;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 }
-#directory-list ul,
+.directory-list ul,
 .overlayPanel ul {
     padding: 0;
     margin: 0;
@@ -32,33 +32,33 @@
 }
 @media screen and (min-width: 640px) {
     .directory-wrapper {
-        top: 55px;
+        top: 0;
     }
-    #directory-list ul {
+    .directory-list ul {
         font-size: 16px;
         line-height: 1.5;
         font-weight: 200;
     }
 }
-#directory-list li,
+.directory-list li,
 .overlayPanel li {
     list-style: none;
     border-bottom: 1px solid rgba(51, 51, 51, 0.2);
     padding: 10px 10px 10px 0;
     position: relative;
 }
-#directory-list li.linked,
+.directory-list li.linked,
 .overlayPanel li.linked {
     padding: 10px 44px 10px 0;
 }
-#directory-list {
+.directory-list {
     padding: 0;
     width: 100%;
     overflow: hidden;
     background: #fff;
     position: relative;
 }
-#directory-list .list-default ul > li .icon,
+.directory-list .list-default ul > li .icon,
 .overlayPanel .list-default ul > li .icon {
     display: none;
     position: absolute;
@@ -72,50 +72,50 @@
     text-align: center;
     color: #333;
 }
-#directory-list .list-default ul > li.linked .icon,
+.directory-list .list-default ul > li.linked .icon,
 .overlayPanel .list-default ul > li.linked .icon {
     display: block;
 }
-#directory-list .list-default li .list-title,
+.directory-list .list-default li .list-title,
 .overlayPanel .list-default li .list-title {
     font-size: 1.1em;
     font-weight: 600;
     margin: 0;
 }
-#directory-list .list-default li .list-tags {
+.directory-list .list-default li .list-tags {
     font-weight: normal;
     font-size: 0.8em;
     margin-top: 5px;
     position: relative;
     z-index: 10;
 }
-#directory-list .list-default ul > li .list-title + p,
+.directory-list .list-default ul > li .list-title + p,
 .overlayPanel .list-default ul > li .list-title + p {
     margin: 0;
     font-size: 12px;
 }
 @media screen and (min-width:640px) {
-    #directory-list {
+    .directory-list {
         float: left;
         border-right: 1px solid rgba(127,127,127,0.1);
         width: 33.333%;
     }
 }
-#directory-details {
+.directory-details {
     padding: 22px 26px;
     width: 66.667%;
 }
 @media screen and (max-width:639px) {
-    #directory-details {
+    .directory-details {
         display: none;
     }
 }
-#directory-list li {
+.directory-list li {
     margin-left: 10px;
     border-bottom: none;
     border-top: 1px solid rgba(51, 51, 51, 0.2);
 }
-#directory-list li.divider {
+.directory-list li.divider {
     background: #FAFAFA;
     font-size: 16px;
     line-height: 22px;
@@ -125,40 +125,40 @@
     margin-left: 0;
     padding-left: 10px;
 }
-#directory-list li.divider + li,
-#directory-list li:first-child {
+.directory-list li.divider + li,
+.directory-list li:first-child {
     border-top: none;
 }
 @media screen and (min-width:640px) {
-    #directory-entries li.active,
-    #search-result li.active {
+    .directory-entries li.active,
+    .search-result li.active {
         margin-left: 0;
         padding-left: 10px;
         border-top: none;
         background-color: #DFDFDF;
         color: inherit;
     }
-    #directory-entries li.active + li,
-    #search-result li.active + li {
+    .directory-entries li.active + li,
+    .search-result li.active + li {
         border-top: none;
     }
-    #directory-entries li.active .buttonControl:after,
-    #search-result li.active .buttonControl:after {
+    .directory-entries li.active .buttonControl:after,
+    .search-result li.active .buttonControl:after {
         background-color: #333;
     }
 }
-#directory-list .list-default li .list-title {
+.directory-list .list-default li .list-title {
     font-weight: normal;
     font-size: 14px;
 }
-#directory-screen {
+.directory-screen {
     display: none;
 }
 @media screen and (min-width:640px) {
-    #directory-screen {
+    .directory-screen {
         display: block;
         position: absolute;
-        top: 56px;
+        top: 0;
         right: 0;
         bottom: 0;
         left: 33.333%;
@@ -166,14 +166,14 @@
         opacity: 0;
         pointer-events: none;
     }
-    #data-directory[data-mode="filter-values"] #directory-screen,
-    #data-directory[data-mode="search"] #directory-screen,
-    #data-directory[data-mode="search-result"] #directory-screen {
+    [data-directory][data-mode="filter-values"] .directory-screen,
+    [data-directory][data-mode="search"] .directory-screen,
+    [data-directory][data-mode="search-result"] .directory-screen {
         opacity: 1;
         pointer-events: all;
     }
 }
-#directory-search {
+.directory-search {
     background: #D2D2D2;
     padding: 10px;
     height: 44px;
@@ -184,26 +184,26 @@
     z-index: 15;
     overflow: hidden;
 }
-#directory-filters {
+.directory-filters {
     display: none;
     padding-top: 44px;
     height: 100%;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 }
-#data-directory[data-mode="filter-values"] #directory-filters,
-#data-directory[data-mode="search"] #directory-filters {
+[data-directory][data-mode="filter-values"] .directory-filters,
+[data-directory][data-mode="search"] .directory-filters {
     display: block;
 }
-#data-directory[data-mode="filter-values"] #directory-entries,
-#data-directory[data-mode="search"] #directory-entries {
+[data-directory][data-mode="filter-values"] .directory-entries,
+[data-directory][data-mode="search"] .directory-entries {
     display: none;
 }
-#directory-entries {
+.directory-entries {
     height: 100%;
     position: relative;
 }
-#directory-entries:empty:after {
+.directory-entries:empty:after {
     content: 'Loading';
     display: block;
     opacity: 0.5;
@@ -217,15 +217,15 @@
     text-align: center;
     padding-top: 30%;
 }
-#directory-entries.not-configured,
-#directory-filters + #directory-entries.not-configured {
+.directory-entries.not-configured,
+.directory-filters + .directory-entries.not-configured {
     text-align: center;
     padding-top: 30%;
     opacity: 0.5;
     font-size: 14px;
     height: 100%;
 }
-#directory-entries.list-index-enabled {
+.directory-entries.list-index-enabled {
     padding-right: 20px;
 }
 .list-index {
@@ -239,7 +239,7 @@
     margin-top: 44px;
     display: none;
 }
-#data-directory[data-mode="default"] .list-index {
+[data-directory][data-mode="default"] .list-index {
     display: block;
 }
 @media screen and (min-width:640px) {
@@ -257,25 +257,25 @@
     z-index: 10;
     color: #2177D4;
 }
-#directory-filters + #directory-entries {
+.directory-filters + .directory-entries {
     padding-top: 44px;
 }
-#data-directory[data-mode="search-result"] #directory-entries,
-#data-directory[data-mode="search-result-entry"] #directory-entries {
+[data-directory][data-mode="search-result"] .directory-entries,
+[data-directory][data-mode="search-result-entry"] .directory-entries {
     display: none;
 }
-#search-result {
+.search-result {
     display: none;
     padding-top: 44px;
     position: relative;
     -webkit-animation: slideInRight 0.35s;
     animation: slideInRight 0.35s;
 }
-#data-directory[data-mode="search-result"] #search-result,
-#data-directory[data-mode="search-result-entry"] #search-result {
+[data-directory][data-mode="search-result"] .search-result,
+[data-directory][data-mode="search-result-entry"] .search-result {
     display: block;
 }
-#search-result ul:empty:after {
+.search-result ul:empty:after {
     content: 'No results were found.';
     display: block;
     text-align: center;
@@ -287,20 +287,20 @@
     padding-top: 30%;
     pointer-events: none;
 }
-#search-result-header-container {
+.search-result-header-container {
     position: absolute;
     background-color: #fff;
     top: 44px;
     width: 100%;
     z-index: 1;
 }
-#search-result-header {
+.search-result-header {
     height: 36px;
     line-height: 36px;
     background-color: #FAFAFA;
     font-size: 12px;
 }
-#search-result-clear {
+.search-result-clear {
     padding-top: 0;
     padding-bottom: 0;
     line-height: 36px;
@@ -308,7 +308,7 @@
     font-size: 12px;
     color: #333;
 }
-#search-result-header h5 {
+.search-result-header h5 {
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -317,10 +317,10 @@
     line-height: 36px;
     padding-left: 10px;
 }
-#search-result ul {
+.search-result ul {
     padding-top: 36px;
 }
-#search {
+.search {
     height: 24px;
     line-height: 20px;
     padding: 2px 10px 2px 30px;
@@ -334,7 +334,7 @@
     transition: width 0.35s ease;
     outline: none;
 }
-#directory-search .fa-search {
+.directory-search .fa-search {
     position: absolute;
     top: 15px;
     left: 18px;
@@ -342,11 +342,11 @@
     font-size: 14px;
     z-index: 1;
 }
-#search-clear {
+.search-clear {
     display: inline-block;
     margin-left: -16px;
 }
-#search-cancel {
+.search-cancel {
     position: absolute;
     top: 3px;
     right: 0;
@@ -359,25 +359,25 @@
     -webkit-transition: all 0.35s 0.03s ease;
     transition: all 0.35s 0.03s ease;
 }
-#search-cancel:active,
-#search-cancel:hover {
+.search-cancel:active,
+.search-cancel:hover {
     text-decoration: none;
 }
-#data-directory[data-mode="filter-values"] #search-cancel,
-#data-directory[data-mode="search"] #search-cancel,
-#data-directory[data-mode="search-result"] #search-cancel,
-#data-directory[data-mode="search-result-entry"] #search-cancel {
+[data-directory][data-mode="filter-values"] .search-cancel,
+[data-directory][data-mode="search"] .search-cancel,
+[data-directory][data-mode="search-result"] .search-cancel,
+[data-directory][data-mode="search-result-entry"] .search-cancel {
     opacity: 1;
     -webkit-transform: translate3d(0,0,0);
     transform: translate3d(0,0,0);
 }
-#data-directory[data-mode="filter-values"] #search,
-#data-directory[data-mode="search"] #search,
-#data-directory[data-mode="search-result"] #search,
-#data-directory[data-mode="search-result-entry"] #search {
+[data-directory][data-mode="filter-values"] .search,
+[data-directory][data-mode="search"] .search,
+[data-directory][data-mode="search-result"] .search,
+[data-directory][data-mode="search-result-entry"] .search {
     margin-right: 60px;
 }
-#directory-filters label {
+.directory-filters label {
     font-weight: normal;
     margin-left: 10px;
     margin-right: 10px;
@@ -388,26 +388,26 @@
     height: 31px;
     line-height: 30px;
 }
-#filters .list-default {
+.filters .list-default {
     overflow: visible;
 }
-#filters h3 {
+.filters h3 {
     font-weight: bold;
     font-size: 20px;
     margin: 15px 0 0;
     padding: 0 10px 10px;
     border-bottom: 1px solid rgba(51, 51, 51, 0.2);
 }
-#filter-selected {
+.filter-selected {
     font-weight: 300;
 }
-#filter-value-list {
+.filter-value-list {
     display: none;
 }
-#data-directory[data-mode="filter-values"] #filter-value-list {
+[data-directory][data-mode="filter-values"] .filter-value-list {
     display: block;
 }
-#data-directory[data-mode="filter-values"] #filter-list {
+[data-directory][data-mode="filter-values"] .filter-list {
     display: none;
 }
 .directory-detail-title {

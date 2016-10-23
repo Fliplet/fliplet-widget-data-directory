@@ -12,7 +12,7 @@ var messageTimeout,
   messageDelay = 5000,        // "Loading..." text delay to display
   loadingOverlayDelay = 1000; // Time it takes to display the loading overlay after a click
 
-var DataDirectory = function (config ) {
+var DataDirectory = function (config, container) {
   this.data = config.rows;
   this.config = $.extend({
     is_alphabetical : false,
@@ -23,10 +23,11 @@ var DataDirectory = function (config ) {
     search_fields : [],
     field_types : "" // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
   }, config);
+  this.$container = $(container);
   this.deviceIsTablet = ( window.innerWidth >= 640 );
-  this.navHeight = $('#main-header').height();
-  this.searchBarHeight = $('#directory-search').outerHeight();
-  this.directoryMode = $('#data-directory').attr('data-mode');
+  this.navHeight = $('.fl-viewport-header').height() || 0;
+  this.searchBarHeight = this.$container.find('.directory-search').outerHeight();
+  this.directoryMode = this.$container.attr('data-mode');
   this.filterOverlay = null;
   this.entryOverlay = null;
   this.searchResultData = [];
@@ -183,7 +184,7 @@ DataDirectory.prototype.renderEntries = function(){
         return 1;
       return 0;
     } );
-    $('#directory-entries').addClass('list-index-enabled');
+    this.$container.find('.directory-entries').addClass('list-index-enabled');
   }
   this.data = listData;
 
@@ -193,16 +194,16 @@ DataDirectory.prototype.renderEntries = function(){
     entries: this.data
   });
 
-  $('#directory-entries').html(directoryListHTML);
+  this.$container.find('.directory-entries').html(directoryListHTML);
   this.renderIndexList();
 };
 
 DataDirectory.prototype.renderIndexList = function(){
   if ( !this.config.is_alphabetical ) return;
 
-  $('#directory-entries').after('<div class="list-index"></div>');
-  var $listIndex = $('#directory-entries + .list-index');
-  $('#directory-entries .divider').each(function(){
+  this.$container.find('.directory-entries').after('<div class="list-index"></div>');
+  var $listIndex = this.$container.find('.directory-entries + .list-index');
+  this.$container.find('.directory-entries .divider').each(function(){
     var letter = $(this).text();
     $listIndex.append('<span data-letter="' + letter + '">' + letter + '</span>');
   });
@@ -215,9 +216,9 @@ DataDirectory.prototype.renderIndexList = function(){
 DataDirectory.prototype.scrollToLetter = function(letter){
   var scrollToEl = $('.divider[data-letter="' + letter + '"]');
   if (!scrollToEl.length) return;
-  var scrollTop = scrollToEl.offset().top + $('#directory-entries').scrollTop() - this.searchBarHeight - this.navHeight;
-  $('#directory-entries')[0].scrollTop = scrollTop;
-  flWebviewRedraw();
+  var scrollTop = scrollToEl.offset().top + this.$container.find('.directory-entries').scrollTop() - this.searchBarHeight - this.navHeight;
+  this.$container.find('.directory-entries')[0].scrollTop = scrollTop;
+  this.flViewportRedraw();
 };
 
 DataDirectory.prototype.listIndexTouchStart = function(e){
@@ -251,11 +252,11 @@ DataDirectory.prototype.renderFilters = function(){
   if ( this.config.filter_fields.length ) {
     // 1 or more filter fields configured
     var directoryFilterHTML = Handlebars.templates.directoryFilter(this.config.filter_fields);
-    $('#filter-list').html(directoryFilterHTML);
+    this.$container.find('.filter-list').html(directoryFilterHTML);
   } else {
     // No filter field configured
-    $('#search').attr('placeholder','Search');
-    $('#filters').remove();
+    this.$container.find('.search').attr('placeholder','Search');
+    this.$container.find('.filters').remove();
   }
 
 };
@@ -301,9 +302,9 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
     });
   } else {
     var directoryFilterValuesHTML = Handlebars.templates.directoryFilterValue(data);
-    $('#filter-value-list').html(directoryFilterValuesHTML);
-    $('#filter-selected').html(filter);
-    $('#directory-filters')[0].scrollTop = 0;
+    this.$container.find('.filter-value-list').html(directoryFilterValuesHTML);
+    this.$container.find('.filter-selected').html(filter);
+    this.$container.find('.directory-filters')[0].scrollTop = 0;
     this.switchMode('filter-values');
   }
 };
@@ -320,7 +321,7 @@ DataDirectory.prototype.switchMode = function(mode){
     mode = 'default';
   }
 
-  $('#data-directory').attr('data-mode',mode);
+  this.$container.attr('data-mode',mode);
 
   if ( mode === 'search' ) {
     this.searchResultData = [];
@@ -342,44 +343,44 @@ DataDirectory.prototype.isMode = function(mode){
 DataDirectory.prototype.attachObservers = function(){
   var _this = this;
 
-  $('#directory-entries').on( 'click', '.data-linked', $.proxy( this.dataLinkClicked, this ) );
+  this.$container.on( 'click', '.data-linked', $.proxy( this.dataLinkClicked, this ) );
   $(window).on( 'resize', function(){
     _this.deviceIsTablet = window.innerWidth >= 640;
     _this.resizeSearch();
-    _this.navHeight = $('#main-header').height();
-    _this.searchBarHeight = $('#directory-search').outerHeight();
+    _this.navHeight = $('.fl-viewport-header').height() || 0;
+    _this.searchBarHeight = _this.$container.find('.directory-search').outerHeight();
   } );
-  $('#directory-search').on( 'click', function(){
+  this.$container.find('.directory-search').on( 'click', function(){
     // GA Track event
     // window.plugins.ga.trackEvent("directory", "search");
 
-    $('#search').trigger( 'focus' );
+    _this.$container.find('.search').trigger( 'focus' );
   } ).on( 'submit', function(e){
     e.preventDefault();
     _this.renderSearchResult( {
       type: 'search',
-      value: $('#search').val()
+      value: _this.$container.find('.search').val()
     } );
   } );
-  $('#search').on( 'focus', $.proxy( this.activateSearch, this ) );
+  this.$container.find('.search').on( 'focus', $.proxy( this.activateSearch, this ) );
   if ( this.supportLiveSearch ) {
-    $('#search').on( 'keydown paste input', function(e){
+    this.$container.find('.search').on( 'keydown paste input', function(e){
       _this.renderLiveSearch($(this).val());
     } );
   }
-  $(document).on( 'click', '#search-cancel', function(){
-    $('#search').val('');
+  $(this.$container).on( 'click', '.search-cancel', function(){
+    _this.$container.find('.search').val('');
     _this.deactivateSearch();
     return false;
   } );
-  $(document).on( 'click', '#search-result-clear', function(){
-    $('#search').val('');
+  $(this.$container).on( 'click', '.search-result-clear', function(){
+    _this.$container.find('.search').val('');
     _this.switchMode('search');
     return false;
   } );
 
-  $(document).on( 'touchmove', '#search-result ul, #filters', function(){
-    $('#search').trigger('blur');
+  $(this.$container).on( 'touchmove', '.search-result ul, .filters', function(){
+    _this.$container.find('.search').trigger('blur');
   } );
 
   document.addEventListener("flDirectoryEntryBeforeRender", function () {
@@ -396,7 +397,7 @@ DataDirectory.prototype.attachObservers = function(){
 
 DataDirectory.prototype.activateSearch = function(){
   if ( this.isMode('default') ) {
-    $('#filter-selected').html('');
+    this.$container.find('.filter-selected').html('');
   }
   if ( !this.isMode('search') && !this.isMode('filter-values') && !this.isMode('search-result') && !this.isMode('search-result-entry') ) {
     this.switchMode('search');
@@ -406,7 +407,7 @@ DataDirectory.prototype.activateSearch = function(){
 };
 
 DataDirectory.prototype.deactivateSearch = function(){
-  $('#search').trigger('blur');
+  this.$container.find('.search').trigger('blur');
   if ( this.deviceIsTablet && this.isMode('search-result-entry') ) {
     this.openDataEntry(0, 'entry', false);
   }
@@ -419,9 +420,9 @@ DataDirectory.prototype.resizeSearch = function(){
   var _this = this;
   setTimeout(function(){
     if ( _this.isMode('search') || _this.isMode('filter-values') || _this.isMode('search-result') || _this.isMode('search-result-entry') ) {
-      $('#search').css( 'width', $('#directory-search').width() - $('#search-cancel').outerWidth() + 8 );
+      _this.$container.find('.search').css( 'width', _this.$container.find('.directory-search').width() - _this.$container.find('.search-cancel').outerWidth() + 8 );
     } else {
-      $('#search').css( 'width', '' );
+      _this.$container.find('.search').css( 'width', '' );
     }
   }, 0);
 };
@@ -477,8 +478,8 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
   if ( typeof type === 'undefined' ) type = 'entry';
   if ( typeof trackEvent === 'undefined' ) trackEvent = true;
 
-  var $listEntry = $('li[data-type="' + type + '"][data-index=' + entryIndex + ']');
-  var $entrytitle = $('li[data-type="' + type + '"][data-index=' + entryIndex + '] .list-title');
+  var $listEntry = this.$container.find('li[data-type="' + type + '"][data-index=' + entryIndex + ']');
+  var $entrytitle = this.$container.find('li[data-type="' + type + '"][data-index=' + entryIndex + '] .list-title');
   var title = $entrytitle.text().trim();
   var detailData = {
     title : title,
@@ -559,10 +560,10 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
   }
 
   if ( this.deviceIsTablet ) {
-    $('#directory-details .directory-details-content').html(detailHTML);
+    this.$container.find('.directory-details .directory-details-content').html(detailHTML);
     after_render();
     setTimeout(function(){
-      $('li[data-type=' + type + '].active').removeClass('active');
+      _this.$container.find('li[data-type=' + type + '].active').removeClass('active');
       $listEntry.addClass('active');
     },0);
   } else {
@@ -584,16 +585,16 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
 };
 
 DataDirectory.prototype.disableClicks = function () {
-  $('#directory-list, #directory-details').addClass('disabled'); // Disables List
+  this.$container.find('.directory-list, .directory-details').addClass('disabled'); // Disables List
 };
 
 // Function that will fade in the loading overlay
 DataDirectory.prototype.addLoading = function () {
   // The following adds Loading Overlay to a specific area depending on the device width
   if (this.deviceIsTablet) {
-    $('#directory-details').find('.directory-loading').fadeIn(400);
+    this.$container.find('.directory-details').find('.directory-loading').fadeIn(400);
   } else {
-    $('#directory-list').find('.directory-loading').fadeIn(400);
+    this.$container.find('.directory-list').find('.directory-loading').fadeIn(400);
   }
 
   // Delay to display the "Loading..." text
@@ -608,12 +609,12 @@ DataDirectory.prototype.removeLoading = function () {
   clearTimeout(messageTimeout); // Clears delay for text to appear
   // The following removes Loading Overlay from a specific area depending on the device width
   if (this.deviceIsTablet) {
-    $('#directory-details').find('.directory-loading').fadeOut(400);
+    this.$container.find('.directory-details').find('.directory-loading').fadeOut(400);
   } else {
-    $('#directory-list').find('.directory-loading').fadeOut(400);
+    this.$container.find('.directory-list').find('.directory-loading').fadeOut(400);
   }
 
-  $('#directory-list, #directory-details').removeClass('disabled'); // Enables List
+  this.$container.find('.directory-list, .directory-details').removeClass('disabled'); // Enables List
   $('.directory-loading .loading-text').text(""); // Resets Loading text
 };
 
@@ -744,7 +745,7 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
 
   this.searchResultData = data.result;
   var directorySearchResultHTML = Handlebars.templates.directorySearchResult(data);
-  $('#search-result').html(directorySearchResultHTML).scrollTop(0);
+  this.$container.find('.search-result').html(directorySearchResultHTML).scrollTop(0);
   if (typeof callback === 'function') setTimeout(callback, 0);
 };
 
@@ -810,7 +811,7 @@ DataDirectory.prototype.parseQueryVars = function(){
 };
 
 DataDirectory.prototype.presetSearch = function( value ){
-  $('#search').val( value );
+  this.$container.find('.search').val( value );
   this.renderSearchResult( {
     type : 'search',
     value : value
@@ -821,7 +822,7 @@ DataDirectory.prototype.presetSearch = function( value ){
       this.switchMode('default');
     }
   }
-  flWebviewRedraw();
+  this.flViewportRedraw();
 };
 
 DataDirectory.prototype.presetFilter = function( field, value ){
@@ -830,17 +831,17 @@ DataDirectory.prototype.presetFilter = function( field, value ){
     field : field,
     value : value
   } );
-  flWebviewRedraw();
+  this.flViewportRedraw();
 };
 
 DataDirectory.prototype.directoryNotConfigured = function(){
-  $('#directory-entries').addClass('not-configured').html('No data is found for the directory');
+  this.$container.find('.directory-entries').addClass('not-configured').html('No data is found for the directory');
 };
 
 DataDirectory.prototype.flViewportRedraw = function(){
-  $('#main-viewport').css('-webkit-transform', 'scale(1)');
+  $(document.body).css('-webkit-transform', 'scale(1)');
   setTimeout(function(){
-    $('#main-viewport').css('-webkit-transform', '');
+    $(document.body).css('-webkit-transform', '');
   }, 0);
 };
 

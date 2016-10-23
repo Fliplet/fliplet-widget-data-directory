@@ -292,6 +292,7 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
     var overlayContent = Handlebars.templates.directoryFilterOverlay(data);
     this.filterOverlay = new Overlay(overlayContent,{
       title: 'Filter by ' + filter,
+      classes: 'overlay-directory',
       showOnInit: true,
       closeText: '<i class="fa fa-chevron-left"></i>',
       entranceAnim: 'slideInRight',
@@ -300,13 +301,6 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
       afterClose: function(){
         _this.filterOverlay = null;
       }
-    }, function(e){
-      $(e.overlayPanel).css({
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0
-      });
     });
   } else {
     var directoryFilterValuesHTML = Handlebars.templates.directoryFilterValue(data);
@@ -577,6 +571,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
   } else {
     this.entryOverlay = new Overlay( detailHTML, {
       showOnInit : true,
+      classes: 'overlay-directory',
       closeText: '<i class="fa fa-chevron-left"></i>',
       entranceAnim: 'slideInRight',
       exitAnim: 'slideOutRight',
@@ -584,13 +579,6 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
       afterClose: function(){
         _this.entryOverlay = null;
       }
-    }, function(e){
-      $(e.overlayPanel).css({
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0
-      });
     });
   }
 

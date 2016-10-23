@@ -18,6 +18,18 @@
     -webkit-overflow-scrolling: touch;
     position: relative;
 }
+.overlay-directory .overlayPanel {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  -webkit-animation-duration: 350ms;
+  -ms-animation-duration: 350ms;
+  animation-duration: 350ms;
+}
+.overlay-directory .overlayPanelScreen {
+  background-color: transparent;
+}
 .directory-list .list-default,
 .overlayPanel .list-default {
     height: 100%;
@@ -475,10 +487,10 @@
     font-size: 16px;
 }
 /* Loading Overlay */
-#directory-list.disabled li {
+.directory-list.disabled li {
     pointer-events: none;
 }
-#directory-details.disabled div {
+.directory-details.disabled div {
     pointer-events: none;
 }
 .directory-loading {

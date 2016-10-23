@@ -293,12 +293,20 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
     this.filterOverlay = new Overlay(overlayContent,{
       title: 'Filter by ' + filter,
       showOnInit: true,
-      entranceAnim: 'bounceInUp',
-      exitAnim: 'bounceOutDown',
+      closeText: '<i class="fa fa-chevron-left"></i>',
+      entranceAnim: 'slideInRight',
+      exitAnim: 'slideOutRight',
       closeText: 'Cancel',
       afterClose: function(){
         _this.filterOverlay = null;
       }
+    }, function(e){
+      $(e.overlayPanel).css({
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+      });
     });
   } else {
     var directoryFilterValuesHTML = Handlebars.templates.directoryFilterValue(data);
@@ -569,13 +577,21 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
   } else {
     this.entryOverlay = new Overlay( detailHTML, {
       showOnInit : true,
-      entranceAnim : 'bounceInDown',
-      exitAnim : 'bounceOutUp',
+      closeText: '<i class="fa fa-chevron-left"></i>',
+      entranceAnim: 'slideInRight',
+      exitAnim: 'slideOutRight',
       afterOpen: after_render,
       afterClose: function(){
         _this.entryOverlay = null;
       }
-    } );
+    }, function(e){
+      $(e.overlayPanel).css({
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+      });
+    });
   }
 
   // GA Track event

@@ -80,13 +80,13 @@
             <div class="col-sm-8">
               <div class="radio-buttons clearfix">
                 <div class="radio">
-                  <input type="radio" id="thumb-list-yes" name="enable_thumb_list" value="thumb-list-yes" checked>
+                  <input type="radio" id="thumb-list-yes" name="enable_thumb_list" value="show" {{#if show_thumb_list}}checked{{/if}}>
                   <label for="thumb-list-yes">
                     Yes
                   </label>
                 </div>
                 <div class="radio">
-                  <input type="radio" id="thumb-list-no" name="enable_thumb_list" value="thumb-list-no">
+                  <input type="radio" id="thumb-list-no" name="enable_thumb_list" value="no-show" {{#if show_thumb_list}}{{else}}checked{{/if}}>
                   <label for="thumb-list-no">
                     No
                   </label>
@@ -102,13 +102,13 @@
             <div class="col-sm-8">
               <div class="radio-buttons clearfix">
                 <div class="radio">
-                  <input type="radio" id="thumb-details-yes" name="enable_thumb_details" value="thumb-details-yes" checked>
+                  <input type="radio" id="thumb-details-yes" name="enable_thumb_details" value="show" {{#if show_thumb_detail}}checked{{/if}}>
                   <label for="thumb-details-yes">
                     Yes
                   </label>
                 </div>
                 <div class="radio">
-                  <input type="radio" id="thumb-details-no" name="enable_thumb_details" value="thumb-details-no">
+                  <input type="radio" id="thumb-details-no" name="enable_thumb_details" value="no-show" {{#if show_thumb_detail}}{{else}}checked{{/if}}>
                   <label for="thumb-details-no">
                     No
                   </label>
@@ -116,7 +116,7 @@
               </div>
             </div>
           </div>
-
+          <!-- TEMPORARLY REMOVED
           <div class="title-header">
             <p>Select the thumbnails folder</p>
             <p>Select the folder where your thumbnails are stored.</p>
@@ -126,7 +126,6 @@
             <div class="breadcrumbs-select">
               <div class="helper"><strong>Root</strong></div>
             </div>
-            <!-- BACK BUTTON ONLY SHOWS WHEN THE USER NAVIGATES INSIDE A FOLDER -->
             <div class="back-btn">
                 Up to <span class="up-to">Folder Name</span>
             </div>
@@ -137,6 +136,7 @@
           <div class="image-library">
 
           </div>
+          -->
         </div>
 
       </div>

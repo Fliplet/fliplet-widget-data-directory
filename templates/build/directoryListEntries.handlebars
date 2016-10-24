@@ -1,8 +1,8 @@
 <ul>{{#each entries}}
     {{{alphabet_divider}}}
-    <li class="linked data-linked" data-type="entry" data-index="{{@index}}">
+    <li class="linked data-linked {{#if ../has_thumbnail}}has-thumbs{{/if}}" data-type="entry" data-index="{{@index}}">
         <span class="icon fa fa-angle-right"></span>
-        {{#if has_thumbnail}}<div class="list-image" style="background-image:url('{{thumbnail}}');"></div>{{/if}}
+        {{#if ../has_thumbnail}}<div class="list-image" style="background-image:url('{{> entry_thumbnail}}');"></div>{{/if}}
         <div class="list-desc">
             <p class="list-title">{{> entry_title}}</p>
             {{#if ../show_subtitle}}

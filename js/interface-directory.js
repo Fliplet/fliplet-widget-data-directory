@@ -17,6 +17,7 @@ var DataDirectoryForm = (function() {
 
     this.tables = configuration.dataSources;
     this.source = '';
+
     if (configuration.source) {
       this.source = configuration.source;
       $('.options').show();
@@ -36,6 +37,10 @@ var DataDirectoryForm = (function() {
     }, configuration);
     if ( typeof this.directoryConfig.field_types === 'string' && this.directoryConfig.field_types.length ) {
       this.directoryConfig.field_types = JSON.parse(this.directoryConfig.field_types);
+    }
+
+    if (configuration.thumbnail_field != '') {
+      $('.thumbs-options').addClass('show');
     }
 
 
@@ -250,7 +255,9 @@ var DataDirectoryForm = (function() {
         alphabetical_field: $('#data-alphabetical-fields-select').val(),
         show_tags: $("#show_tags").is(':checked'),
         tags_field: $("#show_tags").is(':checked') ? $('#data-tags-fields-select').val() : '',
-        thumbnail_field: $('#data-thumbnail-fields-select').val()
+        thumbnail_field: $('#data-thumbnail-fields-select').val(),
+        show_thumb_list: ($('[name=enable_thumb_list]:checked').val() === "show" ? true : false),
+        show_thumb_detail: ($('[name=enable_thumb_details]:checked').val() === "show" ? true : false)
       };
 
       $('[data-type="filter"]:checked').each(function(){

@@ -107,6 +107,10 @@ DataDirectory.prototype.initialiseHandlebars = function(){
     Handlebars.registerPartial('entry_subtitle', this.config.subtitle.replace(/{{/g, "{{[").replace(/}}/g, "]}}"));
   }
 
+  if (this.config.hasOwnProperty('thumbnail_field')) {
+    Handlebars.registerPartial('entry_thumbnail', this.config.thumbnail_field.replace(/(\w+)/g, "{{[$&]}}"));
+  }
+
   if (this.config.hasOwnProperty('tags_field')) {
     Handlebars.registerHelper('entry_tags', function (entry) {
       var tags = entry[_this.config.tags_field];
@@ -191,6 +195,7 @@ DataDirectory.prototype.renderEntries = function(){
   var directoryListHTML = Handlebars.templates.directoryListEntries({
     show_subtitle: this.config.show_subtitle ? this.config.show_subtitle : false,
     show_tags: this.config.show_tags ? this.config.show_tags : false,
+    has_thumbnail: (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_list ? this.config.show_thumb_list : false ),
     entries: this.data
   });
 
@@ -489,7 +494,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     fields : []
   };
 
-  if (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '') {
+  if (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_detail) {
     detailData['has_thumbnail'] = true;
     detailData['thumbnail'] = (type == 'search-result-entry') ? this.searchResultData[entryIndex][this.config.thumbnail_field] : this.data[entryIndex][this.config.thumbnail_field];
   }

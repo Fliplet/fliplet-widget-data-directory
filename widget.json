@@ -10,6 +10,7 @@
   "interface": {
     "dependencies": [
       "fliplet-core",
+      "fliplet-media",
       "fliplet-datasources",
       "fliplet-studio-ui",
       "jquery",
@@ -28,6 +29,7 @@
   "build": {
     "dependencies": [
       "fliplet-core",
+      "fliplet-media",
       "bootstrap-css",
       "jquery",
       "handlebars",

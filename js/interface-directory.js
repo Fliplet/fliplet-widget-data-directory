@@ -20,6 +20,7 @@ var DataDirectoryForm = (function() {
     if (configuration.source) {
       this.source = configuration.source;
       $('.options').show();
+      $('.nav-tabs li.disabled').removeClass('disabled');
     }
     delete configuration.dataSources;
 
@@ -165,7 +166,7 @@ var DataDirectoryForm = (function() {
       $('#data-sources option[value=""]').remove();
       $('a[href="#data-source"][data-toggle="tab"]').html('Change data source');
       $('.nav.nav-stacked li.disabled').removeClass('disabled');
-      
+
       $('#data-browse-configurations').html(Handlebars.templates.dataBrowseConfigurations(_this.columns));
       $('#data-browse-configurations select').each(function() {
         updateSelectText($(this));
@@ -206,6 +207,7 @@ var DataDirectoryForm = (function() {
     attachObservers_ : function(){
       $(document).on( "click", "#save-link", _this.saveDataDirectoryForm_ );
       $('#data-sources').on( 'change', $.proxy(_this.dataSourceChanged_,this) );
+      $('#data-source').on( 'change', '#data-thumbnail-fields-select', _this.thumbFieldChanged_);
       $('.nav.nav-stacked').on( 'click', 'li.disabled', function(){
         return false;
       } );
@@ -229,7 +231,7 @@ var DataDirectoryForm = (function() {
         }
       });
 
-      $('#data-tags-fields-select, #data-alphabetical-fields-select, #data-sources, #data-thumbnail-fields-select, #data-browse-configurations select').on('change', function () {
+      $('.tab-content').on('change', '#data-tags-fields-select, #data-alphabetical-fields-select, #data-sources, #data-thumbnail-fields-select, #data-browse-configurations select', function () {
         updateSelectText($(this));
       });
     },
@@ -284,11 +286,20 @@ var DataDirectoryForm = (function() {
     dataSourceChanged_ : function(e){
       if ( _this.source === "" || confirm("Are you sure you want to change the data source? This will reset your previous configuration for the directory.") ) {
         $('.options').show();
+        $('.nav-tabs li.disabled').removeClass('disabled');
         _this.parseSelectedTable( $(e.target).val(), true );
         _this.loadDataDirectoryForm();
         // $('a[href="#data-browse"]').tab('show');
       } else {
         _this.source
+      }
+    },
+
+    thumbFieldChanged_ : function(e){
+      if ( $(this).val() != '' ) {
+        $('.thumbs-options').addClass('show');
+      } else {
+        $('.thumbs-options.show').removeClass('show');
       }
     }
 

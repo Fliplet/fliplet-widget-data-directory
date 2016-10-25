@@ -12,7 +12,9 @@ var messageTimeout,
   messageDelay = 5000,        // "Loading..." text delay to display
   loadingOverlayDelay = 1000; // Time it takes to display the loading overlay after a click
 
+
 var DataDirectory = function (config, container) {
+  var _this = this;
   this.data = config.rows;
   this.config = $.extend({
     is_alphabetical : false,
@@ -34,21 +36,37 @@ var DataDirectory = function (config, container) {
   this.supportLiveSearch = this.data.length <= 500;
   this.liveSearchInterval = 200;
 
+  var folderID = this.config.folderConfig;
+
+  Fliplet.Media.Folders.get(folderID).then(function (response) {
+    response.files.forEach(renderThumb);
+
+    if (_this.data.length) {
+      _this.initialiseHandlebars();
+      _this.init();
+      _this.attachObservers();
+      _this.parseQueryVars();
+    } else {
+      _this.directoryNotConfigured();
+    }
+
+  });
+
+  function renderThumb(file) {
+    // Returns placeholder if no match
+    _this.data.forEach(function(entry) {
+      if (file.url.indexOf( entry[_this.config.thumbnail_field]) !== -1 && entry[_this.config.thumbnail_field].trim() !== '') {
+        entry[_this.config.thumbnail_field] = file.url;
+      }
+    });
+  }
+
   if ( typeof this.config.is_alphabetical === 'string' ) {
     this.config.is_alphabetical = this.config.is_alphabetical.toLowerCase().trim() === 'true';
   }
 
   if ( typeof this.config.field_types === 'string' && this.config.field_types.length ) {
     this.config.field_types = JSON.parse(this.config.field_types);
-  }
-
-  if (this.data.length) {
-    this.initialiseHandlebars();
-    this.init();
-    this.attachObservers();
-    this.parseQueryVars();
-  } else {
-    this.directoryNotConfigured();
   }
 
   return this;
@@ -105,10 +123,6 @@ DataDirectory.prototype.initialiseHandlebars = function(){
 
   if (this.config.hasOwnProperty('subtitle')) {
     Handlebars.registerPartial('entry_subtitle', this.config.subtitle.replace(/{{/g, "{{[").replace(/}}/g, "]}}"));
-  }
-
-  if (this.config.hasOwnProperty('thumbnail_field')) {
-    Handlebars.registerPartial('entry_thumbnail', this.config.thumbnail_field.replace(/(\w+)/g, "{{[$&]}}"));
   }
 
   if (this.config.hasOwnProperty('tags_field')) {
@@ -350,6 +364,20 @@ DataDirectory.prototype.isMode = function(mode){
 DataDirectory.prototype.attachObservers = function(){
   var _this = this;
 
+  _this.data.forEach(function(entry, i) {
+    var imgURL = entry[_this.config.thumbnail_field];
+    if ( /^(f|ht)tps?:\/\//i.test(imgURL) ) {
+
+      var img = new Image();
+
+      img.addEventListener('load', function(){
+        $('.list-default li[data-index="'+i+'"] .list-image').css('background-image', 'url(' + this.src + ')');
+      }, false);
+
+      img.src = imgURL;
+    }
+  });
+
   this.$container.on( 'click', '.data-linked', $.proxy( this.dataLinkClicked, this ) );
   $(window).on( 'resize', function(){
     _this.deviceIsTablet = window.innerWidth >= 640;
@@ -494,62 +522,50 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     fields : []
   };
 
-  if (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_detail) {
-    detailData['has_thumbnail'] = true;
-    detailData['thumbnail'] = (type == 'search-result-entry') ? this.searchResultData[entryIndex][this.config.thumbnail_field] : this.data[entryIndex][this.config.thumbnail_field];
-  }
+  Fliplet.Media.Folders.get(_this.data[entryIndex][_this.config.folderConfig]).then(function (response) {
 
-  for (var fieldIndex = 0, l = this.config.detail_fields.length; fieldIndex < l; fieldIndex++) {
-    var fieldObj = this.getEntryField( entryIndex, fieldIndex, type );
-    if (fieldObj.value.length) {
-      detailData.fields.push( fieldObj );
+    response.files.forEach(renderEntry);
+  });
+
+  function renderEntry(file) {
+
+    if (typeof _this.config.thumbnail_field !== 'undefined' && _this.config.thumbnail_field.trim() !== '' && _this.config.show_thumb_detail) {
+      detailData['has_thumbnail'] = true;
+
+      var entryURL = _this.data[entryIndex][_this.config.thumbnail_field];
+      // Returns placeholder if no match
+      if (file.url.indexOf(entryURL) !== -1) {
+        var img = new Image();
+        img.addEventListener('load', function(){
+          $('.list-default li[data-index="'+i+'"] .list-image').css('background-image', 'url(' + this.src + ')');
+        }, false);
+        img.src = file.url;
+      } else if (/^(f|ht)tps?:\/\//i.test(entryURL)) {
+        var img = new Image();
+        img.addEventListener('load', function(){
+          $('.directory-detail-title.has-thumbnail span.thumbnail .img-wrapper').css('background-image', 'url(' + this.src + ')');
+        }, false);
+        img.src = entryURL;
+      }
+
     }
-  }
 
-  var detailHTML = Handlebars.templates.directoryDetails(detailData);
-
-  if ( type === 'search-result-entry' ) {
-    this.switchMode('search-result-entry');
-  }
-
-  // Custom event to fire before an entry is rendered in the detailed view.
-  var flDirectoryEntryBeforeRender = new CustomEvent(
-    "flDirectoryEntryBeforeRender",
-    {
-      bubbles: true,
-      cancelable: true,
-      detail: {
-        detailData: detailData
+    for (var fieldIndex = 0, l = _this.config.detail_fields.length; fieldIndex < l; fieldIndex++) {
+      var fieldObj = _this.getEntryField( entryIndex, fieldIndex, type );
+      if (fieldObj.value.length) {
+        detailData.fields.push( fieldObj );
       }
     }
-  );
-  document.dispatchEvent(flDirectoryEntryBeforeRender);
 
-  var after_render = function() {
-    // Link taps listeners
-    $(".directory-detail-value a").not(".data-linked").on("click", function(e){
-      if ($(e.target).attr("href").indexOf("mailto") === 0) {
-        // GA Track event
-        // window.plugins.ga.trackEvent("directory", "entry_email", title);
-      } else if ($(e.target).attr("href").indexOf("tel") === 0) {
-        // GA Track event
-        // window.plugins.ga.trackEvent("directory", "entry_phone", title);
-      } else {
-        // GA Track event
-        // window.plugins.ga.trackEvent("directory", "entry_url", title);
-      }
-    });
-    $(".directory-detail-value a.data-linked").on("click", function(e){
-      var filterType = (typeof $(e.target).data("type") !== "undefined") ? $(e.target).data("type") : "";
-      var filterValue = (typeof $(e.target).data("value") !== "undefined") ? $(e.target).data("value") : "";
+    var detailHTML = Handlebars.templates.directoryDetails(detailData);
 
-      // GA Track event
-      // window.plugins.ga.trackEvent("directory", "entry_filter", filterType + ": " + filterValue);
-    });
+    if ( type === 'search-result-entry' ) {
+      _this.switchMode('search-result-entry');
+    }
 
-    // Custom event to fire after an entry is rendered in the detailed view.
-    var flDirectoryEntryAfterRender = new CustomEvent(
-      "flDirectoryEntryAfterRender",
+    // Custom event to fire before an entry is rendered in the detailed view.
+    var flDirectoryEntryBeforeRender = new CustomEvent(
+      "flDirectoryEntryBeforeRender",
       {
         bubbles: true,
         cancelable: true,
@@ -558,39 +574,77 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
         }
       }
     );
-    document.dispatchEvent(flDirectoryEntryAfterRender);
-  };
+    document.dispatchEvent(flDirectoryEntryBeforeRender);
 
-  // Function to run before rendering the entry
-  if (typeof this.config.before_render_entry === 'function') {
-    detailHTML = this.config.before_render_entry(detailData, detailHTML);
+    var after_render = function() {
+      // Link taps listeners
+      $(".directory-detail-value a").not(".data-linked").on("click", function(e){
+        if ($(e.target).attr("href").indexOf("mailto") === 0) {
+          // GA Track event
+          // window.plugins.ga.trackEvent("directory", "entry_email", title);
+        } else if ($(e.target).attr("href").indexOf("tel") === 0) {
+          // GA Track event
+          // window.plugins.ga.trackEvent("directory", "entry_phone", title);
+        } else {
+          // GA Track event
+          // window.plugins.ga.trackEvent("directory", "entry_url", title);
+        }
+      });
+      $(".directory-detail-value a.data-linked").on("click", function(e){
+        var filterType = (typeof $(e.target).data("type") !== "undefined") ? $(e.target).data("type") : "";
+        var filterValue = (typeof $(e.target).data("value") !== "undefined") ? $(e.target).data("value") : "";
+
+        // GA Track event
+        // window.plugins.ga.trackEvent("directory", "entry_filter", filterType + ": " + filterValue);
+      });
+
+      // Custom event to fire after an entry is rendered in the detailed view.
+      var flDirectoryEntryAfterRender = new CustomEvent(
+        "flDirectoryEntryAfterRender",
+        {
+          bubbles: true,
+          cancelable: true,
+          detail: {
+            detailData: detailData
+          }
+        }
+      );
+      document.dispatchEvent(flDirectoryEntryAfterRender);
+    };
+
+    // Function to run before rendering the entry
+    if (typeof _this.config.before_render_entry === 'function') {
+      detailHTML = _this.config.before_render_entry(detailData, detailHTML);
+    }
+
+    if ( _this.deviceIsTablet ) {
+      _this.$container.find('.directory-details .directory-details-content').html(detailHTML);
+      after_render();
+      setTimeout(function(){
+        _this.$container.find('li[data-type=' + type + '].active').removeClass('active');
+        $listEntry.addClass('active');
+      },0);
+    } else {
+      _this.entryOverlay = new Overlay( detailHTML, {
+        showOnInit : true,
+        classes: 'overlay-directory',
+        closeText: '<i class="fa fa-chevron-left"></i>',
+        entranceAnim: 'slideInRight',
+        exitAnim: 'slideOutRight',
+        afterOpen: after_render,
+        afterClose: function(){
+          _this.entryOverlay = null;
+        }
+      });
+    }
+
+    // GA Track event
+    if (trackEvent) {
+      // window.plugins.ga.trackEvent('directory', "entry_open", title);
+    }
+
   }
 
-  if ( this.deviceIsTablet ) {
-    this.$container.find('.directory-details .directory-details-content').html(detailHTML);
-    after_render();
-    setTimeout(function(){
-      _this.$container.find('li[data-type=' + type + '].active').removeClass('active');
-      $listEntry.addClass('active');
-    },0);
-  } else {
-    this.entryOverlay = new Overlay( detailHTML, {
-      showOnInit : true,
-      classes: 'overlay-directory',
-      closeText: '<i class="fa fa-chevron-left"></i>',
-      entranceAnim: 'slideInRight',
-      exitAnim: 'slideOutRight',
-      afterOpen: after_render,
-      afterClose: function(){
-        _this.entryOverlay = null;
-      }
-    });
-  }
-
-  // GA Track event
-  if (trackEvent) {
-    // window.plugins.ga.trackEvent('directory', "entry_open", title);
-  }
 };
 
 DataDirectory.prototype.disableClicks = function () {

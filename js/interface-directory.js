@@ -39,7 +39,7 @@ var DataDirectoryForm = (function() {
       this.directoryConfig.field_types = JSON.parse(this.directoryConfig.field_types);
     }
 
-    if (configuration.thumbnail_field != '') {
+    if (typeof configuration.thumbnail_field !== 'undefined' && configuration.thumbnail_field !== '') {
       $('.thumbs-options').addClass('show');
     }
 
@@ -69,7 +69,7 @@ var DataDirectoryForm = (function() {
       });
 
       Handlebars.registerHelper("filterCheckbox", function(field){
-        var $input = $("<label class='table-checkbox'><input data-field='"+field+"' data-type='filter' type='checkbox' /></label>");
+        var $input = $("<div class='checkbox'><input data-field='"+field+"' data-type='filter' type='checkbox' id='filter_"+field+"'><label for='filter_"+field+"'><span class='check'><i class='fa fa-check'></i></span></label></div>");
 
         if ( _this.directoryConfig.filter_fields.indexOf(field) > -1 ) {
           $input.find('input').attr('checked',true);
@@ -79,7 +79,7 @@ var DataDirectoryForm = (function() {
       });
 
       Handlebars.registerHelper("searchCheckbox", function(field){
-        var $input = $("<label class='table-checkbox'><input data-field='"+field+"' data-type='search' type='checkbox' /></label>");
+        var $input = $("<div class='checkbox'><input data-field='"+field+"' data-type='search' type='checkbox' id='search_"+field+"'><label for='search_"+field+"'><span class='check'><i class='fa fa-check'></i></span></label></div>");
 
         if ( _this.directoryConfig.search_fields.indexOf(field) > -1 ) {
           $input.find('input').attr('checked',true);
@@ -212,7 +212,7 @@ var DataDirectoryForm = (function() {
     attachObservers_ : function(){
       $(document).on( "click", "#save-link", _this.saveDataDirectoryForm_ );
       $('#data-sources').on( 'change', $.proxy(_this.dataSourceChanged_,this) );
-      $('#data-source').on( 'change', '#data-thumbnail-fields-select', _this.thumbFieldChanged_);
+      $('#data-source').on( 'change', '#data-thumbnail-fields-select', _this.showThumbOptions_);
       $('.nav.nav-stacked').on( 'click', 'li.disabled', function(){
         return false;
       } );
@@ -298,12 +298,12 @@ var DataDirectoryForm = (function() {
         _this.loadDataDirectoryForm();
         // $('a[href="#data-browse"]').tab('show');
       } else {
-        _this.source
+        _this.source;
       }
     },
 
-    thumbFieldChanged_ : function(e){
-      if ( $(this).val() != '' ) {
+    showThumbOptions_ : function(e){
+      if ( $(this).val() !== '' ) {
         $('.thumbs-options').addClass('show');
       } else {
         $('.thumbs-options.show').removeClass('show');

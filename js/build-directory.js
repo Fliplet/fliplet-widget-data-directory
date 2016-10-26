@@ -523,7 +523,6 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
   };
 
   Fliplet.Media.Folders.get(_this.data[entryIndex][_this.config.folderConfig]).then(function (response) {
-
     response.files.forEach(renderEntry);
   });
 

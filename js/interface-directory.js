@@ -161,6 +161,16 @@ var DataDirectoryForm = (function() {
       $('.thumbs-options').addClass('show');
     }
 
+    if (typeof configuration.folderConfig !== 'undefined' && configuration.thumbnail_field.length) {
+      if ('organizationId' in configuration.folderConfig) {
+        $('.item-holder[data-organization-id="'+configuration.folderConfig.organizationId+'"]').addClass('selected');
+      } else if ('appId' in configuration.folderConfig) {
+        $('.item-holder[data-app-id="'+configuration.folderConfig.appId+'"]').addClass('selected');
+      } else if ('folderId' in configuration.folderConfig) {
+        $('.item-holder[data-folder-id="'+configuration.folderConfig.folderId+'"]').addClass('selected');
+      }
+    }
+
     this.initialiseHandlebars();
     this.parseSelectedTable(this.source);
     this.loadDataDirectoryForm();

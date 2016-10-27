@@ -4,170 +4,336 @@
     <a href="#">Need help?</a>
   </header>
 
-  <div class="title-header">
-    <p>Select data source</p>
-    <p>Select a data source for your directory.</p>
-  </div>
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active" id="data-source-control"><a href="#data-source-tab" aria-controls="data-source" role="tab" data-toggle="tab">Data source</a></li>
+    <li role="presentation" class="disabled" id="main-list-control"><a href="#main-list-tab" aria-controls="main-list" role="tab" data-toggle="tab">Main list</a></li>
+  </ul>
 
-  <div class="text-success no-data-source-prompt">
-    <p>You don't have any data source set up, you can do so via <strong>Manage app data</strong> to load in your data in a table.</p>
-    <p>To access it just press the <strong>My apps</strong> button in the toolbar, then you will find the button on the left menu.</p>
-    <p>Go ahead. We'll be right here waiting for you.</p>
-  </div>
-
-  <div class="form-group clearfix">
-    <div class="col-sm-4 control-label">
-      <label for="data-sources">Which table do you want to use for your directory?</label>
-    </div>
-    <div class="col-sm-8">
-      <label for="data-sources" class="select-proxy-display">
-        <span class="icon fa fa-chevron-down"></span>
-        <span class="select-value-proxy">Select a table</span>
-        <select id="data-sources" data-label="select" class="hidden-select form-control">
-          <option>&mdash; Select a table &mdash;</option>
-        </select>
-      </label>
-    </div>
-  </div>
-
-  <div class="options">
-    <div class="title-header">
-      <p>Browse options</p>
-      <p>Your data will be displayed in a list. You can set up how it's displayed and configure how users can search/filter your data.</p>
-    </div>
-
-    <div class="form-group clearfix">
-      <div class="col-sm-4 control-label">
-        <label for="directory-browse-label">How do you want your data displayed in the main list?</label>
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="data-source-tab">
+      <div class="title-header">
+        <p>Select data source</p>
+        <p>Select a data source for your directory.</p>
       </div>
-      <div class="col-sm-8">
-        <input type="text" class="form-control" id="directory-browse-label" placeholder="Enter field names">
-        <p class="help-block">Use <code>\{{*}}</code> to wrap around a field name, e.g. <code>\{{Name}}, \{{Company}}</code>.</p>
-      </div>
-    </div>
 
-    <div class="form-group clearfix">
-      <div class="col-sm-4 control-label">
-        <label for="show_subtitle">Show a subtitle in the main list?</label>
+      <div class="text-success no-data-source-prompt">
+        <p>You don't have any data source set up, you can do so via <strong>Manage app data</strong> to load in your data in a table.</p>
+        <p>To access it just press the <strong>My apps</strong> button in the toolbar, then you will find the button on the left menu.</p>
+        <p>Go ahead. We'll be right here waiting for you.</p>
       </div>
-      <div class="col-sm-8">
-        <div class="checkbox">
-          <input type="checkbox" id="show_subtitle">
-          <label for="show_subtitle">
-            <span class="check"><i class="fa fa-check"></i></span> Yes, please
+
+      <div class="form-group clearfix">
+        <div class="col-sm-4 control-label">
+          <label for="data-sources">Which table do you want to use for your directory?</label>
+        </div>
+        <div class="col-sm-8">
+          <label for="data-sources" class="select-proxy-display">
+            <span class="icon fa fa-chevron-down"></span>
+            <span class="select-value-proxy">Select a table</span>
+            <select id="data-sources" data-label="select" class="hidden-select form-control">
+              <option>&mdash; Select a table &mdash;</option>
+            </select>
           </label>
         </div>
-        <div class="show-subtitle">
-          <div class="form-group clearfix">
-            <div class="col-xs-12">
-              <label for="directory-browse-subtitle">How do you want your subtitle displayed in the main list?</label>
-            </div>
-            <div class="col-xs-12">
-              <input type="text" class="form-control" id="directory-browse-subtitle" placeholder="Enter field names">
-              <p class="help-block">Use <code>\{{*}}</code> to wrap around the field names, e.g. <code>\{{About}}</code>.</p>
-            </div>
+      </div>
+
+      <div class="options">
+        <div class="title-header">
+          <p>Detail options</p>
+          <p>Users will see your data in detail in a side panel or overlay depending on the device they are on. Configure below what they will see in the detailed view.</p>
+        </div>
+
+        <div class="form-group clearfix">
+          <div class="col-sm-4 control-label">
+            <label for="data-detail-fields">Which field(s) do you want them to see?</label>
+          </div>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" id="data-detail-fields" placeholder="Enter field names">
+            <p class="help-block">Separate multiple fields with commas (<code>,</code>). Fields will be displayed in the order provided.</p>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="form-group clearfix">
-      <div class="col-sm-4 control-label">
-        <label for="show_tags">Show tags in the main list?</label>
-      </div>
-      <div class="col-sm-8">
-        <div class="checkbox">
-          <input type="checkbox" id="show_tags">
-          <label for="show_tags">
-            <span class="check"><i class="fa fa-check"></i></span> Yes, please
-          </label>
+        <div class="title-header">
+          <p>Thumbnail options</p>
+          <p>You can enable a thumbnail on your main list and/or detail views. Configure below where and how to show the thumbnails.</p>
         </div>
-        <div class="show-tags">
-          <div class="form-group clearfix">
-            <div class="col-xs-12">
-              <label for="directory-browse-tags-select">In which field can the tags be found?</label>
-            </div>
-            <div class="col-xs-12">
-              <label for="data-tags-fields-select" class="select-proxy-display">
-                <span class="icon fa fa-chevron-down"></span>
-                <span class="select-value-proxy"></span>
-                <span id="data-tags-fields"></span>
-              </label>
-              <p class="help-block">Tags will be separated by commas <code>,</code> and will work as filters.</p>
-            </div>
+
+        <div class="form-group clearfix">
+          <div class="col-sm-4 control-label">
+            <label for="data-thumbnail-fields-select">Select a field to use as the thumbnail</label>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group clearfix">
-      <div class="col-sm-4 control-label">
-        <label>In what order do you want do display your data?</label>
-      </div>
-      <div class="col-sm-8">
-        <div class="radio">
-          <input type="radio" id="alphabetical" name="is_alphabetical" value="true" checked>
-          <label for="alphabetical">
-            <span class="check"><i class="fa fa-circle"></i></span> Alphabetically by
-          </label>
-          <div class="select-holder">
+          <div class="col-sm-8">
             <label for="data-tags-fields-select" class="select-proxy-display">
               <span class="icon fa fa-chevron-down"></span>
               <span class="select-value-proxy"></span>
-              <span id="data-alphabetical-fields"></span>
+              <span id="data-thumbnail-fields"></span>
             </label>
+            <p class="help-block">Make sure the field is pointing at an image file name.</p>
           </div>
         </div>
-        <div class="radio">
-          <input type="radio" id="order" name="is_alphabetical" value="false">
-          <label for="order">
-            <span class="check"><i class="fa fa-circle"></i></span> In the order as loaded
-          </label>
+
+        <div class="thumbs-options">
+          <div class="form-group clearfix inline-radio">
+            <div class="col-sm-4 control-label">
+              <label for="swipe-to-save">Enable thumbnails on the Main list</label>
+            </div>
+            <div class="col-sm-8">
+              <div class="radio-buttons clearfix">
+                <div class="radio">
+                  <input type="radio" id="thumb-list-yes" name="enable_thumb_list" value="show" {{#if show_thumb_list}}checked{{/if}}>
+                  <label for="thumb-list-yes">
+                    Yes
+                  </label>
+                </div>
+                <div class="radio">
+                  <input type="radio" id="thumb-list-no" name="enable_thumb_list" value="no-show" {{#if show_thumb_list}}{{else}}checked{{/if}}>
+                  <label for="thumb-list-no">
+                    No
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group clearfix inline-radio">
+            <div class="col-sm-4 control-label">
+              <label for="swipe-to-save">Enable thumbnails on the Details</label>
+            </div>
+            <div class="col-sm-8">
+              <div class="radio-buttons clearfix">
+                <div class="radio">
+                  <input type="radio" id="thumb-details-yes" name="enable_thumb_details" value="show" {{#if show_thumb_detail}}checked{{/if}}>
+                  <label for="thumb-details-yes">
+                    Yes
+                  </label>
+                </div>
+                <div class="radio">
+                  <input type="radio" id="thumb-details-no" name="enable_thumb_details" value="no-show" {{#if show_thumb_detail}}{{else}}checked{{/if}}>
+                  <label for="thumb-details-no">
+                    No
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="title-header">
+            <p>Select the thumbnails folder</p>
+            <p>Select the folder where your thumbnails are stored.</p>
+          </div>
+
+          <div class="gallery-tool clearfix">
+            <div class="breadcrumbs-select">
+              <div class="helper"><strong>Root</strong></div>
+            </div>
+            <div class="back-btn">
+                Up to <span class="up-to">Folder Name</span>
+            </div>
+          </div>
+          <div class="folder-selection">
+              <span>Select a folder below</span>
+          </div>
+          <div class="image-library"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div role="tabpanel" class="tab-pane" id="main-list-tab">
+      <div class="options">
+        <div class="title-header">
+          <p>Browse options</p>
+          <p>Your data will be displayed in a list. You can set up how it's displayed and configure how users can search/filter your data.</p>
+        </div>
+
+        <div class="form-group clearfix">
+          <div class="col-sm-4 control-label">
+            <label for="directory-browse-label">How do you want your data displayed in the main list?</label>
+          </div>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" id="directory-browse-label" placeholder="Enter field names">
+            <p class="help-block">Use <code>\{{*}}</code> to wrap around a field name, e.g. <code>\{{Name}}, \{{Company}}</code>.</p>
+          </div>
+        </div>
+
+        <div class="form-group clearfix">
+          <div class="col-sm-4 control-label">
+            <label for="show_subtitle">Show a subtitle in the main list?</label>
+          </div>
+          <div class="col-sm-8">
+            <div class="checkbox">
+              <input type="checkbox" id="show_subtitle">
+              <label for="show_subtitle">
+                <span class="check"><i class="fa fa-check"></i></span> Yes, please
+              </label>
+            </div>
+            <div class="show-subtitle">
+              <div class="form-group clearfix">
+                <div class="col-xs-12">
+                  <label for="directory-browse-subtitle">How do you want your subtitle displayed in the main list?</label>
+                </div>
+                <div class="col-xs-12">
+                  <input type="text" class="form-control" id="directory-browse-subtitle" placeholder="Enter field names">
+                  <p class="help-block">Use <code>\{{*}}</code> to wrap around the field names, e.g. <code>\{{About}}</code>.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group clearfix">
+          <div class="col-sm-4 control-label">
+            <label for="show_tags">Show tags in the main list?</label>
+          </div>
+          <div class="col-sm-8">
+            <div class="checkbox">
+              <input type="checkbox" id="show_tags">
+              <label for="show_tags">
+                <span class="check"><i class="fa fa-check"></i></span> Yes, please
+              </label>
+            </div>
+            <div class="show-tags">
+              <div class="form-group clearfix">
+                <div class="col-xs-12">
+                  <label for="directory-browse-tags-select">In which field can the tags be found?</label>
+                </div>
+                <div class="col-xs-12">
+                  <label for="data-tags-fields-select" class="select-proxy-display">
+                    <span class="icon fa fa-chevron-down"></span>
+                    <span class="select-value-proxy"></span>
+                    <span id="data-tags-fields"></span>
+                  </label>
+                  <p class="help-block">Tags will be separated by commas <code>,</code> and will work as filters.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group clearfix">
+          <div class="col-sm-4 control-label">
+            <label>In what order do you want do display your data?</label>
+          </div>
+          <div class="col-sm-8">
+            <div class="radio">
+              <input type="radio" id="alphabetical" name="is_alphabetical" value="true" checked>
+              <label for="alphabetical">
+                <span class="check"><i class="fa fa-circle"></i></span> Alphabetically by
+              </label>
+              <div class="select-holder">
+                <label for="data-tags-fields-select" class="select-proxy-display">
+                  <span class="icon fa fa-chevron-down"></span>
+                  <span class="select-value-proxy"></span>
+                  <span id="data-alphabetical-fields"></span>
+                </label>
+              </div>
+            </div>
+            <div class="radio">
+              <input type="radio" id="order" name="is_alphabetical" value="false">
+              <label for="order">
+                <span class="check"><i class="fa fa-circle"></i></span> In the order as loaded
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group clearfix">
+          <div class="col-sm-4 control-label">
+            <label>How do you want to use the information in each field?</label>
+          </div>
+          <div class="col-xs-12" id="data-browse-configurations">
+
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="form-group clearfix">
-      <div class="col-sm-4 control-label">
-        <label>How do you want to use the information in each field?</label>
-      </div>
-      <div class="col-xs-12" id="data-browse-configurations">
-
-      </div>
-    </div>
-
-    <div class="title-header">
-      <p>Detail options</p>
-      <p>Users will see your data in detail in a side panel or overlay depending on the device they are on. Configure below what they will see in the detailed view.</p>
-    </div>
-
-    <div class="form-group clearfix">
-      <div class="col-sm-4 control-label">
-        <label for="data-thumbnail-fields-select">Select a field to use as the thumbnail URL</label>
-      </div>
-      <div class="col-sm-8">
-        <label for="data-tags-fields-select" class="select-proxy-display">
-          <span class="icon fa fa-chevron-down"></span>
-          <span class="select-value-proxy"></span>
-          <span id="data-thumbnail-fields"></span>
-        </label>
-        <p class="help-block">Make sure the field is pointing at an image URL.</p>
-      </div>
-    </div>
-    <div class="form-group clearfix">
-      <div class="col-sm-4 control-label">
-        <label for="data-detail-fields">Which field(s) do you want them to see?</label>
-      </div>
-      <div class="col-sm-8">
-        <input type="text" class="form-control" id="data-detail-fields" placeholder="Enter field names">
-        <p class="help-block">Separate multiple fields with commas (<code>,</code>). Fields will be displayed in the order provided.</p>
-      </div>
-    </div>
-
   </div>
+
+
+
+
+
+
 </div>
 
 <!-- Templates -->
+<template id="template-folder">
+    <div class="col-xs-4 item-holder folder" data-folder-id="\{{id}}" data-parent-id="\{{parentId}}" }>
+        <div class="image-holder">
+            <div class="image-overlay">
+                <i class="fa fa-folder" aria-hidden="true"></i>
+            </div>
+            <div class="image-info">
+                <p>
+                    <strong>\{{name}}</strong>
+                </p>
+                <p>
+                    Double click to open the folder
+                </p>
+            </div>
+        </div>
+        <div class="image-title">
+            <p>
+                <strong>\{{name}}</strong>
+            </p>
+        </div>
+    </div>
+</template>
+
+<template id="template-app">
+    <div class="col-xs-4 item-holder folder" data-app-id="\{{id}}">
+        <div class="image-holder">
+            <div class="image-overlay">
+                <i class="fa fa-folder" aria-hidden="true"></i>
+            </div>
+            <div class="image-info">
+                <p>
+                    <strong>\{{name}}</strong>
+                </p>
+                <p>
+                    Double click to open the folder
+                </p>
+            </div>
+        </div>
+        <div class="image-title">
+            <p>
+                <strong>\{{name}}</strong>
+            </p>
+        </div>
+    </div>
+</template>
+
+<template id="template-organization">
+    <div class="col-xs-4 item-holder folder" data-organization-id="\{{id}}">
+        <div class="image-holder">
+            <div class="image-overlay">
+                <i class="fa fa-folder" aria-hidden="true"></i>
+            </div>
+            <div class="image-info">
+                <p>
+                    <strong>\{{name}}</strong>
+                </p>
+                <p>
+                    Double click to open the folder
+                </p>
+            </div>
+        </div>
+        <div class="image-title">
+            <p>
+                <strong>\{{name}}</strong>
+            </p>
+        </div>
+    </div>
+</template>
+
+<template id="template-nofiles">
+    <div class="nofiles-msg">
+        <p>This folder is empty.</p>
+    </div>
+</template>
+
 <template id="data-type-selector-template">
   <label class="select-proxy-display">
     <span class="icon fa fa-chevron-down"></span>

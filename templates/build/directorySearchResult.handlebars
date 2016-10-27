@@ -1,12 +1,13 @@
-<div id="search-result-header-container">
-    <div id="search-result-header" data-type="{{type}}">
-        <a href="#" class="btn btn-link pull-right" id="search-result-clear">{{search_result_clear this}}</a>
+<div class="search-result-header-container">
+    <div class="search-result-header" data-type="{{type}}">
+        <a href="#" class="btn btn-link pull-right search-result-clear">{{search_result_clear this}}</a>
         <h5>{{{search_result_header this}}}</h5>
     </div>
 </div>
 <ul>{{#each result}}
     <li class="linked data-linked" data-type="search-result-entry" data-index="{{@index}}">
         <span class="icon fa fa-angle-right"></span>
+        {{#if has_thumbnail}}<div class="list-image" style="background-image:url('{{thumbnail}}');"></div>{{/if}}
         <div class="list-desc">
             <p class="list-title">{{> entry_title}}</p>
             {{#if ../show_subtitle}}

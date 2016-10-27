@@ -36,7 +36,6 @@ Fliplet.DataSources.get({ organizationId: organizationId })
       });
   });
 
-
 // Fired from Fliplet Studio when the external save button is clicked
 Fliplet.Widget.onSaveRequest(function () {
   dataDirectoryForm.saveDataDirectoryForm_();

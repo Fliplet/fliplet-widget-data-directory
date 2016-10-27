@@ -10,6 +10,7 @@
   "interface": {
     "dependencies": [
       "fliplet-core",
+      "fliplet-media",
       "fliplet-datasources",
       "fliplet-studio-ui",
       "jquery",
@@ -28,6 +29,7 @@
   "build": {
     "dependencies": [
       "fliplet-core",
+      "fliplet-media",
       "bootstrap-css",
       "jquery",
       "handlebars",
@@ -43,7 +45,8 @@
       "js/build-directory.js",
       "js/build.js",
       "css/build.css",
-      "vendor/overlay.css"
+      "vendor/overlay.css",
+      "img/thumb-placeholder.png"
     ]
   }
 }

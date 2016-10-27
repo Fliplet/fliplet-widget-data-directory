@@ -1,7 +1,7 @@
-<div class="container-fluid" id="data-directory" data-mode="default" data-directory-id="{{id}}">
+<div class="container-fluid" data-directory data-mode="default" data-directory-id="{{id}}">
   <div class="row">
     <div class="directory-wrapper">
-      <div id="directory-list">
+      <div class="directory-list">
         <div class="directory-loading">
           <div class="directory-loading-screen"></div>
           <div class="directory-loading-body">
@@ -11,23 +11,23 @@
             <p class="loading-text"></p>
           </div>
         </div>
-        <form id="directory-search">
+        <form class="directory-search">
           <span class="fa fa-search"></span>
-          <input id="search" type="search" placeholder="Search or Filter" />
-          <a href="#" class="btn btn-link" id="search-cancel">Cancel</a>
+          <input class="search" type="search" placeholder="Search or Filter" />
+          <a href="#" class="btn btn-link search-cancel">Cancel</a>
         </form>
-        <div id="directory-filters">
-          <div id="filters">
+        <div class="directory-filters">
+          <div class="filters">
             <label>Type to search or select a filter</label>
-            <h3>Filter by <span id="filter-selected"></span></h3>
-            <div class="list-default" id="filter-list"></div>
-            <div class="list-default" id="filter-value-list"></div>
+            <h3>Filter by <span class="filter-selected"></span></h3>
+            <div class="list-default filter-list"></div>
+            <div class="list-default filter-value-list"></div>
           </div>
         </div>
-        <div class="list-default" id="directory-entries"></div>
-        <div class="list-default" id="search-result"></div>
+        <div class="list-default directory-entries circular"></div>
+        <div class="list-default search-result"></div>
       </div>
-      <div id="directory-details">
+      <div class="directory-details">
         <div class="directory-loading">
           <div class="directory-loading-screen"></div>
           <div class="directory-loading-body">
@@ -39,7 +39,7 @@
             </div>
         <div class="directory-details-content"></div>
       </div>
-      <div id="directory-screen"></div>
+      <div class="directory-screen"></div>
     </div>
   </div>
 </div>

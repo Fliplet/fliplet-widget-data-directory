@@ -524,31 +524,6 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
 
   Fliplet.Media.Folders.get(_this.data[entryIndex][_this.config.folderConfig]).then(function (response) {
     response.files.forEach(renderEntry);
-  });
-
-  function renderEntry(file) {
-
-    if (typeof _this.config.thumbnail_field !== 'undefined' && _this.config.thumbnail_field.trim() !== '' && _this.config.show_thumb_detail) {
-      detailData['has_thumbnail'] = true;
-
-      var entryURL = _this.data[entryIndex][_this.config.thumbnail_field];
-      // Returns placeholder if no match
-      if (file.url.indexOf(entryURL) !== -1) {
-        var img = new Image();
-        img.addEventListener('load', function(){
-          $('.list-default li[data-index="'+i+'"] .list-image').css('background-image', 'url(' + this.src + ')');
-        }, false);
-        img.src = file.url;
-      } else if (/^(f|ht)tps?:\/\//i.test(entryURL)) {
-        var img = new Image();
-        img.addEventListener('load', function(){
-          $('.directory-detail-title.has-thumbnail span.thumbnail .img-wrapper').css('background-image', 'url(' + this.src + ')');
-        }, false);
-        img.src = entryURL;
-      }
-
-    }
-
     for (var fieldIndex = 0, l = _this.config.detail_fields.length; fieldIndex < l; fieldIndex++) {
       var fieldObj = _this.getEntryField( entryIndex, fieldIndex, type );
       if (fieldObj.value.length) {
@@ -641,6 +616,32 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     if (trackEvent) {
       // window.plugins.ga.trackEvent('directory', "entry_open", title);
     }
+  });
+
+  function renderEntry(file) {
+
+    if (typeof _this.config.thumbnail_field !== 'undefined' && _this.config.thumbnail_field.trim() !== '' && _this.config.show_thumb_detail) {
+      detailData['has_thumbnail'] = true;
+
+      var entryURL = _this.data[entryIndex][_this.config.thumbnail_field];
+      // Returns placeholder if no match
+      if (file.url.indexOf(entryURL) !== -1) {
+        var img = new Image();
+        img.addEventListener('load', function(){
+          $('.list-default li[data-index="'+i+'"] .list-image').css('background-image', 'url(' + this.src + ')');
+        }, false);
+        img.src = file.url;
+      } else if (/^(f|ht)tps?:\/\//i.test(entryURL)) {
+        var img = new Image();
+        img.addEventListener('load', function(){
+          $('.directory-detail-title.has-thumbnail span.thumbnail .img-wrapper').css('background-image', 'url(' + this.src + ')');
+        }, false);
+        img.src = entryURL;
+      }
+
+    }
+
+
 
   }
 

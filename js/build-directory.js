@@ -25,11 +25,11 @@ var DataDirectory = function (config, container) {
     search_fields : [],
     field_types : "" // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
   }, config);
-  this.$container = $(container);
+  this.$container = $(container).parents('body');
   this.deviceIsTablet = ( window.innerWidth >= 640 );
   this.navHeight = $('.fl-viewport-header').height() || 0;
   this.searchBarHeight = this.$container.find('.directory-search').outerHeight();
-  this.directoryMode = this.$container.attr('data-mode');
+  this.directoryMode = this.$container.find('.container-fluid').attr('data-mode');
   this.filterOverlay = null;
   this.entryOverlay = null;
   this.searchResultData = [];
@@ -342,7 +342,7 @@ DataDirectory.prototype.switchMode = function(mode){
     mode = 'default';
   }
 
-  this.$container.attr('data-mode',mode);
+  this.$container.find('.container-fluid').attr('data-mode',mode);
 
   if ( mode === 'search' ) {
     this.searchResultData = [];

@@ -590,8 +590,7 @@
 }
 
 .directory-detail-value img {
-    max-width: 200px;
-    max-height: 200px;
+    max-width: 100%;
 }
 /* Loading Overlay */
 .directory-list.disabled li {

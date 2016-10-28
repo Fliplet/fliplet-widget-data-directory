@@ -640,9 +640,6 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
       }
 
     }
-
-
-
   }
 
 };
@@ -761,7 +758,9 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
   };
 
   this.switchMode('search-result');
+  var _this = this;
   var data = {
+    has_thumbnail: this.config.show_thumb_list ? this.config.show_thumb_list : false,
     show_subtitle: this.config.show_subtitle ? this.config.show_subtitle : false,
     show_tags: this.config.show_tags ? this.config.show_tags : false,
     type: options.type,
@@ -805,6 +804,20 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
 
       break;
   }
+  console.log(data.result);
+  data.result.forEach(function(entry, i) {
+    var imgURL = entry[_this.config.thumbnail_field];
+    if ( /^(f|ht)tps?:\/\//i.test(imgURL) ) {
+
+      var img = new Image();
+
+      img.addEventListener('load', function(){
+        $('.list-default li[data-index="'+i+'"] .list-image').css('background-image', 'url(' + this.src + ')');
+      }, false);
+
+      img.src = imgURL;
+    }
+  });
 
   this.searchResultData = data.result;
   var directorySearchResultHTML = Handlebars.templates.directorySearchResult(data);

@@ -588,6 +588,11 @@
 .directory-detail-value {
     font-size: 16px;
 }
+
+.directory-detail-value img {
+    max-width: 200px;
+    max-height: 200px;
+}
 /* Loading Overlay */
 .directory-list.disabled li {
     pointer-events: none;

@@ -387,7 +387,7 @@ DataDirectory.prototype.attachObservers = function(){
   } );
   this.$container.find('.directory-search').on( 'click', function(){
     // GA Track event
-    // window.plugins.ga.trackEvent("directory", "search");
+    Fliplet.Analytics.trackEvent("directory", "search");
 
     _this.$container.find('.search').trigger( 'focus' );
   } ).on( 'submit', function(e){
@@ -555,13 +555,13 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
       $(".directory-detail-value a").not(".data-linked").on("click", function(e){
         if ($(e.target).attr("href").indexOf("mailto") === 0) {
           // GA Track event
-          // window.plugins.ga.trackEvent("directory", "entry_email", title);
+          Fliplet.Analytics.trackEvent("directory", "entry_email", title);
         } else if ($(e.target).attr("href").indexOf("tel") === 0) {
           // GA Track event
-          // window.plugins.ga.trackEvent("directory", "entry_phone", title);
+          Fliplet.Analytics.trackEvent("directory", "entry_phone", title);
         } else {
           // GA Track event
-          // window.plugins.ga.trackEvent("directory", "entry_url", title);
+          Fliplet.Analytics.trackEvent("directory", "entry_url", title);
         }
       });
       $(".directory-detail-value a.data-linked").on("click", function(e){
@@ -569,7 +569,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
         var filterValue = (typeof $(e.target).data("value") !== "undefined") ? $(e.target).data("value") : "";
 
         // GA Track event
-        // window.plugins.ga.trackEvent("directory", "entry_filter", filterType + ": " + filterValue);
+        Fliplet.Analytics.trackEvent("directory", "entry_filter", filterType + ": " + filterValue);
       });
 
       // Custom event to fire after an entry is rendered in the detailed view.
@@ -614,7 +614,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
 
     // GA Track event
     if (trackEvent) {
-      // window.plugins.ga.trackEvent('directory', "entry_open", title);
+      Fliplet.Analytics.trackEvent('directory', "entry_open", title);
     }
   });
 
@@ -790,7 +790,7 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
       data.result = this.data.filter(filterByTag);
 
       // GA Track event
-      // window.plugins.ga.trackEvent("directory", "list_tag_filter", options.type + ": " + options.value);
+      Fliplet.Analytics.trackEvent("directory", "list_tag_filter", options.type + ": " + options.value);
 
       break;
     case 'search':
@@ -800,7 +800,7 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
       data.result = this.search( options.value );
 
       // GA Track event
-      // window.plugins.ga.trackEvent("directory", "filter", options.type + ": " + options.value);
+      Fliplet.Analytics.trackEvent("directory", "filter", options.type + ": " + options.value);
 
       break;
   }

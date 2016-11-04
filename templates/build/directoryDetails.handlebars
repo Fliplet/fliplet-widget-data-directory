@@ -1,4 +1,4 @@
-<div class="directory-detail-title {{#if has_thumbnail}}has-thumbnail{{/if}}">{{#if has_thumbnail}}<span class="thumbnail"><span class="helper"></span><span class="img-wrapper"><img class="img-responsive center-block" src="{{thumbnail}}" onError="this.onerror=null;this.src='theme/images/data-directory-placeholder.png';" /></span></span>{{/if}}{{title}}</div>
+<div class="directory-detail-title {{#if has_thumbnail}}has-thumbnail{{/if}}">{{#if has_thumbnail}}<span class="thumbnail"><span class="helper"></span><span class="img-wrapper circular"><img class="img-responsive center-block" src="{{thumbnail}}" onError="this.onerror=null;this.src='theme/images/data-directory-placeholder.png';" /></span></span>{{/if}}{{title}}</div>
 {{#each fields}}
     <div class="directory-detail-label">{{label}}</div>
     <div class="directory-detail-value">{{{value}}}</div>

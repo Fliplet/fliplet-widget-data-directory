@@ -38,7 +38,25 @@ var DataDirectory = function (config, container) {
 
   var folderID = this.config.folderConfig;
 
-  Fliplet.Media.Folders.get(folderID).then(function (response) {
+  var getThumbnails;
+  if (Fliplet.Env.get('platform') === 'web') {
+    getThumbnails = Fliplet.Media.Folders.get(folderID);
+  } else {
+    var files = this.data.map(function(entry) {
+      return entry[_this.config.thumbnail_field];
+    });
+    getThumbnails = Fliplet.Media.Files.getCachedImages({
+      folderId: this.config.folderConfig.folderId,
+      fileNames: files,
+      size: 80,
+      onProgress: function onProgress (fileName, data) {
+        console.log(fileName);
+        console.log(data);
+        renderThumb(fileName);
+      }
+    });
+  }
+  getThumbnails.then(function (response) {
     response.files.forEach(renderThumb);
 
     if (_this.data.length) {

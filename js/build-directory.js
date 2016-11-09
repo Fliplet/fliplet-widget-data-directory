@@ -519,7 +519,8 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
   var detailData = {
     title : title,
     has_thumbail : false,
-    fields : []
+    fields : [],
+    dataSourceEntryId: _this.data[entryIndex]['dataSourceEntryId'] || ''
   };
 
   if (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '') {

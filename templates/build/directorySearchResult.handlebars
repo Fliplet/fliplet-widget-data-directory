@@ -5,7 +5,7 @@
     </div>
 </div>
 <ul>{{#each result}}
-    <li class="linked data-linked {{#if ../has_thumbnail}}has-thumbs{{/if}}" data-type="search-result-entry" data-index="{{@index}}">
+    <li class="linked data-linked {{#if ../has_thumbnail}}has-thumbs{{/if}}" data-type="search-result-entry" data-index="{{@index}}" data-source-entry-id="{{dataSourceEntryId}}">
         <span class="icon fa fa-angle-right"></span>
         {{#if ../has_thumbnail}}<div class="list-image"></div>{{/if}}
         <div class="list-desc">

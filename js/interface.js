@@ -22,6 +22,7 @@ Fliplet.DataSources.get({ organizationId: organizationId })
         })
         .then(function (rows) {
           dataSource.rows = rows.map(function (row) {
+            row.data.dataSourceEntryId = row.id;
             return row.data;
           });
           return Promise.resolve(dataSource);

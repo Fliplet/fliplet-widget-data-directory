@@ -425,6 +425,7 @@ DataDirectory.prototype.attachObservers = function(){
 
   document.addEventListener("flDirectoryEntryBeforeRender", function () {
     _this.disableClicks();
+    _this.removeLoading();
     loadingTimeout = setTimeout(function () {
       _this.addLoading();
     }, loadingOverlayDelay);

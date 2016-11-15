@@ -38,9 +38,7 @@ var DataDirectory = function (config, container) {
 
   var folderID = this.config.folderConfig;
 
-  Fliplet.Media.Folders.get(folderID).then(function (response) {
-    response.files.forEach(renderThumb);
-
+  function initialize () {
     if (_this.data.length) {
       _this.initialiseHandlebars();
       _this.init();
@@ -49,7 +47,14 @@ var DataDirectory = function (config, container) {
     } else {
       _this.directoryNotConfigured();
     }
+  }
 
+  Fliplet.Media.Folders.get(folderID).then(function (response) {
+    response.files.forEach(renderThumb);
+    initialize();
+  }, function onMediaFolderError(err) {
+    console.error(err);
+    initialize();
   });
 
   function renderThumb(file) {

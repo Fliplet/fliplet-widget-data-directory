@@ -334,6 +334,12 @@ var DataDirectoryForm = (function() {
         updateSelectText($('#data-tags-fields-select'));
         $('.show-tags').show();
       }
+
+      if (_this.directoryConfig.enable_live_data) {
+        $('#enable_live_data').prop('checked', true);
+      }
+
+
     },
 
     attachObservers_ : function(){
@@ -503,7 +509,8 @@ var DataDirectoryForm = (function() {
         tags_field: $("#show_tags").is(':checked') ? $('#data-tags-fields-select').val() : '',
         thumbnail_field: $('#data-thumbnail-fields-select').val(),
         show_thumb_list: ($('[name=enable_thumb_list]:checked').val() === "show" ? true : false),
-        show_thumb_detail: ($('[name=enable_thumb_details]:checked').val() === "show" ? true : false)
+        show_thumb_detail: ($('[name=enable_thumb_details]:checked').val() === "show" ? true : false),
+        enable_live_data: ($('#enable_live_data:checked').val() === "on" ? true : false)
       };
 
       $('[data-type="filter"]:checked').each(function(){

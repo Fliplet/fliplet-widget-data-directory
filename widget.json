@@ -47,6 +47,7 @@
       "css/build.css",
       "vendor/overlay.css",
       "img/thumb-placeholder.png"
-    ]
+    ],
+    "references": ["source:dataSource"]
   }
 }

@@ -15,7 +15,15 @@ var messageTimeout,
 
 var DataDirectory = function (config, container) {
   var _this = this;
-  this.data = config.rows;
+
+  if (config.published_field) {
+    this.data = config.rows.filter(function(row) {
+      return row[config.published_field];
+    });
+  } else {
+    this.data = config.rows;
+  }
+
   this.config = $.extend({
     is_alphabetical : false,
     alphabetical_field : "",

@@ -499,6 +499,15 @@ var DataDirectoryForm = (function() {
           $('.published-select').addClass('hidden');
         }
       });
+
+      $('#enable_share').on('change', function() {
+        // @TODO: SAVE configuration
+        if ( $(this).is(':checked') ) {
+          $('.enabled_sharing').removeClass('hidden');
+        } else {
+          $('.enabled_sharing').addClass('hidden');
+        }
+      });
     },
 
     saveDataDirectoryForm_ : function(){

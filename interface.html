@@ -100,6 +100,49 @@
           </div>
         </div>
 
+        <div class="form-group clearfix">
+          <div class="col-sm-4 control-label">
+            <label for="enable_share">Do you want to add a share button?</label>
+            <p class="help-block">Sharing will be done via email that is composed using the device's email client.</p>
+          </div>
+          <div class="col-sm-8">
+            <div class="checkbox">
+              <input type="checkbox" id="enable_share">
+              <label for="enable_share">
+                <span class="check"><i class="fa fa-check"></i></span> Yes, please
+              </label>
+              <p class="help-block">By turning this feature on you will have to choose the fields you want to share.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group enabled_sharing clearfix hidden">
+          <div class="col-sm-4 control-label">
+            <label for="enable_share">Select the fields you want to share</label>
+          </div>
+          <div class="col-sm-8 share-data-fields">
+            <!-- @TODO: You can turn this into a template that gets appended here for each field name -->
+            <!-- @TODO: input ID and label for must match but be different for every checkbox -->
+            <!-- @TODO: Maybe it's a good idea to think how you are going to pass the field type to the email template.
+            Because images and files should display differently than text fields -->
+
+            <div class="checkbox">
+              <input type="checkbox" id="field_1">
+              <label for="field_1">
+                <span class="check"><i class="fa fa-check"></i></span> Field label
+              </label>
+            </div>
+            <div class="checkbox">
+              <input type="checkbox" id="field_2">
+              <label for="field_2">
+                <span class="check"><i class="fa fa-check"></i></span> Field label
+              </label>
+            </div>
+
+            <!-- END OF APPENDING -->
+          </div>
+        </div>
+
         <div class="title-header">
           <p>Thumbnail options</p>
           <p>You can enable a thumbnail on your main list and/or detail views. Configure below where and how to show the thumbnails.</p>

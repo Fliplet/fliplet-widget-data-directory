@@ -257,7 +257,7 @@ var DataDirectoryForm = (function() {
       $('#data-alphabetical-fields').html(Handlebars.templates.dataAlphabeticalField(_this.columns));
       $('#data-tags-fields').html(Handlebars.templates.dataTagsField(_this.columns));
       $('#data-thumbnail-fields').html(Handlebars.templates.dataThumbnailField(_this.columns));
-      $('#data-published-fields').html(Handlebars.templates.dataThumbnailField(_this.columns));
+      $('#data-published-fields').html(Handlebars.templates.dataPublishedField(_this.columns));
 
       if (!_this.tables.length) {
         $('#no-data-source-prompt').removeClass('hidden');
@@ -319,6 +319,9 @@ var DataDirectoryForm = (function() {
 
       $('#data-thumbnail-fields-select').val( _this.directoryConfig.thumbnail_field );
       updateSelectText($('#data-thumbnail-fields-select'));
+
+      $('#data-published-fields-select').val( _this.directoryConfig.thumbnail_field );
+      updateSelectText($('#data-published-fields-select'));
 
       $('#data-detail-fields').val(_this.directoryConfig.detail_fields.join(','));
 
@@ -495,7 +498,7 @@ var DataDirectoryForm = (function() {
         }
       });
 
-      $('.tab-content').on('change', '#data-tags-fields-select, #data-alphabetical-fields-select, #data-sources, #data-thumbnail-fields-select, #data-browse-configurations select', function () {
+      $('.tab-content').on('change', '#data-tags-fields-select, #data-alphabetical-fields-select, #data-sources, #data-thumbnail-fields-select, #data-published-fields-select, #data-browse-configurations select', function () {
         updateSelectText($(this));
       });
 

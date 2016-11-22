@@ -690,6 +690,15 @@ DataDirectory.prototype.getEntryField = function( entryIndex, fieldIndex, type )
     };
   }
 
+  if ( fieldType === 'accordion' ) {
+    fieldType = 'accordion';
+    value = {
+      id : fieldIndex,
+      value : value,
+      label : label
+    };
+  }
+
   var valueHTML;
   if ( (typeof value === 'object' && value && value.value && value.value.length) || (typeof value === 'string' && value.length) ) {
     if (this.config.show_tags && this.config.tags_field === label && fieldType === 'filter') {

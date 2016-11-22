@@ -490,6 +490,15 @@ var DataDirectoryForm = (function() {
       $('.tab-content').on('change', '#data-tags-fields-select, #data-alphabetical-fields-select, #data-sources, #data-thumbnail-fields-select, #data-browse-configurations select', function () {
         updateSelectText($(this));
       });
+
+      $('#enable_published_only').on('change', function() {
+        // @TODO: SAVE configuration
+        if ( $(this).is(':checked') ) {
+          $('.published-select').removeClass('hidden');
+        } else {
+          $('.published-select').addClass('hidden');
+        }
+      });
     },
 
     saveDataDirectoryForm_ : function(){

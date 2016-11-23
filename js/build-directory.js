@@ -549,6 +549,19 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     }
   }
 
+  if (this.config.share_fields.length) {
+    var body = '';
+    this.config.share_fields.forEach(function(shareLabel) {
+      detailData.fields.forEach(function(field) {
+        if (field.label === shareLabel) {
+          body = body + '<p><strong>' + field.label + '</strong></p>';
+          body = body + '<p>' + field.value + '</p>';
+        }
+      });
+    });
+    detailData.shareBody = encodeURI(body);
+  }
+
   var detailHTML = Handlebars.templates.directoryDetails(detailData);
 
   if ( type === 'search-result-entry' ) {

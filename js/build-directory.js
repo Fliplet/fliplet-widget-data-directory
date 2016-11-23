@@ -442,6 +442,10 @@ DataDirectory.prototype.attachObservers = function(){
   document.addEventListener("flDirectoryEntryAfterRender", function () {
     _this.removeLoading();
   }, false);
+
+  this.$container.find('#date_cancel').on( 'click', function(){
+    $('.overlay-date-range').removeClass('active');
+  }
 };
 
 DataDirectory.prototype.activateSearch = function(){

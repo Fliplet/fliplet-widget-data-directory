@@ -491,6 +491,13 @@ DataDirectory.prototype.dataLinkClicked = function(e){
   var _this = this;
   e.preventDefault();
 
+  // Date
+  if (e.currentTarget.dataset.filter === 'date') {
+    $('.date-picker').datepicker();
+    $('.overlay-date-rangeactive').addClass('active');
+    return;
+  }
+
   switch (e.currentTarget.dataset.type) {
     case 'filter-tag':
     case 'filter':

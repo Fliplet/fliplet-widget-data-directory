@@ -35,7 +35,8 @@
       "fliplet-datasources",
       "bootstrap",
       "font-awesome",
-      "animate-css"
+      "animate-css",
+      "moment"
     ],
     "assets": [
       "vendor/overlay.js",

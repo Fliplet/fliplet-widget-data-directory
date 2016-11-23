@@ -550,16 +550,10 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
   }
 
   if (this.config.share_fields.length) {
-    var body = '';
+    detailData.shareBody = encodeURI('I was reading ' + title + ' and I thought you might be interested in the following:') + '%0D%0A%0D%0A';
     this.config.share_fields.forEach(function(shareLabel) {
-      detailData.fields.forEach(function(field) {
-        if (field.label === shareLabel) {
-          body = body + '<p><strong>' + field.label + '</strong></p>';
-          body = body + '<p>' + field.value + '</p>';
-        }
-      });
+      detailData.shareBody = detailData.shareBody + encodeURI(shareLabel) + '%0D%0A' + encodeURI(_this.data[entryIndex][shareLabel]) + '%0D%0A%0D%0A';
     });
-    detailData.shareBody = encodeURI(body);
   }
 
   var detailHTML = Handlebars.templates.directoryDetails(detailData);

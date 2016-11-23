@@ -41,6 +41,9 @@
     "assets": [
       "vendor/overlay.js",
       "vendor/jsonselect.js",
+      "vendor/bootstrap-datepicker3.css",
+      "vendor/bootstrap-datepicker.min.js",
+      "vendor/bootstrap-datepicker-mobile.js",
       "js/build-templates.js",
       "js/build-directory.js",
       "js/build.js",

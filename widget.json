@@ -5,7 +5,6 @@
   "icon": "img/icon.png",
   "tags": ["category:data"],
   "provider_only": false,
-  "references": [],
   "html_tag": "span",
   "interface": {
     "dependencies": [

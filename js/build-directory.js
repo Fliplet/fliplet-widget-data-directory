@@ -494,7 +494,7 @@ DataDirectory.prototype.dataLinkClicked = function(e){
   // Date
   if (e.currentTarget.dataset.filter === 'date') {
     $('.date-picker').datepicker();
-    $('.overlay-date-rangeactive').addClass('active');
+    $('.overlay-date-range').addClass('active');
     return;
   }
 

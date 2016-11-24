@@ -2,11 +2,6 @@
 /*****************  DataDirectory  *****************/
 /*****************  DataDirectory  *****************/
 
-
-// TODO: Remove this when query vars are implemented
-var flQueryVars = {};
-
-
 var messageTimeout,
   loadingTimeout,
   messageDelay = 5000,        // "Loading..." text delay to display

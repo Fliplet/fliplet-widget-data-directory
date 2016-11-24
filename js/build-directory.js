@@ -445,7 +445,8 @@ DataDirectory.prototype.attachObservers = function(){
 
   this.$container.find('#date_cancel').on( 'click', function(){
     $('.overlay-date-range').removeClass('active');
-  }
+  });
+
 };
 
 DataDirectory.prototype.activateSearch = function(){

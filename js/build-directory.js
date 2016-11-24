@@ -10,7 +10,8 @@ var flQueryVars = {};
 var messageTimeout,
   loadingTimeout,
   messageDelay = 5000,        // "Loading..." text delay to display
-  loadingOverlayDelay = 1000; // Time it takes to display the loading overlay after a click
+  loadingOverlayDelay = 1000, // Time it takes to display the loading overlay after a click
+  date_filter;                // Filter used before pick date range when filtering by a date type field
 
 
 var DataDirectory = function (config, container) {
@@ -314,6 +315,15 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
     });
 
     values = values.sort(sortAlphabetically);
+  } else if (_this.config.field_types[filter] === 'date') {
+    var start_date = new Date($('.start_date').datepicker("getDate"))
+    var end_date = new Date($('.finish_date').datepicker("getDate"))
+        this.data.forEach(function(value, index) {
+          var entryDate = new Date(value[filter]);
+           if (entryDate >= start_date && entryDate <= end_date) {
+             values.push(value[filter]);
+           }
+        });
   } else {
     values = this.getFilterValues( filter );
   }
@@ -443,10 +453,13 @@ DataDirectory.prototype.attachObservers = function(){
     _this.removeLoading();
   }, false);
 
-  this.$container.find('#date_cancel').on( 'click', function(){
+  this.$container.find('#date_cancel, .overlay-date-range .closeButton').on( 'click', function(){
     $('.overlay-date-range').removeClass('active');
   });
-
+  this.$container.find('#date_go').on( 'click', function(){
+    $('.overlay-date-range').removeClass('active');
+    _this.renderFilterValues(date_filter, !_this.deviceIsTablet)
+  });
 };
 
 DataDirectory.prototype.activateSearch = function(){
@@ -497,7 +510,8 @@ DataDirectory.prototype.dataLinkClicked = function(e){
   e.preventDefault();
 
   // Date
-  if (e.currentTarget.dataset.filter === 'date') {
+  if (e.currentTarget.dataset.filter === 'date' && e.currentTarget.dataset.type === 'filter') {
+    date_filter = e.currentTarget.dataset.filter;
     $('.date-picker').datepicker();
     $('.overlay-date-range').addClass('active');
     return;

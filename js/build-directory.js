@@ -849,16 +849,17 @@ DataDirectory.prototype.getFilterValues = function( field ) {
 };
 
 DataDirectory.prototype.parseQueryVars = function(){
-  if ( flQueryVars.hasOwnProperty('action') ) {
-    switch ( flQueryVars.action ) {
+  var query = Fliplet.Navigate.query;
+  if (query.action) {
+    switch (query.action) {
       case 'search':
-        if ( flQueryVars.hasOwnProperty('value') ) {
-          this.presetSearch( flQueryVars.value );
+        if (query.value) {
+          this.presetSearch(query.value);
         }
         break;
       case 'filter':
-        if ( flQueryVars.hasOwnProperty('field') && flQueryVars.hasOwnProperty('value') ) {
-          this.presetFilter( flQueryVars.field, flQueryVars.value );
+        if (query.field && query.value) {
+          this.presetFilter(query.field, query.value);
         }
         break;
       case 'open':

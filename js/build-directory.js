@@ -141,16 +141,16 @@ DataDirectory.prototype.initialiseHandlebars = function(){
         return '';
       }
       var splitTags = tags.split(",");
-      return new Handlebars.SafeString(
-        splitTags.map(function (tag) {
+      var html = splitTags.map(function (tag) {
           tag = tag.trim();
           if (tag !== '') {
             return '<a class="data-linked" data-type="filter-value-tag" data-value="' + tag + '" data-filter="' + _this.config.tags_field + '" href="#">' + tag + '</a>';
           }
 
           return '';
-        }).join(', ')
-      );
+        }).join(', ');
+      html = '<div class="list-tags">' + html + '</div>';
+      return new Handlebars.SafeString(html);
     });
   }
 
@@ -745,7 +745,8 @@ DataDirectory.prototype.getEntryField = function( entryIndex, fieldIndex, type )
         }
 
         return '';
-      }).join(', ')
+      }).join(', ');
+      valueHTML = '<div class="list-tags">' + valueHTML + '</div>';
     } else {
       valueHTML = Handlebars.templates['directoryFieldType' + fieldType](value);
     }

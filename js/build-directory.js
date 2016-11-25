@@ -448,10 +448,10 @@ DataDirectory.prototype.attachObservers = function(){
     _this.removeLoading();
   }, false);
 
-  this.$container.find('#date_cancel, .overlay-date-range .closeButton').on( 'click', function(){
+  this.$container.find('.date_cancel, .overlay-date-range .closeButton').on( 'click', function(){
     $('.overlay-date-range').removeClass('active');
   });
-  this.$container.find('#date_go').on( 'click', function(){
+  this.$container.find('.date_go').on( 'click', function(){
     $('.overlay-date-range').removeClass('active');
     _this.renderFilterValues(date_filter, !_this.deviceIsTablet)
   });

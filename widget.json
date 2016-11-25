@@ -5,7 +5,6 @@
   "icon": "img/icon.png",
   "tags": ["category:data"],
   "provider_only": false,
-  "references": [],
   "html_tag": "span",
   "interface": {
     "dependencies": [
@@ -36,11 +35,15 @@
       "fliplet-datasources",
       "bootstrap",
       "font-awesome",
-      "animate-css"
+      "animate-css",
+      "moment"
     ],
     "assets": [
       "vendor/overlay.js",
       "vendor/jsonselect.js",
+      "vendor/bootstrap-datepicker3.css",
+      "vendor/bootstrap-datepicker.min.js",
+      "vendor/bootstrap-datepicker-mobile.js",
       "js/build-templates.js",
       "js/build-directory.js",
       "js/build.js",

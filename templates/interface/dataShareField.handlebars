@@ -1,0 +1,8 @@
+{{#each this}}
+    <div class="checkbox">
+        <input data-field='{{this}}' data-type="share" type="checkbox" id="share_{{this}}">
+        <label for="share_{{this}}">
+            <span class="check"><i class="fa fa-check"></i></span> {{this}}
+        </label>
+    </div>
+{{/each}}

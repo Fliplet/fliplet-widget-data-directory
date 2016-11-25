@@ -225,8 +225,8 @@
         border-top: none;
     }
 
-    .directory-entries li.active .icon,
-    .search-result li.active .icon {
+    .directory-list .list-default ul > li.active .icon,
+    .search-result .list-default ul > li.active .icon {
         color: #FFF;
     }
 }

@@ -39,6 +39,7 @@ var DataDirectory = function (config, container) {
   this.searchResultData = [];
   this.supportLiveSearch = this.data.length <= 500;
   this.liveSearchInterval = 200;
+  this.currentEntry;
 
   var folderID = this.config.folderConfig;
 
@@ -654,11 +655,16 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
       afterOpen: after_render,
       afterClose: function(){
         _this.entryOverlay = null;
+        _this.currentEntry = null;
       }
     });
   }
 
   // GA Track event
+  _this.currentEntry = {
+    row: _this.data[entryIndex],
+    detailData: detailData
+  };
   if (trackEvent) {
     // window.plugins.ga.trackEvent('directory', "entry_open", title);
   }

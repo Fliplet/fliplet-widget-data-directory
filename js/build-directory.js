@@ -505,7 +505,7 @@ DataDirectory.prototype.dataLinkClicked = function(e){
   e.preventDefault();
 
   // Date
-  if (e.currentTarget.dataset.filter === 'date' && e.currentTarget.dataset.type === 'filter') {
+  if (_this.config.field_types[e.currentTarget.dataset.filter] === 'date' && e.currentTarget.dataset.type === 'filter') {
     date_filter = e.currentTarget.dataset.filter;
     $('.date-picker').datepicker();
     $('.overlay-date-range').addClass('active');

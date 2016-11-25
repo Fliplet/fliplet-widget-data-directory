@@ -225,9 +225,9 @@
         border-top: none;
     }
 
-    .directory-entries li.active .buttonControl:after,
-    .search-result li.active .buttonControl:after {
-        background-color: #333;
+    .directory-entries li.active .icon,
+    .search-result li.active .icon {
+        color: #FFF;
     }
 }
 

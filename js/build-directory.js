@@ -405,8 +405,8 @@ DataDirectory.prototype.attachObservers = function(){
     _this.searchBarHeight = _this.$container.find('.directory-search').outerHeight();
   } );
   this.$container.find('.directory-search').on( 'click', function(){
-    // GA Track event
-    // window.plugins.ga.trackEvent("directory", "search");
+    // Analytics - Track Event
+    Fliplet.Analytics.trackEvent({category: 'directory', action: 'search'});
 
     _this.$container.find('.search').trigger( 'focus' );
   } ).on( 'submit', function(e){
@@ -455,6 +455,11 @@ DataDirectory.prototype.attachObservers = function(){
   this.$container.find('.date_go').on( 'click', function(){
     $('.overlay-date-range').removeClass('active');
     _this.renderFilterValues(date_filter, !_this.deviceIsTablet)
+  });
+
+  this.$container.find('.detail-share-button').on( 'click', function() {
+    // Analytics - Track Event
+    Fliplet.Analytics.trackEvent({category: 'directory', action: 'share', title: _this.currentEntry.detailData.title });
   });
 };
 
@@ -601,22 +606,23 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     // Link taps listeners
     $(".directory-detail-value a").not(".data-linked").on("click", function(e){
       if ($(e.target).attr("href").indexOf("mailto") === 0) {
-        // GA Track event
-        // window.plugins.ga.trackEvent("directory", "entry_email", title);
+        // Analytics - Track Event
+        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: title });
+
       } else if ($(e.target).attr("href").indexOf("tel") === 0) {
-        // GA Track event
-        // window.plugins.ga.trackEvent("directory", "entry_phone", title);
+        // Analytics - Track Event
+        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_phone', title: title });
       } else {
-        // GA Track event
-        // window.plugins.ga.trackEvent("directory", "entry_url", title);
+        // Analytics - Track Event
+        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: title });
       }
     });
     $(".directory-detail-value a.data-linked").on("click", function(e){
       var filterType = (typeof $(e.target).data("type") !== "undefined") ? $(e.target).data("type") : "";
       var filterValue = (typeof $(e.target).data("value") !== "undefined") ? $(e.target).data("value") : "";
 
-      // GA Track event
-      // window.plugins.ga.trackEvent("directory", "entry_filter", filterType + ": " + filterValue);
+      // Analytics - Track Event
+      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: filterType + ": " + filterValue });
     });
 
     // Custom event to fire after an entry is rendered in the detailed view.
@@ -660,13 +666,14 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     });
   }
 
-  // GA Track event
   _this.currentEntry = {
     row: _this.data[entryIndex],
     detailData: detailData
   };
+
+  // Analytics - Track Event
   if (trackEvent) {
-    // window.plugins.ga.trackEvent('directory', "entry_open", title);
+    Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_open', title: title });
   }
 };
 
@@ -825,8 +832,8 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
       data.value = options.value;
       data.result = this.data.filter(filterByTag);
 
-      // GA Track event
-      // window.plugins.ga.trackEvent("directory", "list_tag_filter", options.type + ": " + options.value);
+      // Analytics - Track Event
+      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'list_tag_filter', title: options.type + ": " + options.value });
 
       break;
     case 'search':
@@ -835,8 +842,8 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
       data.value = options.value;
       data.result = this.search( options.value );
 
-      // GA Track event
-      // window.plugins.ga.trackEvent("directory", "filter", options.type + ": " + options.value);
+      // Analytics - Track Event
+      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'filter', title: options.type + ": " + options.value });
 
       break;
   }

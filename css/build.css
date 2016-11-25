@@ -216,8 +216,8 @@
         margin-left: 0;
         padding-left: 10px;
         border-top: none;
-        background-color: #DFDFDF;
-        color: inherit;
+        background-color: #337ab7;
+        color: #FFF;
     }
 
     .directory-entries li.active + li,

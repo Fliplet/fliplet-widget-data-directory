@@ -141,16 +141,16 @@ DataDirectory.prototype.initialiseHandlebars = function(){
         return '';
       }
       var splitTags = tags.split(",");
-      var html = splitTags.map(function (tag) {
+      return new Handlebars.SafeString(
+        splitTags.map(function (tag) {
           tag = tag.trim();
           if (tag !== '') {
             return '<a class="data-linked" data-type="filter-value-tag" data-value="' + tag + '" data-filter="' + _this.config.tags_field + '" href="#">' + tag + '</a>';
           }
 
           return '';
-        }).join(', ');
-      html = '<div class="list-tags">' + html + '</div>';
-      return new Handlebars.SafeString(html);
+        }).join(', ')
+      );
     });
   }
 

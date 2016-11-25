@@ -553,13 +553,13 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
   var title = $entrytitle.text().trim();
   var detailData = {
     title : title,
-    has_thumbail : false,
+    has_thumbnail : this.config.show_thumb_detail ? this.config.show_thumb_detail : false,
     fields : [],
     dataSourceEntryId: _this.data[entryIndex]['dataSourceEntryId'] || ''
   };
 
   if (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '') {
-    detailData['has_thumbnail'] = true;
+    detailData['has_thumbnail'] = (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_detail ? this.config.show_thumb_detail : false );
     detailData['thumbnail'] = (type == 'search-result-entry') ? this.searchResultData[entryIndex][this.config.thumbnail_field] : this.data[entryIndex][this.config.thumbnail_field];
   }
 

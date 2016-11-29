@@ -327,7 +327,7 @@ var DataDirectoryForm = (function() {
       $('#data-detail-fields').val(_this.directoryConfig.detail_fields.join(','));
 
 
-      if (this.config.share_fields && _this.directoryConfig.share_fields.length) {
+      if (_this.directoryConfig.share_fields && _this.directoryConfig.share_fields.length) {
         $('#enable_share').prop('checked', true);
         $('.enabled_sharing').removeClass('hidden');
         $('[data-type="share"]').each(function() {

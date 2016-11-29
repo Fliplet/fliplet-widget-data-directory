@@ -206,6 +206,10 @@ DataDirectory.prototype.renderEntries = function(){
   } else {
     listData = this.data.sort( function(a,b){
       var attr = _this.config.alphabetical_field;
+      if (!a[attr] || !b[attr]) {
+        return 0;
+      }
+
       if (a[attr].toUpperCase() < b[attr].toUpperCase())
         return -1;
       if (a[attr].toUpperCase() > b[attr].toUpperCase())

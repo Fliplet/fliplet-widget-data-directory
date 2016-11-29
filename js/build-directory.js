@@ -576,7 +576,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     }
   }
 
-  if (this.config.share_fields.length) {
+  if (this.config.share_fields && this.config.share_fields.length) {
     detailData.shareBody = encodeURI('I was reading ' + title + ' and I thought you might be interested in the following:') + '%0D%0A%0D%0A';
     this.config.share_fields.forEach(function(shareLabel) {
       detailData.shareBody = detailData.shareBody + encodeURI(shareLabel) + '%0D%0A' + encodeURI(_this.data[entryIndex][shareLabel]) + '%0D%0A%0D%0A';

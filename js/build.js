@@ -23,13 +23,13 @@ $('[data-directory-id]').each(function(){
               return source.find();
             })
             .then(function (rows) {
-              config.rows = rows.map(function (row) {
+              dataDirectory[id].data = rows.map(function (row) {
                 row.data.dataSourceEntryId = row.id;
                 return row.data;
               });
 
               Fliplet.Storage.set('data-directory-rows-' + id, config.rows);
-              dataDirectory[id] = new DataDirectory(config, container);
+              dataDirectory[id].init();
             });
         }
       });

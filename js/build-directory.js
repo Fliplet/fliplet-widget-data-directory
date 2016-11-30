@@ -28,8 +28,8 @@ var DataDirectory = function (config, container) {
   document.dispatchEvent(flDirectoryBeforeInit);
 
   // Function to run before initialising the directory.
-  if (typeof this.config.before_init === 'function') {
-    this.data = this.config.before_init(JSON.parse(JSON.stringify(this.data)));
+  if (typeof config.before_init === 'function') {
+    this.data = config.before_init(JSON.parse(JSON.stringify(this.data)));
   }
 
   this.config = $.extend({

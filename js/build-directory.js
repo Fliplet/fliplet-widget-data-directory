@@ -87,6 +87,16 @@ DataDirectory.prototype.initialiseHandlebars = function(){
 
   var lastAlphabetIndex = '';
 
+  Handlebars.registerHelper('plaintext', function(partial, context){
+    // Create compiler function for said partial
+    var output = Handlebars.compile(Handlebars.partials[partial]);
+
+    // Return compiled output using said context
+    var result = output(context);
+    result = $('<div></div>').html(result).text();
+    return $('<div></div>').html(result).text();
+  });
+
   Handlebars.registerHelper('alphabet_divider', function(){
     if (!_this.config.is_alphabetical) return '';
 

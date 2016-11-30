@@ -12,12 +12,31 @@ var messageTimeout,
 var DataDirectory = function (config, container) {
   var _this = this;
 
+  this.data = config.rows;
+
+  // Custom event to fire before an entry is rendered in the detailed view.
+  var flDirectoryBeforeInit = new CustomEvent(
+    "flDirectoryBeforeInit",
+    {
+      bubbles: true,
+      cancelable: true,
+      detail: {
+        data: this.data
+      }
+    }
+  );
+  document.dispatchEvent(flDirectoryBeforeInit);
+
+  // Function to run before initialising the directory.
+  if (typeof this.config.before_init === 'function') {
+    this.data = this.config.before_init(JSON.parse(JSON.stringify(this.data)));
+  }
+
+  // @TODO: To be removed and implemented through flDirectoryBeforeInit event listener instead
   if (config.published_field) {
-    this.data = config.rows.filter(function(row) {
+    this.data = this.data.filter(function(row) {
       return row[config.published_field];
     });
-  } else {
-    this.data = config.rows;
   }
 
   this.config = $.extend({
@@ -169,11 +188,6 @@ DataDirectory.prototype.initialiseHandlebars = function(){
 };
 
 DataDirectory.prototype.init = function(){
-  // Function to run before rendering the directory UI.
-  if (typeof this.config.before_init === 'function') {
-    this.data = this.config.before_init(JSON.parse(JSON.stringify(this.data)));
-  }
-
   this.verifyConfig();
   this.renderEntries();
   this.renderFilters();

@@ -146,11 +146,11 @@ DataDirectory.prototype.initialiseHandlebars = function(){
         splitTags.map(function (tag) {
           tag = tag.trim();
           if (tag !== '') {
-            return '<a class="data-linked" data-type="filter-value-tag" data-value="' + tag + '" data-filter="' + _this.config.tags_field + '" href="#">' + tag + '</a>';
+            return '<a class="data-linked" data-type="filter-value-tag" data-value="' + tag + '" data-filter="' + _this.config.tags_field + '" href="#">' + tag + '</a> ';
           }
 
           return '';
-        }).join(', ')
+        }).join('<span class="tag-seperation">, </span>')
       );
     });
   }

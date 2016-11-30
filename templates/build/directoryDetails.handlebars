@@ -1,10 +1,4 @@
-<div data-source-entry-id="{{dataSourceEntryId}}" {{#if shareBody}}class="no-margin-top"{{/if}}
->
-{{#if shareBody}}
-    <div class="detail-share-button">
-        <a href="mailto:?body={{{shareBody}}}" class="btn btn-default"><i class="fa fa-share-square-o"></i> Share</a>
-    </div>
-{{/if}}
+<div data-source-entry-id="{{dataSourceEntryId}}">
 <div class="directory-detail-title {{#if has_thumbnail}}has-thumbnail{{/if}}">{{#if has_thumbnail}}<span class="thumbnail"><span class="helper"></span><span class="img-wrapper circular" style="background-image: url('{{thumbnail}}');"></span></span>{{/if}}{{title}}</div>
 {{#each fields}}
     <div class="directory-detail-label">{{label}}</div>

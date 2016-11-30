@@ -460,11 +460,6 @@ DataDirectory.prototype.attachObservers = function(){
     $('.overlay-date-range').removeClass('active');
     _this.renderFilterValues(date_filter, !_this.deviceIsTablet)
   });
-
-  this.$container.find('.detail-share-button').on( 'click', function() {
-    // Analytics - Track Event
-    Fliplet.Analytics.trackEvent({category: 'directory', action: 'share', title: _this.currentEntry.detailData.title });
-  });
 };
 
 DataDirectory.prototype.activateSearch = function(){
@@ -578,13 +573,6 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     if (fieldObj.value.length) {
       detailData.fields.push( fieldObj );
     }
-  }
-
-  if (this.config.share_fields && this.config.share_fields.length) {
-    detailData.shareBody = encodeURI('I was reading ' + title + ' and I thought you might be interested in the following:') + '%0D%0A%0D%0A';
-    this.config.share_fields.forEach(function(shareLabel) {
-      detailData.shareBody = detailData.shareBody + encodeURI(shareLabel) + '%0D%0A' + encodeURI(_this.data[entryIndex][shareLabel]) + '%0D%0A%0D%0A';
-    });
   }
 
   var detailHTML = Handlebars.templates.directoryDetails(detailData);

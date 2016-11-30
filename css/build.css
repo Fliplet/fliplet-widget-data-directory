@@ -542,6 +542,10 @@
     margin-top: 1.9em;
 }
 
+.no-margin-top .directory-detail-title {
+    margin-top: 0;
+}
+
 .directory-detail-title.has-thumbnail {
     text-align: center;
 }
@@ -635,13 +639,9 @@
 }
 
 .detail-share-button {
-    margin-top: 40px;
-}
-
-.detail-share-button .btn {
-    display: block;
-    clear: both;
-    width: 100%;
+    margin-top: 0.9em;
+    margin-bottom: 0.9em;
+    text-align: right;
 }
 /* LOADER */
 .loader-wrapper {
@@ -961,11 +961,8 @@
     cursor: pointer;
 }
 @media (min-width:640px) {
-    .detail-share-button .btn {
-        clear: none;
-        display: inline-block;
-        width: auto;
-        max-width: 100%;
+    .detail-share-button {
+        margin-top: 0;
     }
 
     .overlay-date-range .btn-default,

@@ -13,6 +13,9 @@
 // # bootstrap-datepicker-mobile
 
 (function($, Modernizr, window) {
+  if(Fliplet.Env.get('platform') !== 'native') {
+    return;
+  }
 
   // Set the default datepicker format
   $.fn.datepicker.defaults.format = "mm/dd/yy";

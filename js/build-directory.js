@@ -234,8 +234,8 @@ DataDirectory.prototype.renderEntries = function(){
 DataDirectory.prototype.renderIndexList = function(){
   if ( !this.config.is_alphabetical ) return;
 
-  this.$container.find('.directory-entries').after('<div class="list-index"></div>');
   var $listIndex = this.$container.find('.directory-entries + .list-index');
+  $listIndex.html('');
   this.$container.find('.directory-entries .divider').each(function(){
     var letter = $(this).text();
     $listIndex.append('<span data-letter="' + letter + '">' + letter + '</span>');

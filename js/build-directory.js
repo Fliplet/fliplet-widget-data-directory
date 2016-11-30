@@ -32,13 +32,6 @@ var DataDirectory = function (config, container) {
     this.data = this.config.before_init(JSON.parse(JSON.stringify(this.data)));
   }
 
-  // @TODO: To be removed and implemented through flDirectoryBeforeInit event listener instead
-  if (config.published_field) {
-    this.data = this.data.filter(function(row) {
-      return row[config.published_field];
-    });
-  }
-
   this.config = $.extend({
     is_alphabetical : false,
     alphabetical_field : "",

@@ -21,7 +21,7 @@ var DataDirectory = function (config, container) {
       bubbles: true,
       cancelable: true,
       detail: {
-        data: this.data
+        context: this
       }
     }
   );

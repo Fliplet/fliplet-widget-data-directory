@@ -14,24 +14,6 @@ var DataDirectory = function (config, container) {
 
   this.data = config.rows;
 
-  // Custom event to fire before an entry is rendered in the detailed view.
-  var flDirectoryBeforeInit = new CustomEvent(
-    "flDirectoryBeforeInit",
-    {
-      bubbles: true,
-      cancelable: true,
-      detail: {
-        context: this
-      }
-    }
-  );
-  document.dispatchEvent(flDirectoryBeforeInit);
-
-  // Function to run before initialising the directory.
-  if (typeof config.before_init === 'function') {
-    this.data = config.before_init(JSON.parse(JSON.stringify(this.data)));
-  }
-
   this.config = $.extend({
     is_alphabetical : false,
     alphabetical_field : "",
@@ -181,6 +163,24 @@ DataDirectory.prototype.initialiseHandlebars = function(){
 };
 
 DataDirectory.prototype.init = function(){
+  // Custom event to fire before an entry is rendered in the detailed view.
+  var flDirectoryBeforeInit = new CustomEvent(
+    "flDirectoryBeforeInit",
+    {
+      bubbles: true,
+      cancelable: true,
+      detail: {
+        context: this
+      }
+    }
+  );
+  document.dispatchEvent(flDirectoryBeforeInit);
+
+  // Function to run before initialising the directory.
+  if (typeof config.before_init === 'function') {
+    this.data = config.before_init(JSON.parse(JSON.stringify(this.data)));
+  }
+
   this.verifyConfig();
   this.renderEntries();
   this.renderFilters();

@@ -337,7 +337,7 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
     var end_date = new Date($('.finish_date').datepicker("getDate"))
         this.data.forEach(function(value, index) {
           var entryDate = new Date(value[filter]);
-           if (entryDate >= start_date && entryDate <= end_date) {
+           if (entryDate >= start_date && entryDate <= end_date && values.indexOf(value[filter]) === -1) {
              values.push(value[filter]);
            }
         });

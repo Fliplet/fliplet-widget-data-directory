@@ -28,7 +28,7 @@
   function bootstrapDatepickerMobile(ev) {
 
     var $inputs = $('input.date-picker');
-    var isMobile = $(window).width() <= 480 || Modernizr.touch;
+    var isMobile = Modernizr.mobile || Modernizr.tablet;
 
     $inputs.each(function() {
 

@@ -532,7 +532,12 @@ DataDirectory.prototype.dataLinkClicked = function(e){
   // Date
   if (_this.config.field_types[e.currentTarget.dataset.filter] === 'date' && e.currentTarget.dataset.type === 'filter') {
     date_filter = e.currentTarget.dataset.filter;
-    $('.date-picker').datepicker();
+    $('.date-picker').datepicker({
+      format: "dd M yyyy",
+      maxViewMode: 2,
+      autoclose: true,
+      todayHighlight: true
+    });
     $('.overlay-date-range').addClass('active');
     return;
   }

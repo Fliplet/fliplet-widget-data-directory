@@ -42,7 +42,6 @@ var DataDirectory = function (config, container) {
       _this.initialiseHandlebars();
       _this.init();
       _this.attachObservers();
-      _this.parseQueryVars();
     } else {
       _this.directoryNotConfigured();
     }
@@ -184,6 +183,7 @@ DataDirectory.prototype.init = function(){
   this.verifyConfig();
   this.renderEntries();
   this.renderFilters();
+  this.parseQueryVars();
 
   // Custom event to fire after the directory list is rendered.
   var flDirectoryListRendered = new CustomEvent(

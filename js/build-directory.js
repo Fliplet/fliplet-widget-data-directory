@@ -338,7 +338,8 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
     this.data.forEach(function(value, index) {
       var entryDate = getFormatedDate(value[filter]);
        if (entryDate.isAfter(start_date) && end_date.isAfter(entryDate) && values.indexOf(value[filter]) === -1) {
-         values.push(value[filter]);
+         // Format date to look like DD MMM YYYY;
+         values.push(moment(value[filter]).format("DD MMM YYYY"));
        }
     });
     values.sort(function(a,b) {
@@ -552,6 +553,11 @@ DataDirectory.prototype.dataLinkClicked = function(e){
     });
     $('.overlay-date-range').addClass('active');
     return;
+  }
+
+  // Revert format date to YYYY-MM-DD
+  if (_this.config.field_types[e.currentTarget.dataset.filter] === 'date' && e.currentTarget.dataset.type === 'filter-value') {
+    e.currentTarget.dataset.value = moment(e.currentTarget.dataset.value).format('YYYY-MM-DD');
   }
 
   switch (e.currentTarget.dataset.type) {
@@ -790,6 +796,10 @@ DataDirectory.prototype.getEntryField = function( entryIndex, fieldIndex, type )
       }).join(', ');
       valueHTML = '<div class="list-tags">' + valueHTML + '</div>';
     } else {
+      if (this.config.field_types[label] === 'date') {
+        value = moment(value).format("DD MMM YYYY");
+      }
+
       valueHTML = Handlebars.templates['directoryFieldType' + fieldType](value);
     }
   } else {

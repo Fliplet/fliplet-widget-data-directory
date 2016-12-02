@@ -379,7 +379,7 @@ function getFormatedDate(date) {
 
   if (nativeDateFormat.test(date))
     return moment(date, 'YYYY-MM-DD');
-  else if (datepickerDateFormat.test(birthday))
+  else if (datepickerDateFormat.test(date))
     return moment(date, 'MM/DD/YY');
 
   return moment(date);

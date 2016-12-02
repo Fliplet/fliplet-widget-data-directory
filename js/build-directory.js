@@ -333,11 +333,11 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
 
     values = values.sort(sortAlphabetically);
   } else if (_this.config.field_types[filter] === 'date') {
-    var start_date = new Date($('.start_date').datepicker("getDate"));
-    var end_date = new Date($('.finish_date').datepicker("getDate"));
+    var start_date = getFormatedDate($('.start_date').datepicker("getDate"));
+    var end_date = getFormatedDate($('.finish_date').datepicker("getDate"));
     this.data.forEach(function(value, index) {
-      var entryDate = new Date(value[filter]);
-       if (entryDate >= start_date && entryDate <= end_date && values.indexOf(value[filter]) === -1) {
+      var entryDate = getFormatedDate(value[filter]);
+       if (entryDate.isAfter(start_date) && end_date.isAfter(entryDate) && values.indexOf(value[filter]) === -1) {
          values.push(value[filter]);
        }
     });
@@ -372,6 +372,18 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
     this.switchMode('filter-values');
   }
 };
+
+function getFormatedDate(date) {
+  var nativeDateFormat = /^\d{4}-\d{2}-\d{2}$/;
+  var datepickerDateFormat = /^\d{2}\/\d{2}\/\d{2}$/;
+
+  if (nativeDateFormat.test(date))
+    return moment(date, 'YYYY-MM-DD');
+  else if (datepickerDateFormat.test(birthday))
+    return moment(date, 'MM/DD/YY');
+
+  return moment(date);
+}
 
 DataDirectory.prototype.switchMode = function(mode){
   /*

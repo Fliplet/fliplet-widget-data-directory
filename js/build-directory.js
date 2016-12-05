@@ -333,8 +333,17 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
 
     values = values.sort(sortAlphabetically);
   } else if (_this.config.field_types[filter] === 'date') {
-    var start_date = getFormatedDate($('.start_date').datepicker("getDate"));
-    var end_date = getFormatedDate($('.finish_date').datepicker("getDate"));
+    var isMobile = Modernizr.mobile || Modernizr.tablet;
+    var start_date;
+    var end_date;
+
+    if (isMobile && Modernizr.inputtypes.date) {
+      start_date = getFormatedDate($('.start_date').val());
+      end_date = getFormatedDate($('.finish_date').val());
+    } else {
+      start_date = getFormatedDate($('.start_date').datepicker("getDate"));
+      end_date = getFormatedDate($('.finish_date').datepicker("getDate"));
+    }
     this.data.forEach(function(value, index) {
       var entryDate = getFormatedDate(value[filter]);
        if (entryDate.isAfter(start_date) && end_date.isAfter(entryDate) && values.indexOf(value[filter]) === -1) {

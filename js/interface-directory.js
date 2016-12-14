@@ -157,11 +157,11 @@ var DataDirectoryForm = (function() {
       this.directoryConfig.field_types = JSON.parse(this.directoryConfig.field_types);
     }
 
-    if (typeof configuration.thumbnail_field !== 'undefined' && configuration.thumbnail_field !== '') {
+    if (typeof configuration.thumbnail_field !== 'undefined' && configuration.thumbnail_field !== null && configuration.thumbnail_field !== '') {
       $('.thumbs-options').addClass('show');
     }
 
-    if (typeof configuration.folderConfig !== 'undefined' && configuration.thumbnail_field.length) {
+    if (typeof configuration.folderConfig !== 'undefined' && configuration.thumbnail_field !== null && configuration.thumbnail_field.length) {
       if ('organizationId' in configuration.folderConfig) {
         $('.item-holder[data-organization-id="'+configuration.folderConfig.organizationId+'"]').addClass('selected');
       } else if ('appId' in configuration.folderConfig) {

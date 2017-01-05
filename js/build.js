@@ -2,13 +2,15 @@ var dataDirectory = {};
 $('[data-directory-id]').each(function(){
   var container = this;
   var id = $(this).data('directory-id');
+  var uuid = $(this).data('directory-uuid');
+  var pvKey = 'data-directory-rows-' + uuid;
   var config = Fliplet.Widget.getData(id);
   if (config.source) {
     if (!config.enable_live_data) {
       return dataDirectory[id] = new DataDirectory(config, container);
     }
 
-    Fliplet.Storage.get('data-directory-rows-' + id)
+    Fliplet.Storage.get(pvKey)
       .then(function (rows) {
         if (rows) {
           config.rows = rows;
@@ -28,7 +30,7 @@ $('[data-directory-id]').each(function(){
                 return row.data;
               });
 
-              Fliplet.Storage.set('data-directory-rows-' + id, config.rows);
+              Fliplet.Storage.set(pvKey, config.rows);
               dataDirectory[id].init();
             });
         }

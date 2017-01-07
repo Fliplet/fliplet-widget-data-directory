@@ -2,6 +2,7 @@ var dataDirectory = {};
 $('[data-directory-id]').each(function(){
   var container = this;
   var id = $(this).data('directory-id');
+  var uuid = $(this).data('directory-uuid');
   var config = Fliplet.Widget.getData(id);
   if (config.source) {
     if (!config.enable_live_data) {

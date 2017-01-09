@@ -4,34 +4,40 @@ $('[data-directory-id]').each(function(){
   var id = $(this).data('directory-id');
   var uuid = $(this).data('directory-uuid');
   var config = Fliplet.Widget.getData(id);
+  var connection;
+  
+  function formatRows(rows) {
+    return rows.map(function (row) {
+      row.data.dataSourceEntryId = row.id;
+      return row.data;
+    });
+  }
+
   if (config.source) {
-    if (!config.enable_live_data) {
-      return dataDirectory[id] = new DataDirectory(config, container);
-    }
-
-    Fliplet.Storage.get('data-directory-rows-' + id)
+    // Load local data
+    Fliplet.DataSources.connect(config.source)
+      .then(function (source) {
+        connection = source;
+        return source.find();
+      })
       .then(function (rows) {
-        if (rows) {
-          config.rows = rows;
-          dataDirectory[id] = new DataDirectory(config, container);
-        } else {
-          dataDirectory[id] = new DataDirectory(config, container);
-        }
+        config.rows = formatRows(rows);
 
-        if (Fliplet.Navigator.isOnline()) {
-          Fliplet.DataSources.connect(config.source)
-            .then(function (source) {
-              return source.find();
-            })
-            .then(function (rows) {
-              dataDirectory[id].data = rows.map(function (row) {
-                row.data.dataSourceEntryId = row.id;
-                return row.data;
-              });
+        // Start data directory
+        dataDirectory[id] = new DataDirectory(config, container);
 
-              Fliplet.Storage.set('data-directory-rows-' + id, config.rows);
+        // Check if live data is enabled  
+        if (config.enable_live_data) {
+          // Pull latest data
+          connection.pull()
+            .then(function (result) {
+              if (!result.pull) {
+                return;
+              }
+
+              config.rows = formatRows(result.entries);
               dataDirectory[id].init();
-            });
+            })
         }
       });
   }

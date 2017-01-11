@@ -364,7 +364,7 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
 
   if ( inOverlay ) {
     var overlayContent = Handlebars.templates.directoryFilterOverlay(data);
-    this.filterOverlay = new Overlay(overlayContent,{
+    this.filterOverlay = new Fliplet.Utils.Overlay(overlayContent,{
       title: 'Filter by ' + filter,
       classes: 'overlay-directory',
       showOnInit: true,
@@ -698,7 +698,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
       $listEntry.addClass('active');
     },0);
   } else {
-    this.entryOverlay = new Overlay( detailHTML, {
+    this.entryOverlay = new Fliplet.Utils.Overlay( detailHTML, {
       showOnInit : true,
       classes: 'overlay-directory',
       closeText: '<i class="fa fa-chevron-left"></i>',

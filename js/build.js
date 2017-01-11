@@ -13,32 +13,39 @@ $('[data-directory-id]').each(function(){
     });
   }
 
-  if (config.source) {
-    // Load local data
-    Fliplet.DataSources.connect(config.source)
-      .then(function (source) {
-        connection = source;
-        return source.find();
-      })
-      .then(function (rows) {
-        config.rows = formatRows(rows);
-
-        // Start data directory
-        dataDirectory[id] = new DataDirectory(config, container);
-
-        // Check if live data is enabled  
-        if (config.enable_live_data) {
-          // Pull latest data
-          connection.pull()
-            .then(function (result) {
-              if (!result.pull) {
-                return;
-              }
-
-              config.rows = formatRows(result.entries);
-              dataDirectory[id].init();
-            })
-        }
-      });
+  if (!config.source) {
+    // Start data directory with no data
+    return dataDirectory[id] = new DataDirectory(config, container);
   }
+
+  // Load local data
+  Fliplet.DataSources.connect(config.source)
+    .then(function (source) {
+      connection = source;
+      return source.find();
+    })
+    .then(function (rows) {
+      config.rows = formatRows(rows);
+
+      // Start data directory
+      dataDirectory[id] = new DataDirectory(config, container);
+
+      // Check if live data is enabled  
+      if (config.enable_live_data) {
+        // Pull latest data
+        connection.pull()
+          .then(function (result) {
+            if (!result.pull) {
+              return;
+            }
+
+            config.rows = formatRows(result.entries);
+            dataDirectory[id].init();
+          })
+      }
+    })
+    .catch(function (error) {
+      // Start data directory with no data
+      dataDirectory[id] = new DataDirectory(config, container);
+    });
 });

@@ -12,8 +12,6 @@ var messageTimeout,
 var DataDirectory = function (config, container) {
   var _this = this;
 
-  this.data = config.rows;
-
   this.config = $.extend({
     is_alphabetical : false,
     alphabetical_field : "",
@@ -36,6 +34,8 @@ var DataDirectory = function (config, container) {
   this.supportLiveSearch = this.data.length <= 500;
   this.liveSearchInterval = 200;
   this.currentEntry;
+  this.data = config.rows;
+  delete this.config.rows;
 
   var folderID = this.config.folderConfig;
 
@@ -75,6 +75,18 @@ var DataDirectory = function (config, container) {
   }
 
   return this;
+};
+
+DataDirectory.prototype.getConfig = function(key){
+  if (key.length && this.config.hasOwnProperty(key)) {
+    return this.config[key];
+  }
+};
+
+DataDirectory.prototype.setConfig = function(key, value){
+  if (key.length) {
+    this.config[key] = value;
+  }
 };
 
 DataDirectory.prototype.initialiseHandlebars = function(){

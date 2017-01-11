@@ -537,6 +537,7 @@ var DataDirectoryForm = (function() {
         detailFields = [];
       }
       data.detail_fields = detailFields;
+      data.rows = [];
       this.directoryConfig = data;
     },
 

@@ -21,8 +21,12 @@ var DataDirectory = function (config, container) {
     search_fields : [],
     field_types : "", // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
     tags_field : "",
-    thumbnail_field : ""
+    thumbnail_field : "",
+    search_only: true
   }, config);
+  this.data = config.rows;
+  delete this.config.rows;
+
   this.$container = $(container).parents('body');
   this.deviceIsTablet = ( window.innerWidth >= 640 );
   this.navHeight = $('.fl-viewport-header').height() || 0;
@@ -34,8 +38,6 @@ var DataDirectory = function (config, container) {
   this.supportLiveSearch = this.data.length <= 500;
   this.liveSearchInterval = 200;
   this.currentEntry;
-  this.data = config.rows;
-  delete this.config.rows;
 
   var folderID = this.config.folderConfig;
 
@@ -195,8 +197,17 @@ DataDirectory.prototype.init = function(){
   }
 
   this.verifyConfig();
-  this.renderEntries();
   this.renderFilters();
+
+  if (this.config.search_only) {
+    this.activateSearch();
+    setTimeout(function(){
+      // _this.$container.find('.search').trigger( 'focus' );
+    }, 0);
+    return;
+  }
+
+  this.renderEntries();
   this.parseQueryVars();
 
   // Custom event to fire after the directory list is rendered.
@@ -383,7 +394,6 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
       closeText: '<i class="fa fa-chevron-left"></i>',
       entranceAnim: 'slideInRight',
       exitAnim: 'slideOutRight',
-      closeText: 'Cancel',
       afterClose: function(){
         _this.filterOverlay = null;
       }
@@ -519,6 +529,14 @@ DataDirectory.prototype.attachObservers = function(){
 };
 
 DataDirectory.prototype.activateSearch = function(){
+  this.$container.find('.search-cancel').css({
+    'top': this.config.search_only ? '-9999px' : ''
+  });
+  this.$container.find('.directory-screen').css({
+    'opacity': this.config.search_only ? '0' : '',
+    'pointer-events': this.config.search_only ? 'none' : ''
+  });
+
   if ( this.isMode('default') ) {
     this.$container.find('.filter-selected').html('');
   }
@@ -530,6 +548,10 @@ DataDirectory.prototype.activateSearch = function(){
 };
 
 DataDirectory.prototype.deactivateSearch = function(){
+  if (this.config.search_only) {
+    return;
+  }
+
   this.$container.find('.search').trigger('blur');
   if ( this.deviceIsTablet && this.isMode('search-result-entry') ) {
     this.openDataEntry(0, 'entry', false);
@@ -542,6 +564,10 @@ DataDirectory.prototype.deactivateSearch = function(){
 DataDirectory.prototype.resizeSearch = function(){
   var _this = this;
   setTimeout(function(){
+    if (_this.config.search_only) {
+      return _this.$container.find('.search').css( 'width', '' );
+    }
+
     if ( _this.isMode('search') || _this.isMode('filter-values') || _this.isMode('search-result') || _this.isMode('search-result-entry') ) {
       _this.$container.find('.search').css( 'width', _this.$container.find('.directory-search').width() - _this.$container.find('.search-cancel').outerWidth() + 8 );
     } else {
@@ -986,8 +1012,8 @@ DataDirectory.prototype.parseQueryVars = function(){
       case 'open':
         break;
     }
-  } else if ( this.deviceIsTablet ) {
-    // Open the first entry if on a tablet
+  } else if ( this.deviceIsTablet && !this.config.search_only ) {
+    // Open the first entry if on a tablet and search_only mode isn't on
     this.openDataEntry(0, 'entry', false);
   }
 };

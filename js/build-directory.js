@@ -79,6 +79,21 @@ var DataDirectory = function (config, container) {
   return this;
 };
 
+DataDirectory.prototype.trigger = function(event, detail){
+  var detail = $.extend({
+    context: this
+  }, detail || {});
+  var customEvent = new CustomEvent(
+    event,
+    {
+      bubbles: true,
+      cancelable: true,
+      detail: detail
+    }
+  );
+  document.dispatchEvent(customEvent);
+};
+
 DataDirectory.prototype.getConfig = function(key){
   if (key.length && this.config.hasOwnProperty(key)) {
     return this.config[key];
@@ -179,17 +194,7 @@ DataDirectory.prototype.initialiseHandlebars = function(){
 
 DataDirectory.prototype.init = function(){
   // Custom event to fire before an entry is rendered in the detailed view.
-  var flDirectoryBeforeInit = new CustomEvent(
-    "flDirectoryBeforeInit",
-    {
-      bubbles: true,
-      cancelable: true,
-      detail: {
-        context: this
-      }
-    }
-  );
-  document.dispatchEvent(flDirectoryBeforeInit);
+  this.trigger('flDirectoryBeforeInit');
 
   // Function to run before initialising the directory.
   if (typeof this.config.before_init === 'function') {
@@ -211,14 +216,7 @@ DataDirectory.prototype.init = function(){
   this.parseQueryVars();
 
   // Custom event to fire after the directory list is rendered.
-  var flDirectoryListRendered = new CustomEvent(
-    "flDirectoryListRendered",
-    {
-      bubbles: true,
-      cancelable: true
-    }
-  );
-  document.dispatchEvent(flDirectoryListRendered);
+  this.trigger('flDirectoryListRendered');
 };
 
 DataDirectory.prototype.verifyFields = function(fieldConfig){
@@ -680,17 +678,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
   }
 
   // Custom event to fire before an entry is rendered in the detailed view.
-  var flDirectoryEntryBeforeRender = new CustomEvent(
-    "flDirectoryEntryBeforeRender",
-    {
-      bubbles: true,
-      cancelable: true,
-      detail: {
-        detailData: detailData
-      }
-    }
-  );
-  document.dispatchEvent(flDirectoryEntryBeforeRender);
+  this.trigger('flDirectoryEntryBeforeRender', {detailData: detailData});
 
   var after_render = function() {
     // Link taps listeners
@@ -716,17 +704,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     });
 
     // Custom event to fire after an entry is rendered in the detailed view.
-    var flDirectoryEntryAfterRender = new CustomEvent(
-      "flDirectoryEntryAfterRender",
-      {
-        bubbles: true,
-        cancelable: true,
-        detail: {
-          detailData: detailData
-        }
-      }
-    );
-    document.dispatchEvent(flDirectoryEntryAfterRender);
+    _this.trigger('flDirectoryEntryAfterRender', {detailData: detailData});
   };
 
   // Function to run before rendering the entry

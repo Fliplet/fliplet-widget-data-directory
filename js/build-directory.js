@@ -121,6 +121,10 @@ DataDirectory.prototype.initialiseHandlebars = function(){
     return $('<div></div>').html(result).text();
   });
 
+  Handlebars.registerHelper('moment', function(key, format, obj){
+    return moment(obj[key]).format(format);
+  });
+
   Handlebars.registerHelper('alphabet_divider', function(){
     if (!_this.config.is_alphabetical) return '';
 

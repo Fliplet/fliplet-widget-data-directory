@@ -22,7 +22,7 @@ var DataDirectory = function (config, container) {
     field_types : "", // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
     tags_field : "",
     thumbnail_field : "",
-    search_only: true
+    search_only: false
   }, config);
   this.data = config.rows;
   delete this.config.rows;

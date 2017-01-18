@@ -22,13 +22,14 @@ var DataDirectory = function (config, container) {
     field_types : "", // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
     tags_field : "",
     thumbnail_field : "",
-    search_only: false
+    search_only: false,
+    mobile_mode: false
   }, config);
   this.data = config.rows;
   delete this.config.rows;
 
   this.$container = $(container).parents('body');
-  this.deviceIsTablet = ( window.innerWidth >= 640 );
+  this.deviceIsTablet = (window.innerWidth >= 640 && window.innerHeight >= 640);
   this.navHeight = $('.fl-viewport-header').height() || 0;
   this.searchBarHeight = this.$container.find('.directory-search').outerHeight();
   this.directoryMode = this.$container.find('.container-fluid').attr('data-mode');
@@ -38,6 +39,8 @@ var DataDirectory = function (config, container) {
   this.supportLiveSearch = this.data.length <= 500;
   this.liveSearchInterval = 200;
   this.currentEntry;
+
+  this.checkMobileMode();
 
   var folderID = this.config.folderConfig;
 
@@ -129,7 +132,7 @@ DataDirectory.prototype.initialiseHandlebars = function(){
     if (!_this.config.is_alphabetical) return '';
 
     var entryTitleTemplate = Handlebars.compile( "{{["+_this.config.alphabetical_field+"]}}" );
-    var firstCharacterOfTitle = entryTitleTemplate( this )[0].toUpperCase();
+    var firstCharacterOfTitle = entryTitleTemplate( this )[0].toString().toUpperCase();
     if ( "1234567890".indexOf(firstCharacterOfTitle) > -1 ) firstCharacterOfTitle = '#';
     if ( firstCharacterOfTitle !== lastAlphabetIndex ) {
       lastAlphabetIndex = firstCharacterOfTitle;
@@ -216,6 +219,7 @@ DataDirectory.prototype.init = function(){
     return;
   }
 
+  this.checkMobileMode();
   this.renderEntries();
   this.parseQueryVars();
 
@@ -254,9 +258,9 @@ DataDirectory.prototype.renderEntries = function(){
         return 0;
       }
 
-      if (a[attr].toUpperCase() < b[attr].toUpperCase())
+      if (a[attr].toString().toUpperCase() < b[attr].toString().toUpperCase())
         return -1;
-      if (a[attr].toUpperCase() > b[attr].toUpperCase())
+      if (a[attr].toString().toUpperCase() > b[attr].toString().toUpperCase())
         return 1;
       return 0;
     } );
@@ -471,7 +475,8 @@ DataDirectory.prototype.attachObservers = function(){
 
   this.$container.on( 'click', '.data-linked', $.proxy( this.dataLinkClicked, this ) );
   $(window).on( 'resize', function(){
-    _this.deviceIsTablet = window.innerWidth >= 640;
+    _this.deviceIsTablet = (window.innerWidth >= 640 && window.innerHeight >= 640);
+    _this.checkMobileMode();
     _this.resizeSearch();
     _this.navHeight = $('.fl-viewport-header').height() || 0;
     _this.searchBarHeight = _this.$container.find('.directory-search').outerHeight();
@@ -526,7 +531,7 @@ DataDirectory.prototype.attachObservers = function(){
   });
   this.$container.find('.date_go').on( 'click', function(){
     $('.overlay-date-range').removeClass('active');
-    _this.renderFilterValues(date_filter, !_this.deviceIsTablet)
+    _this.renderFilterValues(date_filter, _this.config.mobile_mode || !_this.deviceIsTablet);
   });
 };
 
@@ -559,7 +564,7 @@ DataDirectory.prototype.deactivateSearch = function(){
   }
 
   this.$container.find('.search').trigger('blur');
-  if ( this.deviceIsTablet && this.isMode('search-result-entry') ) {
+  if ( !this.config.mobile_mode && this.deviceIsTablet && this.isMode('search-result-entry') ) {
     this.openDataEntry(0, 'entry', false);
   }
   this.switchMode('default');
@@ -567,6 +572,14 @@ DataDirectory.prototype.deactivateSearch = function(){
   document.body.classList.remove('fl-top-menu-hidden');
 
   this.flViewportRedraw();
+};
+
+DataDirectory.prototype.checkMobileMode = function(){
+  if (this.config.mobile_mode) {
+    this.$container.addClass('directory-mobile-mode');
+  } else {
+    this.$container.removeClass('directory-mobile-mode');
+  }
 };
 
 DataDirectory.prototype.resizeSearch = function(){
@@ -585,11 +598,11 @@ DataDirectory.prototype.resizeSearch = function(){
 };
 
 DataDirectory.prototype.filterOverlayIsActive = function(){
-  return this.filterOverlay instanceof Overlay;
+  return this.filterOverlay instanceof Fliplet.Utils.Overlay;
 };
 
 DataDirectory.prototype.entryOverlayIsActive = function(){
-  return this.entryOverlay instanceof Overlay;
+  return this.entryOverlay instanceof Fliplet.Utils.Overlay;
 };
 
 DataDirectory.prototype.dataLinkClicked = function(e){
@@ -621,7 +634,7 @@ DataDirectory.prototype.dataLinkClicked = function(e){
     case 'filter-tag':
     case 'filter':
       var filter = e.currentTarget.dataset.filter;
-      this.renderFilterValues( filter, !this.deviceIsTablet );
+      this.renderFilterValues( filter, (this.config.mobile_mode || !this.deviceIsTablet) );
       break;
     case 'filter-value-tag':
       e.stopPropagation();
@@ -716,7 +729,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     detailHTML = this.config.before_render_entry(detailData, detailHTML);
   }
 
-  if ( this.deviceIsTablet ) {
+  if ( !this.config.mobile_mode && this.deviceIsTablet ) {
     this.$container.find('.directory-details .directory-details-content').html(detailHTML);
     after_render();
     setTimeout(function(){
@@ -756,10 +769,10 @@ DataDirectory.prototype.disableClicks = function () {
 // Function that will fade in the loading overlay
 DataDirectory.prototype.addLoading = function () {
   // The following adds Loading Overlay to a specific area depending on the device width
-  if (this.deviceIsTablet) {
-    this.$container.find('.directory-details').find('.directory-loading').fadeIn(400);
-  } else {
+  if (this.config.mobile_mode || !this.deviceIsTablet) {
     this.$container.find('.directory-list').find('.directory-loading').fadeIn(400);
+  } else {
+    this.$container.find('.directory-details').find('.directory-loading').fadeIn(400);
   }
 
   // Delay to display the "Loading..." text
@@ -773,10 +786,10 @@ DataDirectory.prototype.removeLoading = function () {
   clearTimeout(loadingTimeout); // Clears delay loading overlay
   clearTimeout(messageTimeout); // Clears delay for text to appear
   // The following removes Loading Overlay from a specific area depending on the device width
-  if (this.deviceIsTablet) {
-    this.$container.find('.directory-details').find('.directory-loading').fadeOut(400);
-  } else {
+  if (this.config.mobile_mode || !this.deviceIsTablet) {
     this.$container.find('.directory-list').find('.directory-loading').fadeOut(400);
+  } else {
+    this.$container.find('.directory-details').find('.directory-loading').fadeOut(400);
   }
 
   this.$container.find('.directory-list, .directory-details').removeClass('disabled'); // Enables List
@@ -965,9 +978,9 @@ DataDirectory.prototype.filter = function( field, value ) {
 
 function sortAlphabetically(a,b) {
   // Sort by alphabet
-  if (a.toUpperCase() < b.toUpperCase())
+  if (a.toString().toUpperCase() < b.toString().toUpperCase())
     return -1;
-  if (a.toUpperCase() > b.toUpperCase())
+  if (a.toString().toUpperCase() > b.toString().toUpperCase())
     return 1;
   return 0;
 }
@@ -1000,7 +1013,7 @@ DataDirectory.prototype.parseQueryVars = function(){
       case 'open':
         break;
     }
-  } else if ( this.deviceIsTablet && !this.config.search_only ) {
+  } else if ( !this.config.mobile_mode && this.deviceIsTablet && !this.config.search_only ) {
     // Open the first entry if on a tablet and search_only mode isn't on
     this.openDataEntry(0, 'entry', false);
   }
@@ -1014,7 +1027,7 @@ DataDirectory.prototype.presetSearch = function( value ){
   } );
   if (this.searchResultData.length === 1) {
     this.openDataEntry(0,'search-result-entry');
-    if (!this.deviceIsTablet) {
+    if (this.config.mobile_mode || !this.deviceIsTablet) {
       this.switchMode('default');
     }
   }

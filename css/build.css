@@ -41,6 +41,10 @@
   animation-duration: 350ms;
 }
 
+.directory-mobile-mode .overlay-directory .overlayPanel {
+  width: 100%;
+}
+
 .overlay-directory .overlayPanelScreen {
   background-color: transparent;
 }
@@ -195,6 +199,12 @@
     border-right: 1px solid rgba(127,127,127,0.1);
     width: 33.333%;
   }
+
+  .directory-mobile-mode .directory-list {
+    float: none;
+    border-right: none;
+    width: 100%;
+  }
 }
 
 .directory-details {
@@ -275,6 +285,11 @@
   [data-directory][data-mode="search-result"] .directory-screen {
     opacity: 1;
     pointer-events: all;
+  }
+
+  .directory-mobile-mode .directory-screen {
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 }
 
@@ -360,6 +375,10 @@
   .list-index {
     right: 66.667%;
     margin-top: 50px;
+  }
+
+  .directory-mobile-mode .list-index {
+    right: 0;
   }
 }
 

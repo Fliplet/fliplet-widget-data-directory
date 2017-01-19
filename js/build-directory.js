@@ -883,6 +883,7 @@ DataDirectory.prototype.renderLiveSearch = function( value ) {
 
 DataDirectory.prototype.renderSearchResult = function( options, callback ){
 
+  this.activateSearch();
   this.flViewportRedraw();
 
   // Return all results of search term is empty

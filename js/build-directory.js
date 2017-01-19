@@ -468,7 +468,7 @@ DataDirectory.prototype.attachObservers = function(){
       var img = new Image();
 
       img.addEventListener('load', function(){
-        $('.list-default li[data-index="'+i+'"] .list-image').css('background-image', 'url(' + this.src + ')');
+        $('.list-default.directory-entries li[data-index="'+i+'"] .list-image').css('background-image', 'url(' + this.src + ')');
       }, false);
 
       img.src = imgURL;
@@ -954,7 +954,7 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
       var img = new Image();
 
       img.addEventListener('load', function(){
-        $('.list-default li[data-index="'+i+'"] .list-image').css('background-image', 'url(' + this.src + ')');
+        $('.list-default.search-result li[data-index="'+i+'"] .list-image').css('background-image', 'url(' + this.src + ')');
       }, false);
 
       img.src = imgURL;

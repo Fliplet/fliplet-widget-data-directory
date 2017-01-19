@@ -909,10 +909,12 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
       break;
     case 'filter-value-tag':
       var filterByTag = function(value) {
-        var splitTags = value[options.field].split(',');
-        for (var i = 0; i < splitTags.length; i++) {
-          if (splitTags[i].trim() === options.value.trim()) {
-            return true;
+        if (value[options.field]) {
+          var splitTags = value[options.field].split(',');
+          for (var i = 0; i < splitTags.length; i++) {
+            if (splitTags[i].trim() === options.value.trim()) {
+              return true;
+            }
           }
         }
 

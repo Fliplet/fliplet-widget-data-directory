@@ -888,7 +888,7 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
     options.userTriggered = true;
   }
 
-  if (!options.userTriggered) this.activateSearch();
+  if (options.userTriggered) this.activateSearch();
   this.flViewportRedraw();
 
   // Return all results of search term is empty

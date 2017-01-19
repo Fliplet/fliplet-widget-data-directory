@@ -882,8 +882,13 @@ DataDirectory.prototype.renderLiveSearch = function( value ) {
 };
 
 DataDirectory.prototype.renderSearchResult = function( options, callback ){
+  options = options || {};
 
-  this.activateSearch();
+  if (!options.hasOwnProperty('userTriggered')) {
+    options.userTriggered = true;
+  }
+
+  if (!options.userTriggered) this.activateSearch();
   this.flViewportRedraw();
 
   // Return all results of search term is empty
@@ -1028,7 +1033,8 @@ DataDirectory.prototype.presetSearch = function( value ){
   this.$container.find('.search').val( value );
   this.renderSearchResult( {
     type : 'search',
-    value : value
+    value : value,
+    userTriggered : false
   } );
   if (this.searchResultData.length === 1) {
     this.openDataEntry(0,'search-result-entry');
@@ -1043,7 +1049,8 @@ DataDirectory.prototype.presetFilter = function( field, value ){
   this.renderSearchResult( {
     type : 'filter',
     field : field,
-    value : value
+    value : value,
+    userTriggered : false
   } );
   this.flViewportRedraw();
 };

@@ -671,11 +671,12 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
   var $listEntry = this.$container.find('li[data-type="' + type + '"][data-index=' + entryIndex + ']');
   var $entrytitle = this.$container.find('li[data-type="' + type + '"][data-index=' + entryIndex + '] .list-title');
   var title = $entrytitle.text().trim();
+  var dataArr = (type === 'search-result-entry') ? _this.searchResultData : _this.data;
   var detailData = {
     title : title,
     has_thumbnail : this.config.show_thumb_detail ? this.config.show_thumb_detail : false,
     fields : [],
-    dataSourceEntryId: _this.data[entryIndex]['dataSourceEntryId'] || ''
+    dataSourceEntryId: dataArr[entryIndex]['dataSourceEntryId'] || ''
   };
 
   if (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '') {

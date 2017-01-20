@@ -28,6 +28,7 @@ var DataDirectory = function (config, container) {
   this.data = config.rows;
   delete this.config.rows;
 
+  this.config.is_alphabetical == this.config.is_alphabetical && this.config.alphabetical_field; // Ensures an alphabetical field is provided
   this.$container = $(container).parents('body');
   this.deviceIsTablet = (window.innerWidth >= 640 && window.innerHeight >= 640);
   this.navHeight = $('.fl-viewport-header').height() || 0;

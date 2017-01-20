@@ -16,6 +16,7 @@ $('[data-directory-id]').each(function(){
           config.rows = rows;
           dataDirectory[id] = new DataDirectory(config, container);
         } else {
+          Fliplet.Storage.set(pvKey, config.rows);
           dataDirectory[id] = new DataDirectory(config, container);
         }
 
@@ -30,7 +31,7 @@ $('[data-directory-id]').each(function(){
                 return row.data;
               });
 
-              Fliplet.Storage.set(pvKey, config.rows);
+              Fliplet.Storage.set(pvKey, dataDirectory[id].data);
               dataDirectory[id].init();
             });
         }

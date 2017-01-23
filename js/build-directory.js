@@ -660,6 +660,9 @@ DataDirectory.prototype.dataLinkClicked = function(e){
         if ( _this.entryOverlayIsActive() ) {
           _this.entryOverlay.close();
         }
+        if ( _this.searchResultData.length === 1 ) {
+          _this.openDataEntry(0, 'search-result-entry');
+        }
       } );
       break;
     case 'entry':

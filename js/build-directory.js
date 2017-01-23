@@ -365,8 +365,8 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
       }
     });
 
-    values = values.sort(sortAlphabetically);
-  } else if (_this.config.field_types[filter] === 'date') {
+    values = _.sortBy(values);
+  } else if (this.config.field_types[filter] === 'date') {
     var isMobile = Modernizr.mobile || Modernizr.tablet;
     var start_date;
     var end_date;
@@ -378,16 +378,11 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
       start_date = getFormatedDate($('.start_date').datepicker("getDate"));
       end_date = getFormatedDate($('.finish_date').datepicker("getDate"));
     }
-    this.data.forEach(function(value, index) {
-      var entryDate = getFormatedDate(value[filter]);
-       if (entryDate.isAfter(start_date) && end_date.isAfter(entryDate) && values.indexOf(value[filter]) === -1) {
-         // Format date to look like DD MMM YYYY;
-         values.push(moment(value[filter]).format("DD MMM YYYY"));
-       }
-    });
-    values.sort(function(a,b) {
-      return new Date(a) - new Date(b);
-    });
+    return this.renderSearchResult( {
+      type: 'filter',
+      field: filter,
+      value: [start_date, end_date]
+    } );
   } else {
     values = this.getFilterValues( filter );
   }
@@ -914,6 +909,10 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
       data.field = options.field;
       data.value = options.value;
       data.result = this.filter( options.field, options.value );
+      if (this.config.field_types[options.field] === 'date') {
+        var [startDate, endDate] = options.value;
+        data.value = `${startDate.format("DD MMM ‘YY")} &mdash; ${endDate.format("DD MMM ‘YY")}`;
+      }
       break;
     case 'filter-value-tag':
       var filterByTag = function(value) {
@@ -983,29 +982,27 @@ DataDirectory.prototype.search = function( value ) {
 }
 
 DataDirectory.prototype.filter = function( field, value ) {
+  if (this.config.field_types[field] === 'date') {
+    var [startDate, endDate] = value;
+    var output = _.filter(this.data, function(o){
+      if (!o.hasOwnProperty(field) || !o[field]) {
+        return false;
+      }
+      return moment(o[field]).isBetween(startDate, endDate, 'day', '[]');
+    });
+    return _.sortBy(output, [function(o){
+      return parseInt(moment(o[field]).format('x'));
+    }]);
+  }
+
   var path = ':root > :has(."' + field + '":val("' + value + '"))';
-
   return JSONSelect.match( path, this.data );
-}
-
-function sortAlphabetically(a,b) {
-  // Sort by alphabet
-  if (a.toString().toUpperCase() < b.toString().toUpperCase())
-    return -1;
-  if (a.toString().toUpperCase() > b.toString().toUpperCase())
-    return 1;
-  return 0;
 }
 
 DataDirectory.prototype.getFilterValues = function( field ) {
   var path = '."'+field+'"';
   var values = JSONSelect.match( path, this.data ).filter(function(value){ return value !== null; });
-
-  return values.sort(sortAlphabetically).reduce( function(a,b){
-    // Remove duplicates
-    if (a.indexOf(b) < 0 && b.trim() !== '' ) a.push(b);
-    return a;
-  }, [] );
+  return _.sortedUniq(_.sortBy(values));
 };
 
 DataDirectory.prototype.parseQueryVars = function(){

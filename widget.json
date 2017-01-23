@@ -36,7 +36,8 @@
       "bootstrap",
       "font-awesome",
       "animate-css",
-      "moment"
+      "moment",
+      "lodash"
     ],
     "assets": [
       "vendor/jsonselect.js",

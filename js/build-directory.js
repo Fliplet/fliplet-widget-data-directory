@@ -98,6 +98,18 @@ DataDirectory.prototype.trigger = function(event, detail){
   document.dispatchEvent(customEvent);
 };
 
+DataDirectory.prototype.get = function(key){
+  if (key.length && this.hasOwnProperty(key)) {
+    return this[key];
+  }
+};
+
+DataDirectory.prototype.set = function(key, value){
+  if (key.length) {
+    this[key] = value;
+  }
+};
+
 DataDirectory.prototype.getConfig = function(key){
   if (key.length && this.config.hasOwnProperty(key)) {
     return this.config[key];

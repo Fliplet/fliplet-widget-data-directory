@@ -963,7 +963,8 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
   });
 
   this.searchResultData = data.result;
-  var directorySearchResultHTML = Handlebars.templates.directorySearchResult(data);
+  this.trigger('flDirectoryResultBeforeRender');
+  var directorySearchResultHTML = Handlebars.templates.directorySearchResult(this.searchResultData);
   this.$container.find('.search-result').html(directorySearchResultHTML).scrollTop(0);
   if (typeof callback === 'function') setTimeout(callback, 0);
 };

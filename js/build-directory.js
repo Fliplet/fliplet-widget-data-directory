@@ -660,13 +660,13 @@ DataDirectory.prototype.dataLinkClicked = function(e){
         if ( _this.entryOverlayIsActive() ) {
           _this.entryOverlay.close();
         }
-        if ( _this.searchResultData.length === 1 ) {
-          _this.openDataEntry(0, 'search-result-entry');
-          if (_this.config.mobile_mode || !_this.deviceIsTablet) {
-            _this.switchMode('default');
-          }
-        }
       } );
+      if ( this.searchResultData.length === 1 ) {
+        this.openDataEntry(0, 'search-result-entry');
+        if (this.config.mobile_mode || !this.deviceIsTablet) {
+          this.switchMode('default');
+        }
+      }
       break;
     case 'entry':
     case 'search-result-entry':

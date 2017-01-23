@@ -668,7 +668,7 @@ DataDirectory.prototype.dataLinkClicked = function(e){
           if ( _this.searchResultData.length === 1 ) {
             _this.openDataEntry(0, 'search-result-entry');
             if (_this.config.mobile_mode || !_this.deviceIsTablet) {
-              _this.switchMode('default');
+              // _this.switchMode('default');
             }
           }
         }, 0);

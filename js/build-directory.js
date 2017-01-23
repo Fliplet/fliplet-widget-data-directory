@@ -632,7 +632,7 @@ DataDirectory.prototype.dataLinkClicked = function(e){
       autoclose: true,
       todayHighlight: true
     });
-    if (isMobile && Modernizr.inputtypes.date) {
+    if (isMobile && Modernizr.inputtypes.date && 'ontouchstart' in document.documentElement) {
       $('.date-picker').datepicker('remove')
     }
     $('.overlay-date-range').addClass('active');

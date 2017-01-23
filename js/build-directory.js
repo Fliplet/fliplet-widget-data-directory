@@ -976,7 +976,7 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
 
   this.searchResultData = data.result;
   this.trigger('flDirectoryResultBeforeRender');
-  var directorySearchResultHTML = Handlebars.templates.directorySearchResult(this.searchResultData);
+  var directorySearchResultHTML = Handlebars.templates.directorySearchResult(data);
   this.$container.find('.search-result').html(directorySearchResultHTML).scrollTop(0);
   this.trigger('flDirectoryResultAfterRender');
   if (typeof callback === 'function') setTimeout(callback, 0);

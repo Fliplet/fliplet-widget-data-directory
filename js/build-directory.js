@@ -620,6 +620,7 @@ DataDirectory.prototype.dataLinkClicked = function(e){
   this.flViewportRedraw();
 
   var _this = this;
+  var isMobile = Modernizr.mobile || Modernizr.tablet;
   e.preventDefault();
 
   // Date
@@ -631,6 +632,9 @@ DataDirectory.prototype.dataLinkClicked = function(e){
       autoclose: true,
       todayHighlight: true
     });
+    if (isMobile && Modernizr.inputtypes.date) {
+      $('.date-picker').datepicker('remove')
+    }
     $('.overlay-date-range').addClass('active');
     return;
   }

@@ -23,7 +23,8 @@ var DataDirectory = function (config, container) {
     tags_field : "",
     thumbnail_field : "",
     search_only: false,
-    mobile_mode: false
+    mobile_mode: false,
+    directory_enabled: true
   }, config);
   this.data = config.rows;
   delete this.config.rows;
@@ -215,6 +216,8 @@ DataDirectory.prototype.initialiseHandlebars = function(){
 DataDirectory.prototype.init = function(){
   // Custom event to fire before an entry is rendered in the detailed view.
   this.trigger('flDirectoryBeforeInit');
+
+  if (!this.config.directory_enabled) return;
 
   // Function to run before initialising the directory.
   if (typeof this.config.before_init === 'function') {

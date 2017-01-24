@@ -5,6 +5,7 @@ $('[data-directory-id]').each(function(){
   var uuid = $(this).data('directory-uuid');
   var pvKey = 'data-directory-rows-' + uuid;
   var config = Fliplet.Widget.getData(id);
+
   if (config.source) {
     if (!config.enable_live_data) {
       return dataDirectory[id] = new DataDirectory(config, container);

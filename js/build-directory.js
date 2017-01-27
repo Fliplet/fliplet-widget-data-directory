@@ -12,8 +12,6 @@ var messageTimeout,
 var DataDirectory = function (config, container) {
   var _this = this;
 
-  this.data = config.rows;
-
   this.config = $.extend({
     is_alphabetical : false,
     alphabetical_field : "",
@@ -23,10 +21,17 @@ var DataDirectory = function (config, container) {
     search_fields : [],
     field_types : "", // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
     tags_field : "",
-    thumbnail_field : ""
+    thumbnail_field : "",
+    search_only: false,
+    mobile_mode: false,
+    directory_enabled: true
   }, config);
+  this.data = config.rows;
+  delete this.config.rows;
+
+  this.config.is_alphabetical = this.config.is_alphabetical && this.config.alphabetical_field !== ''; // Ensures an alphabetical field is provided
   this.$container = $(container).parents('body');
-  this.deviceIsTablet = ( window.innerWidth >= 640 );
+  this.deviceIsTablet = (window.innerWidth >= 640 && window.innerHeight >= 640);
   this.navHeight = $('.fl-viewport-header').height() || 0;
   this.searchBarHeight = this.$container.find('.directory-search').outerHeight();
   this.directoryMode = this.$container.find('.container-fluid').attr('data-mode');
@@ -36,6 +41,8 @@ var DataDirectory = function (config, container) {
   this.supportLiveSearch = this.data.length <= 500;
   this.liveSearchInterval = 200;
   this.currentEntry;
+
+  this.checkMobileMode();
 
   var folderID = this.config.folderConfig;
 
@@ -77,6 +84,45 @@ var DataDirectory = function (config, container) {
   return this;
 };
 
+DataDirectory.prototype.trigger = function(event, detail){
+  var detail = $.extend({
+    context: this
+  }, detail || {});
+  var customEvent = new CustomEvent(
+    event,
+    {
+      bubbles: true,
+      cancelable: true,
+      detail: detail
+    }
+  );
+  document.dispatchEvent(customEvent);
+};
+
+DataDirectory.prototype.get = function(key){
+  if (key.length && this.hasOwnProperty(key)) {
+    return this[key];
+  }
+};
+
+DataDirectory.prototype.set = function(key, value){
+  if (key.length) {
+    this[key] = value;
+  }
+};
+
+DataDirectory.prototype.getConfig = function(key){
+  if (key.length && this.config.hasOwnProperty(key)) {
+    return this.config[key];
+  }
+};
+
+DataDirectory.prototype.setConfig = function(key, value){
+  if (key.length) {
+    this.config[key] = value;
+  }
+};
+
 DataDirectory.prototype.initialiseHandlebars = function(){
   var _this = this;
 
@@ -92,11 +138,15 @@ DataDirectory.prototype.initialiseHandlebars = function(){
     return $('<div></div>').html(result).text();
   });
 
+  Handlebars.registerHelper('moment', function(key, format, obj){
+    return moment(obj[key]).format(format);
+  });
+
   Handlebars.registerHelper('alphabet_divider', function(){
     if (!_this.config.is_alphabetical) return '';
 
     var entryTitleTemplate = Handlebars.compile( "{{["+_this.config.alphabetical_field+"]}}" );
-    var firstCharacterOfTitle = entryTitleTemplate( this )[0].toUpperCase();
+    var firstCharacterOfTitle = entryTitleTemplate( this )[0].toString().toUpperCase();
     if ( "1234567890".indexOf(firstCharacterOfTitle) > -1 ) firstCharacterOfTitle = '#';
     if ( firstCharacterOfTitle !== lastAlphabetIndex ) {
       lastAlphabetIndex = firstCharacterOfTitle;
@@ -165,17 +215,9 @@ DataDirectory.prototype.initialiseHandlebars = function(){
 
 DataDirectory.prototype.init = function(){
   // Custom event to fire before an entry is rendered in the detailed view.
-  var flDirectoryBeforeInit = new CustomEvent(
-    "flDirectoryBeforeInit",
-    {
-      bubbles: true,
-      cancelable: true,
-      detail: {
-        context: this
-      }
-    }
-  );
-  document.dispatchEvent(flDirectoryBeforeInit);
+  this.trigger('flDirectoryBeforeInit');
+
+  if (!this.config.directory_enabled) return;
 
   // Function to run before initialising the directory.
   if (typeof this.config.before_init === 'function') {
@@ -183,19 +225,22 @@ DataDirectory.prototype.init = function(){
   }
 
   this.verifyConfig();
-  this.renderEntries();
   this.renderFilters();
+
+  if (this.config.search_only) {
+    this.activateSearch();
+    setTimeout(function(){
+      // _this.$container.find('.search').trigger( 'focus' );
+    }, 0);
+    return;
+  }
+
+  this.checkMobileMode();
+  this.renderEntries();
   this.parseQueryVars();
 
   // Custom event to fire after the directory list is rendered.
-  var flDirectoryListRendered = new CustomEvent(
-    "flDirectoryListRendered",
-    {
-      bubbles: true,
-      cancelable: true
-    }
-  );
-  document.dispatchEvent(flDirectoryListRendered);
+  this.trigger('flDirectoryListRendered');
 };
 
 DataDirectory.prototype.verifyFields = function(fieldConfig){
@@ -229,9 +274,9 @@ DataDirectory.prototype.renderEntries = function(){
         return 0;
       }
 
-      if (a[attr].toUpperCase() < b[attr].toUpperCase())
+      if (a[attr].toString().toUpperCase() < b[attr].toString().toUpperCase())
         return -1;
-      if (a[attr].toUpperCase() > b[attr].toUpperCase())
+      if (a[attr].toString().toUpperCase() > b[attr].toString().toUpperCase())
         return 1;
       return 0;
     } );
@@ -324,17 +369,19 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
   // Check if it's the tag filter
   if (tags_field === filter) {
     this.data.forEach(function (record) {
-      var entryTags = record[tags_field].split(',');
-      entryTags.forEach(function(tag) {
-        tag = tag.trim();
-        if (tag !== "" && values.indexOf(tag) === -1) {
-          values.push(tag);
-        }
-      });
+      if (record[tags_field]) {
+        var entryTags = record[tags_field].split(',');
+        entryTags.forEach(function(tag) {
+          tag = tag.trim();
+          if (tag !== "" && values.indexOf(tag) === -1) {
+            values.push(tag);
+          }
+        });
+      }
     });
 
-    values = values.sort(sortAlphabetically);
-  } else if (_this.config.field_types[filter] === 'date') {
+    values = _.sortBy(values);
+  } else if (this.config.field_types[filter] === 'date') {
     var isMobile = Modernizr.mobile || Modernizr.tablet;
     var start_date;
     var end_date;
@@ -346,16 +393,11 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
       start_date = getFormatedDate($('.start_date').datepicker("getDate"));
       end_date = getFormatedDate($('.finish_date').datepicker("getDate"));
     }
-    this.data.forEach(function(value, index) {
-      var entryDate = getFormatedDate(value[filter]);
-       if (entryDate.isAfter(start_date) && end_date.isAfter(entryDate) && values.indexOf(value[filter]) === -1) {
-         // Format date to look like DD MMM YYYY;
-         values.push(moment(value[filter]).format("DD MMM YYYY"));
-       }
-    });
-    values.sort(function(a,b) {
-      return new Date(a) - new Date(b);
-    });
+    return this.renderSearchResult( {
+      type: 'filter',
+      field: filter,
+      value: [start_date, end_date]
+    } );
   } else {
     values = this.getFilterValues( filter );
   }
@@ -364,14 +406,13 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
 
   if ( inOverlay ) {
     var overlayContent = Handlebars.templates.directoryFilterOverlay(data);
-    this.filterOverlay = new Overlay(overlayContent,{
+    this.filterOverlay = new Fliplet.Utils.Overlay(overlayContent,{
       title: 'Filter by ' + filter,
       classes: 'overlay-directory',
       showOnInit: true,
       closeText: '<i class="fa fa-chevron-left"></i>',
       entranceAnim: 'slideInRight',
       exitAnim: 'slideOutRight',
-      closeText: 'Cancel',
       afterClose: function(){
         _this.filterOverlay = null;
       }
@@ -438,7 +479,7 @@ DataDirectory.prototype.attachObservers = function(){
       var img = new Image();
 
       img.addEventListener('load', function(){
-        $('.list-default li[data-index="'+i+'"] .list-image').css('background-image', 'url(' + this.src + ')');
+        $('.list-default.directory-entries li[data-index="'+i+'"] .list-image').css('background-image', 'url(' + this.src + ')');
       }, false);
 
       img.src = imgURL;
@@ -447,7 +488,8 @@ DataDirectory.prototype.attachObservers = function(){
 
   this.$container.on( 'click', '.data-linked', $.proxy( this.dataLinkClicked, this ) );
   $(window).on( 'resize', function(){
-    _this.deviceIsTablet = window.innerWidth >= 640;
+    _this.deviceIsTablet = (window.innerWidth >= 640 && window.innerHeight >= 640);
+    _this.checkMobileMode();
     _this.resizeSearch();
     _this.navHeight = $('.fl-viewport-header').height() || 0;
     _this.searchBarHeight = _this.$container.find('.directory-search').outerHeight();
@@ -502,11 +544,19 @@ DataDirectory.prototype.attachObservers = function(){
   });
   this.$container.find('.date_go').on( 'click', function(){
     $('.overlay-date-range').removeClass('active');
-    _this.renderFilterValues(date_filter, !_this.deviceIsTablet)
+    _this.renderFilterValues(date_filter, _this.config.mobile_mode || !_this.deviceIsTablet);
   });
 };
 
 DataDirectory.prototype.activateSearch = function(){
+  this.$container.find('.search-cancel').css({
+    'top': this.config.search_only ? '-9999px' : ''
+  });
+  this.$container.find('.directory-screen').css({
+    'opacity': this.config.search_only ? '0' : '',
+    'pointer-events': this.config.search_only ? 'none' : ''
+  });
+
   if ( this.isMode('default') ) {
     this.$container.find('.filter-selected').html('');
   }
@@ -514,22 +564,44 @@ DataDirectory.prototype.activateSearch = function(){
     this.switchMode('search');
   }
 
+  if (!this.config.search_only) {
+    document.body.classList.add('fl-top-menu-hidden');
+  }
+
   this.flViewportRedraw();
 };
 
 DataDirectory.prototype.deactivateSearch = function(){
+  if (this.config.search_only) {
+    return;
+  }
+
   this.$container.find('.search').trigger('blur');
-  if ( this.deviceIsTablet && this.isMode('search-result-entry') ) {
+  if ( !this.config.mobile_mode && this.deviceIsTablet && this.isMode('search-result-entry') ) {
     this.openDataEntry(0, 'entry', false);
   }
   this.switchMode('default');
 
+  document.body.classList.remove('fl-top-menu-hidden');
+
   this.flViewportRedraw();
+};
+
+DataDirectory.prototype.checkMobileMode = function(){
+  if (this.config.mobile_mode) {
+    this.$container.addClass('directory-mobile-mode');
+  } else {
+    this.$container.removeClass('directory-mobile-mode');
+  }
 };
 
 DataDirectory.prototype.resizeSearch = function(){
   var _this = this;
   setTimeout(function(){
+    if (_this.config.search_only) {
+      return _this.$container.find('.search').css( 'width', '' );
+    }
+
     if ( _this.isMode('search') || _this.isMode('filter-values') || _this.isMode('search-result') || _this.isMode('search-result-entry') ) {
       _this.$container.find('.search').css( 'width', _this.$container.find('.directory-search').width() - _this.$container.find('.search-cancel').outerWidth() + 8 );
     } else {
@@ -539,11 +611,11 @@ DataDirectory.prototype.resizeSearch = function(){
 };
 
 DataDirectory.prototype.filterOverlayIsActive = function(){
-  return this.filterOverlay instanceof Overlay;
+  return this.filterOverlay instanceof Fliplet.Utils.Overlay;
 };
 
 DataDirectory.prototype.entryOverlayIsActive = function(){
-  return this.entryOverlay instanceof Overlay;
+  return this.entryOverlay instanceof Fliplet.Utils.Overlay;
 };
 
 DataDirectory.prototype.dataLinkClicked = function(e){
@@ -551,6 +623,7 @@ DataDirectory.prototype.dataLinkClicked = function(e){
   this.flViewportRedraw();
 
   var _this = this;
+  var isMobile = Modernizr.mobile || Modernizr.tablet;
   e.preventDefault();
 
   // Date
@@ -562,6 +635,9 @@ DataDirectory.prototype.dataLinkClicked = function(e){
       autoclose: true,
       todayHighlight: true
     });
+    if (isMobile && Modernizr.inputtypes.date && 'ontouchstart' in document.documentElement) {
+      $('.date-picker').datepicker('remove')
+    }
     $('.overlay-date-range').addClass('active');
     return;
   }
@@ -575,7 +651,7 @@ DataDirectory.prototype.dataLinkClicked = function(e){
     case 'filter-tag':
     case 'filter':
       var filter = e.currentTarget.dataset.filter;
-      this.renderFilterValues( filter, !this.deviceIsTablet );
+      this.renderFilterValues( filter, (this.config.mobile_mode || !this.deviceIsTablet) );
       break;
     case 'filter-value-tag':
       e.stopPropagation();
@@ -591,6 +667,11 @@ DataDirectory.prototype.dataLinkClicked = function(e){
         if ( _this.entryOverlayIsActive() ) {
           _this.entryOverlay.close();
         }
+        setTimeout(function(){
+          if ( _this.searchResultData.length === 1 ) {
+            _this.openDataEntry(0, 'search-result-entry');
+          }
+        }, 0);
       } );
       break;
     case 'entry':
@@ -610,11 +691,12 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
   var $listEntry = this.$container.find('li[data-type="' + type + '"][data-index=' + entryIndex + ']');
   var $entrytitle = this.$container.find('li[data-type="' + type + '"][data-index=' + entryIndex + '] .list-title');
   var title = $entrytitle.text().trim();
+  var dataArr = (type === 'search-result-entry') ? _this.searchResultData : _this.data;
   var detailData = {
     title : title,
     has_thumbnail : this.config.show_thumb_detail ? this.config.show_thumb_detail : false,
     fields : [],
-    dataSourceEntryId: _this.data[entryIndex]['dataSourceEntryId'] || ''
+    dataSourceEntryId: dataArr[entryIndex]['dataSourceEntryId'] || ''
   };
 
   if (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '') {
@@ -636,17 +718,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
   }
 
   // Custom event to fire before an entry is rendered in the detailed view.
-  var flDirectoryEntryBeforeRender = new CustomEvent(
-    "flDirectoryEntryBeforeRender",
-    {
-      bubbles: true,
-      cancelable: true,
-      detail: {
-        detailData: detailData
-      }
-    }
-  );
-  document.dispatchEvent(flDirectoryEntryBeforeRender);
+  this.trigger('flDirectoryEntryBeforeRender', {detailData: detailData});
 
   var after_render = function() {
     // Link taps listeners
@@ -672,17 +744,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     });
 
     // Custom event to fire after an entry is rendered in the detailed view.
-    var flDirectoryEntryAfterRender = new CustomEvent(
-      "flDirectoryEntryAfterRender",
-      {
-        bubbles: true,
-        cancelable: true,
-        detail: {
-          detailData: detailData
-        }
-      }
-    );
-    document.dispatchEvent(flDirectoryEntryAfterRender);
+    _this.trigger('flDirectoryEntryAfterRender', {detailData: detailData});
   };
 
   // Function to run before rendering the entry
@@ -690,7 +752,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     detailHTML = this.config.before_render_entry(detailData, detailHTML);
   }
 
-  if ( this.deviceIsTablet ) {
+  if ( !this.config.mobile_mode && this.deviceIsTablet ) {
     this.$container.find('.directory-details .directory-details-content').html(detailHTML);
     after_render();
     setTimeout(function(){
@@ -698,7 +760,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
       $listEntry.addClass('active');
     },0);
   } else {
-    this.entryOverlay = new Overlay( detailHTML, {
+    this.entryOverlay = new Fliplet.Utils.Overlay( detailHTML, {
       showOnInit : true,
       classes: 'overlay-directory',
       closeText: '<i class="fa fa-chevron-left"></i>',
@@ -730,10 +792,10 @@ DataDirectory.prototype.disableClicks = function () {
 // Function that will fade in the loading overlay
 DataDirectory.prototype.addLoading = function () {
   // The following adds Loading Overlay to a specific area depending on the device width
-  if (this.deviceIsTablet) {
-    this.$container.find('.directory-details').find('.directory-loading').fadeIn(400);
-  } else {
+  if (this.config.mobile_mode || !this.deviceIsTablet) {
     this.$container.find('.directory-list').find('.directory-loading').fadeIn(400);
+  } else {
+    this.$container.find('.directory-details').find('.directory-loading').fadeIn(400);
   }
 
   // Delay to display the "Loading..." text
@@ -747,10 +809,10 @@ DataDirectory.prototype.removeLoading = function () {
   clearTimeout(loadingTimeout); // Clears delay loading overlay
   clearTimeout(messageTimeout); // Clears delay for text to appear
   // The following removes Loading Overlay from a specific area depending on the device width
-  if (this.deviceIsTablet) {
-    this.$container.find('.directory-details').find('.directory-loading').fadeOut(400);
-  } else {
+  if (this.config.mobile_mode || !this.deviceIsTablet) {
     this.$container.find('.directory-list').find('.directory-loading').fadeOut(400);
+  } else {
+    this.$container.find('.directory-details').find('.directory-loading').fadeOut(400);
   }
 
   this.$container.find('.directory-list, .directory-details').removeClass('disabled'); // Enables List
@@ -841,7 +903,13 @@ DataDirectory.prototype.renderLiveSearch = function( value ) {
 };
 
 DataDirectory.prototype.renderSearchResult = function( options, callback ){
+  options = options || {};
 
+  if (!options.hasOwnProperty('userTriggered')) {
+    options.userTriggered = true;
+  }
+
+  if (options.userTriggered) this.activateSearch();
   this.flViewportRedraw();
 
   // Return all results of search term is empty
@@ -862,16 +930,26 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
 
   switch (options.type) {
     case 'filter':
+    case 'filter-value':
+      data.type = 'filter';
       data.field = options.field;
       data.value = options.value;
       data.result = this.filter( options.field, options.value );
+      if (this.config.field_types[options.field] === 'date') {
+        var [startDate, endDate] = options.value;
+        data.value = `${startDate.format("DD MMM ‘YY")} &mdash; ${endDate.format("DD MMM ‘YY")}`;
+      }
+      // Analytics - Track Event
+      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'filter', title: options.type + ": " + options.value });
       break;
     case 'filter-value-tag':
       var filterByTag = function(value) {
-        var splitTags = value[options.field].split(',');
-        for (var i = 0; i < splitTags.length; i++) {
-          if (splitTags[i].trim() === options.value.trim()) {
-            return true;
+        if (value[options.field]) {
+          var splitTags = value[options.field].split(',');
+          for (var i = 0; i < splitTags.length; i++) {
+            if (splitTags[i].trim() === options.value.trim()) {
+              return true;
+            }
           }
         }
 
@@ -893,11 +971,11 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
       data.result = this.search( options.value );
 
       // Analytics - Track Event
-      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'filter', title: options.type + ": " + options.value });
+      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'search', title: options.type + ": " + options.value });
 
       break;
   }
-  console.log(data.result);
+
   data.result.forEach(function(entry, i) {
     var imgURL = entry[_this.config.thumbnail_field];
     if ( /^(f|ht)tps?:\/\//i.test(imgURL) ) {
@@ -905,7 +983,7 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
       var img = new Image();
 
       img.addEventListener('load', function(){
-        $('.list-default li[data-index="'+i+'"] .list-image').css('background-image', 'url(' + this.src + ')');
+        $('.list-default.search-result li[data-index="'+i+'"] .list-image').css('background-image', 'url(' + this.src + ')');
       }, false);
 
       img.src = imgURL;
@@ -932,29 +1010,27 @@ DataDirectory.prototype.search = function( value ) {
 }
 
 DataDirectory.prototype.filter = function( field, value ) {
+  if (this.config.field_types[field] === 'date') {
+    var [startDate, endDate] = value;
+    var output = _.filter(this.data, function(o){
+      if (!o.hasOwnProperty(field) || !o[field]) {
+        return false;
+      }
+      return moment(o[field]).isBetween(startDate, endDate, 'day', '[]');
+    });
+    return _.sortBy(output, [function(o){
+      return parseInt(moment(o[field]).format('x'));
+    }]);
+  }
+
   var path = ':root > :has(."' + field + '":val("' + value + '"))';
-
   return JSONSelect.match( path, this.data );
-}
-
-function sortAlphabetically(a,b) {
-  // Sort by alphabet
-  if (a.toUpperCase() < b.toUpperCase())
-    return -1;
-  if (a.toUpperCase() > b.toUpperCase())
-    return 1;
-  return 0;
 }
 
 DataDirectory.prototype.getFilterValues = function( field ) {
   var path = '."'+field+'"';
-  var values = JSONSelect.match( path, this.data );
-
-  return values.sort(sortAlphabetically).reduce( function(a,b){
-    // Remove duplicates
-    if (a.indexOf(b) < 0 && b.trim() !== '' ) a.push(b);
-    return a;
-  }, [] );
+  var values = JSONSelect.match( path, this.data ).filter(function(value){ return value !== null && value !== ''; });
+  return _.sortedUniq(_.sortBy(values));
 };
 
 DataDirectory.prototype.parseQueryVars = function(){
@@ -974,8 +1050,8 @@ DataDirectory.prototype.parseQueryVars = function(){
       case 'open':
         break;
     }
-  } else if ( this.deviceIsTablet ) {
-    // Open the first entry if on a tablet
+  } else if ( !this.config.mobile_mode && this.deviceIsTablet && !this.config.search_only ) {
+    // Open the first entry if on a tablet and search_only mode isn't on
     this.openDataEntry(0, 'entry', false);
   }
 };
@@ -984,11 +1060,12 @@ DataDirectory.prototype.presetSearch = function( value ){
   this.$container.find('.search').val( value );
   this.renderSearchResult( {
     type : 'search',
-    value : value
+    value : value,
+    userTriggered : false
   } );
   if (this.searchResultData.length === 1) {
     this.openDataEntry(0,'search-result-entry');
-    if (!this.deviceIsTablet) {
+    if (this.config.mobile_mode || !this.deviceIsTablet) {
       this.switchMode('default');
     }
   }
@@ -999,7 +1076,8 @@ DataDirectory.prototype.presetFilter = function( field, value ){
   this.renderSearchResult( {
     type : 'filter',
     field : field,
-    value : value
+    value : value,
+    userTriggered : false
   } );
   this.flViewportRedraw();
 };

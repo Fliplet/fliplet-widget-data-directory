@@ -5,7 +5,7 @@ $('[data-directory-id]').each(function(){
   var uuid = $(this).data('directory-uuid');
   var config = Fliplet.Widget.getData(id);
   var connection;
-  
+
   function formatRows(rows) {
     return rows.map(function (row) {
       row.data.dataSourceEntryId = row.id;
@@ -30,7 +30,7 @@ $('[data-directory-id]').each(function(){
       // Start data directory
       dataDirectory[id] = new DataDirectory(config, container);
 
-      // Check if live data is enabled  
+      // Check if live data is enabled
       if (config.enable_live_data) {
         // Pull latest data
         connection.pull()

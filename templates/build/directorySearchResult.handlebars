@@ -9,9 +9,9 @@
         <span class="icon fa fa-angle-right"></span>
         {{#if ../has_thumbnail}}<div class="list-image"></div>{{/if}}
         <div class="list-desc">
-            <p class="list-title">{{> entry_title}}</p>
+            <p class="list-title">{{plaintext "entry_title" this}}</p>
             {{#if ../show_subtitle}}
-                <p class="list-subtitle">{{> entry_subtitle}}</p>
+                <p class="list-subtitle">{{plaintext "entry_subtitle" this}}</p>
             {{/if}}
         </div>
         {{#if ../show_tags}}

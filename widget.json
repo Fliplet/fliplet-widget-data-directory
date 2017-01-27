@@ -1,5 +1,5 @@
 {
-  "name": "data-directory",
+  "name": "Data Directory",
   "package": "com.fliplet.data-directory",
   "version": "1.0.0",
   "icon": "img/icon.png",
@@ -36,10 +36,10 @@
       "bootstrap",
       "font-awesome",
       "animate-css",
-      "moment"
+      "moment",
+      "lodash"
     ],
     "assets": [
-      "vendor/overlay.js",
       "vendor/jsonselect.js",
       "vendor/bootstrap-datepicker3.css",
       "vendor/bootstrap-datepicker.min.js",
@@ -48,7 +48,6 @@
       "js/build-directory.js",
       "js/build.js",
       "css/build.css",
-      "vendor/overlay.css",
       "img/thumb-placeholder.png"
     ]
   },

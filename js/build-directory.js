@@ -24,7 +24,10 @@ var DataDirectory = function (config, container) {
     thumbnail_field : "",
     search_only: false,
     mobile_mode: false,
-    directory_enabled: true
+    directory_enabled: true,
+    searchResultTemplate: "",
+    directoryListTemplate: "",
+    directoryDetailsTemplate: ""
   }, config);
   this.data = config.rows;
   delete this.config.rows;
@@ -283,13 +286,16 @@ DataDirectory.prototype.renderEntries = function(){
     this.$container.find('.directory-entries').addClass('list-index-enabled');
   }
   this.data = listData;
-
-  var directoryListHTML = Handlebars.templates.directoryListEntries({
+  var entriesData = {
     show_subtitle: this.config.show_subtitle ? this.config.show_subtitle : false,
     show_tags: this.config.show_tags ? this.config.show_tags : false,
     has_thumbnail: (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field !== null && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_list ? this.config.show_thumb_list : false ),
     entries: this.data
-  });
+  };
+  var directoryListTemplate = (this.config.directoryListTemplate !== '')
+    ? Handlebars.compile(this.config.directoryListTemplate)
+    : Handlebars.templates.directoryListEntries;
+  var directoryListHTML = directoryListTemplate(entriesData);
 
   this.$container.find('.directory-entries').html(directoryListHTML);
   this.renderIndexList();
@@ -711,7 +717,10 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     }
   }
 
-  var detailHTML = Handlebars.templates.directoryDetails(detailData);
+  var directoryDetailsTemplate = (this.config.directoryDetailsTemplate !== '')
+    ? Handlebars.compile(this.config.directoryDetailsTemplate)
+    : Handlebars.templates.directoryDetails;
+  var detailHTML = directoryDetailsTemplate(detailData);
 
   if ( type === 'search-result-entry' ) {
     this.switchMode('search-result-entry');
@@ -991,7 +1000,10 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
   });
 
   this.searchResultData = data.result;
-  var directorySearchResultHTML = Handlebars.templates.directorySearchResult(data);
+  var searchResultTemplate = (this.config.searchResultTemplate !== '')
+    ? Handlebars.compile(this.config.searchResultTemplate)
+    : Handlebars.templates.directorySearchResult;
+  var directorySearchResultHTML = searchResultTemplate(data);
   this.$container.find('.search-result').html(directorySearchResultHTML).scrollTop(0);
   if (typeof callback === 'function') setTimeout(callback, 0);
 };

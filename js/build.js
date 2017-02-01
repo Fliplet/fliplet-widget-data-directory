@@ -3,39 +3,49 @@ $('[data-directory-id]').each(function(){
   var container = this;
   var id = $(this).data('directory-id');
   var uuid = $(this).data('directory-uuid');
-  var pvKey = 'data-directory-rows-' + uuid;
   var config = Fliplet.Widget.getData(id);
+  var connection;
 
-  if (config.source) {
-    if (!config.enable_live_data) {
-      return dataDirectory[id] = new DataDirectory(config, container);
-    }
-
-    Fliplet.Storage.get(pvKey)
-      .then(function (rows) {
-        if (rows) {
-          config.rows = rows;
-          dataDirectory[id] = new DataDirectory(config, container);
-        } else {
-          Fliplet.Storage.set(pvKey, config.rows);
-          dataDirectory[id] = new DataDirectory(config, container);
-        }
-
-        if (Fliplet.Navigator.isOnline()) {
-          Fliplet.DataSources.connect(config.source)
-            .then(function (source) {
-              return source.find();
-            })
-            .then(function (rows) {
-              dataDirectory[id].data = rows.map(function (row) {
-                row.data.dataSourceEntryId = row.id;
-                return row.data;
-              });
-
-              Fliplet.Storage.set(pvKey, dataDirectory[id].data);
-              dataDirectory[id].init();
-            });
-        }
-      });
+  function formatRows(rows) {
+    return rows.map(function (row) {
+      row.data.dataSourceEntryId = row.id;
+      return row.data;
+    });
   }
+
+  if (!config.source) {
+    // Start data directory with no data
+    return dataDirectory[id] = new DataDirectory(config, container);
+  }
+
+  // Load local data
+  Fliplet.DataSources.connect(config.source)
+    .then(function (source) {
+      connection = source;
+      return source.find();
+    })
+    .then(function (rows) {
+      config.rows = formatRows(rows);
+
+      // Start data directory
+      dataDirectory[id] = new DataDirectory(config, container);
+
+      // Check if live data is enabled
+      if (config.enable_live_data) {
+        // Pull latest data
+        connection.pull()
+          .then(function (result) {
+            if (!result.pulled) {
+              return;
+            }
+
+            config.rows = formatRows(result.entries);
+            dataDirectory[id].init();
+          })
+      }
+    })
+    .catch(function (error) {
+      // Start data directory with no data
+      dataDirectory[id] = new DataDirectory(config, container);
+    });
 });

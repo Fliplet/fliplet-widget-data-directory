@@ -23,9 +23,6 @@ $('[data-directory-id]').each(function(){
 
         return Promise.resolve(formattedRows);
       })
-      .catch(function(error) {
-        console.log(error);
-      });
   }
 
   if (!config.source) {
@@ -36,6 +33,10 @@ $('[data-directory-id]').each(function(){
     return getData({ offline: true })
       .then(function (data) {
         config.rows = data;
+        return dataDirectory[id] = new DataDirectory(config, container);
+      })
+      .catch(function (error) {
+        // Load empty directory
         return dataDirectory[id] = new DataDirectory(config, container);
       });
   }
@@ -53,6 +54,10 @@ $('[data-directory-id]').each(function(){
           .then(function (data) {
             config.rows = data;
             Fliplet.Storage.set(pvKey, data);
+            return dataDirectory[id] = new DataDirectory(config, container);
+          })
+          .catch(function (error) {
+            // Load empty directory
             return dataDirectory[id] = new DataDirectory(config, container);
           });
       }

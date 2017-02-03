@@ -41,7 +41,7 @@ var DataDirectory = function (config, container) {
   this.filterOverlay = null;
   this.entryOverlay = null;
   this.searchResultData = [];
-  this.supportLiveSearch = this.data.length <= 500;
+  this.supportLiveSearch = true || this.data.length <= 500;
   this.liveSearchInterval = 200;
   this.currentEntry;
 

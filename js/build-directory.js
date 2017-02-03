@@ -42,7 +42,7 @@ var DataDirectory = function (config, container) {
   this.entryOverlay = null;
   this.searchResultData = [];
   this.supportLiveSearch = true || this.data.length <= 500;
-  this.liveSearchInterval = 200;
+  this.liveSearchInterval = 500;
   this.currentEntry;
 
   this.checkMobileMode();

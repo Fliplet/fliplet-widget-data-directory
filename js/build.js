@@ -54,6 +54,13 @@ $('[data-directory-id]').each(function(){
           .then(function (data) {
             config.rows = data;
             Fliplet.Storage.set(pvKey, data);
+            // If directory was alreay initialised with cached data
+            if (dataDirectory[id]) {
+              // Let's just update data and initilise again
+              dataDirectory[id].data = data;
+              return dataDirectory[id].init();
+            }
+
             return dataDirectory[id] = new DataDirectory(config, container);
           })
           .catch(function (error) {

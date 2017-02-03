@@ -229,6 +229,7 @@ DataDirectory.prototype.init = function(){
 
   this.verifyConfig();
   this.renderFilters();
+  this.sortEntries();
 
   if (this.config.search_only) {
     this.activateSearch();
@@ -262,6 +263,30 @@ DataDirectory.prototype.verifyConfig = function(){
   this.verifyFields('filter_fields');
   this.verifyFields('search_fields');
   this.verifyFields('detail_fields');
+};
+
+DataDirectory.prototype.sortEntries = function(){
+  var _this = this;
+  var listData = [];
+
+  if ( !this.config.is_alphabetical) {
+    listData = this.data;
+  } else {
+    listData = this.data.sort( function(a,b){
+      var attr = _this.config.alphabetical_field;
+      if (!a[attr] || !b[attr]) {
+        return 0;
+      }
+
+      if (a[attr].toString().toUpperCase() < b[attr].toString().toUpperCase())
+        return -1;
+      if (a[attr].toString().toUpperCase() > b[attr].toString().toUpperCase())
+        return 1;
+      return 0;
+    } );
+    this.$container.find('.directory-entries').addClass('list-index-enabled');
+  }
+  this.data = listData;
 };
 
 DataDirectory.prototype.renderEntries = function(){

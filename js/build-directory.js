@@ -1036,7 +1036,10 @@ DataDirectory.prototype.filter = function( field, value ) {
   }
 
   var path = ':root > :has(."' + field + '":val("' + value + '"))';
-  return JSONSelect.match( path, this.data );
+  return this.data.filter(function (x) {
+    return x[field] == value;
+  });
+  // return JSONSelect.match( path, this.data );
 }
 
 DataDirectory.prototype.getFilterValues = function( field ) {

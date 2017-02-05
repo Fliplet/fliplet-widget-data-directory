@@ -1103,7 +1103,7 @@ DataDirectory.prototype.presetSearch = function( value ){
     value : value,
     userTriggered : false
   } );
-  if (this.searchResultData.length === 1) {
+  if (this.searchResultData.length === 1 && !this.currentEntry) {
     this.openDataEntry(0,'search-result-entry');
     if (this.config.mobile_mode || !this.deviceIsTablet) {
       this.switchMode('default');

@@ -57,41 +57,32 @@ $('[data-directory-id]').each(function(){
           if (cache) {
             var dsUpdated = new Date(dataSource.updatedAt);
             var cacheUpdated = new Date(cache.updatedAt);
-            if (cacheUpdated > dsUpdated) {
+            if (dsUpdated > cacheUpdated) {
               // Cached data is up to date. Let's stop here
               return;
             }
           }
 
-          if (Fliplet.Navigator.isOnline()) {
-            return getData({ offline: false })
-              .then(function (rows) {
-                config.rows = rows;
-                Fliplet.App.Storage.set(storageKey, { rows: rows, updatedAt: (new Date()).toISOString() });
+          return getData({ offline: false })
+            .then(function (rows) {
+              config.rows = rows;
+              Fliplet.App.Storage.set(storageKey, { rows: rows, updatedAt: dataSource.updatedAt });
 
-                // If directory was already initialised with cached data
-                if (dataDirectory[id]) {
-                  // Let's just update data and initialise it again
-                  dataDirectory[id].data = rows;
-                  return dataDirectory[id].init();
-                }
+              // If directory was already initialised with cached data
+              if (dataDirectory[id]) {
+                // Let's just update data and initialise it again
+                dataDirectory[id].data = rows;
+                return dataDirectory[id].init();
+              }
 
-                return dataDirectory[id] = new DataDirectory(config, container);
-              })
-              .catch(function (error) {
-                // If directory have been initialized do nothing
-                if (dataDirectory[id]) {
-                  return;
-                }
-
-                // Initilize empty directory
-                return dataDirectory[id] = new DataDirectory(config, container);
-              });
-          }
-
-          // If offline and no cache, because if there was rows it have been initialized already
+              return dataDirectory[id] = new DataDirectory(config, container);
+            })
+        })
+        .catch(function (error) {
+          // This catches: network errors/server is down/offline
+          // If we don't have cache(new direcotry) let's create new empty directory
           if (!cache) {
-            dataDirectory[id] = new DataDirectory(config, container);
+            return dataDirectory[id] = new DataDirectory(config, container);
           }
         });
     })

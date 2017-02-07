@@ -44,7 +44,6 @@ $('[data-directory-id]').each(function(){
   Fliplet.Storage.get(pvKey)
     .then(function (rows) {
       if (rows) {
-        Fliplet.Storage.set(pvKey, config.rows);
         config.rows = rows;
         dataDirectory[id] = new DataDirectory(config, container);
       }

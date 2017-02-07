@@ -28,7 +28,8 @@ $('[data-directory-id]').each(function(){
   if (!config.source) {
     return dataDirectory[id] = new DataDirectory(config, container);
   }
-  
+
+  // If live data is disabled or we are on web let's go directly to data source.
   if (!config.enable_live_data || Fliplet.Env.get('platform') === 'web') {
     return getData({ offline: true })
       .then(function (rows) {

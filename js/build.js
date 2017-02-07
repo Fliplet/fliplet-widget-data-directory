@@ -54,9 +54,9 @@ $('[data-directory-id]').each(function(){
           .then(function (data) {
             config.rows = data;
             Fliplet.Storage.set(pvKey, data);
-            // If directory was alreay initialised with cached data
+            // If directory was already initialised with cached data
             if (dataDirectory[id]) {
-              // Let's just update data and initilise again
+              // Let's just update data and initialise it again
               dataDirectory[id].data = data;
               return dataDirectory[id].init();
             }
@@ -64,15 +64,19 @@ $('[data-directory-id]').each(function(){
             return dataDirectory[id] = new DataDirectory(config, container);
           })
           .catch(function (error) {
-            // Load empty directory
+            // If directory have been initialized do nothing
+            if (dataDirectory[id]) {
+              return;
+            }
+
+            // Initilize empty directory
             return dataDirectory[id] = new DataDirectory(config, container);
           });
       }
 
-      return Promise.reject();
+      // If offline and no rows, because if there was rows it have been initialized already
+      if (!rows) {
+        dataDirectory[id] = new DataDirectory(config, container);
+      }
     })
-    .catch(function () {
-      // Start data directory with no data
-      dataDirectory[id] = new DataDirectory(config, container);
-    });
 });

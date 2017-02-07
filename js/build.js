@@ -3,7 +3,7 @@ $('[data-directory-id]').each(function(){
   var container = this;
   var id = $(this).data('directory-id');
   var uuid = $(this).data('directory-uuid');
-  var pvKey = 'data-directory-rows-' + uuid;
+  var storageKey = 'directory-' + uuid;
   var config = Fliplet.Widget.getData(id);
 
   /*
@@ -28,11 +28,12 @@ $('[data-directory-id]').each(function(){
   if (!config.source) {
     return dataDirectory[id] = new DataDirectory(config, container);
   }
-  
+
+  // If live data is disabled or we are on web let's go directly to data source.
   if (!config.enable_live_data || Fliplet.Env.get('platform') === 'web') {
     return getData({ offline: true })
-      .then(function (data) {
-        config.rows = data;
+      .then(function (rows) {
+        config.rows = rows;
         return dataDirectory[id] = new DataDirectory(config, container);
       })
       .catch(function (error) {
@@ -41,38 +42,48 @@ $('[data-directory-id]').each(function(){
       });
   }
 
-  Fliplet.Storage.get(pvKey)
-    .then(function (rows) {
-      if (rows) {
-        Fliplet.Storage.set(pvKey, config.rows);
-        config.rows = rows;
+  Fliplet.App.Storage.get(storageKey)
+    .then(function (cache) {
+      // Let's load cache if we have it
+      if (cache) {
+        config.rows = cache.rows;
         dataDirectory[id] = new DataDirectory(config, container);
       }
 
-      if (Fliplet.Navigator.isOnline()) {
-        return getData({ offline: false })
-          .then(function (data) {
-            config.rows = data;
-            Fliplet.Storage.set(pvKey, data);
-            // If directory was alreay initialised with cached data
-            if (dataDirectory[id]) {
-              // Let's just update data and initilise again
-              dataDirectory[id].data = data;
-              return dataDirectory[id].init();
+      // Let's check if there's is new data
+      Fliplet.DataSources.getById(config.source)
+        .then(function (dataSource) {
+          // Let's see if live data source was updated
+          if (cache) {
+            var dsUpdated = new Date(dataSource.updatedAt);
+            var cacheUpdated = new Date(cache.updatedAt);
+            if (dsUpdated > cacheUpdated) {
+              // Cached data is up to date. Let's stop here
+              return;
             }
+          }
 
-            return dataDirectory[id] = new DataDirectory(config, container);
-          })
-          .catch(function (error) {
-            // Load empty directory
-            return dataDirectory[id] = new DataDirectory(config, container);
-          });
-      }
+          return getData({ offline: false })
+            .then(function (rows) {
+              config.rows = rows;
+              Fliplet.App.Storage.set(storageKey, { rows: rows, updatedAt: dataSource.updatedAt });
 
-      return Promise.reject();
+              // If directory was already initialised with cached data
+              if (dataDirectory[id]) {
+                // Let's just update data and initialise it again
+                dataDirectory[id].data = rows;
+                return dataDirectory[id].init();
+              }
+
+              return dataDirectory[id] = new DataDirectory(config, container);
+            })
+        })
+        .catch(function (error) {
+          // This catches: network errors/server is down/offline
+          // If we don't have cache(new direcotry) let's create new empty directory
+          if (!cache) {
+            return dataDirectory[id] = new DataDirectory(config, container);
+          }
+        });
     })
-    .catch(function () {
-      // Start data directory with no data
-      dataDirectory[id] = new DataDirectory(config, container);
-    });
 });

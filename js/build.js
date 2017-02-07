@@ -3,7 +3,7 @@ $('[data-directory-id]').each(function(){
   var container = this;
   var id = $(this).data('directory-id');
   var uuid = $(this).data('directory-uuid');
-  var pvKey = 'data-directory-rows-' + uuid;
+  var storageKey = 'directory-' + uuid;
   var config = Fliplet.Widget.getData(id);
 
   /*
@@ -41,7 +41,7 @@ $('[data-directory-id]').each(function(){
       });
   }
 
-  Fliplet.Storage.get(pvKey)
+  Fliplet.App.Storage.get(storageKey)
     .then(function (rows) {
       if (rows) {
         config.rows = rows;
@@ -52,7 +52,7 @@ $('[data-directory-id]').each(function(){
         return getData({ offline: false })
           .then(function (data) {
             config.rows = data;
-            Fliplet.Storage.set(pvKey, data);
+            Fliplet.App.Storage.set(storageKey, data);
             // If directory was already initialised with cached data
             if (dataDirectory[id]) {
               // Let's just update data and initialise it again

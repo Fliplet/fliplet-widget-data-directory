@@ -971,7 +971,8 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
       data.value = options.value;
       data.result = this.filter( options.field, options.value );
       if (this.config.field_types[options.field] === 'date') {
-        var [startDate, endDate] = options.value;
+        var startDate = options.value[0];
+        var endDate = options.value[1];
         data.value = `${startDate.format("DD MMM ‘YY")} &mdash; ${endDate.format("DD MMM ‘YY")}`;
       }
       // Analytics - Track Event

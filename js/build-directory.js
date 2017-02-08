@@ -104,6 +104,7 @@ DataDirectory.prototype.trigger = function(event, detail){
   } catch (e) {
     var evt = document.createEvent("CustomEvent");
     evt.initCustomEvent(event, true, true, detail);
+    document.dispatchEvent(evt);
   }
 };
 

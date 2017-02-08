@@ -973,7 +973,7 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
       if (this.config.field_types[options.field] === 'date') {
         var startDate = options.value[0];
         var endDate = options.value[1];
-        data.value = `${startDate.format("DD MMM ‘YY")} &mdash; ${endDate.format("DD MMM ‘YY")}`;
+        data.value = startDate.format("DD MMM ‘YY") + '&mdash;' + endDate.format("DD MMM ‘YY");
       }
       // Analytics - Track Event
       Fliplet.Analytics.trackEvent({ category: 'directory', action: 'filter', title: options.type + ": " + options.value });

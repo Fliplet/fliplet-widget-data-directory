@@ -744,7 +744,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
 
   // Set current entry
   _this.currentEntry = {
-    row: _this.data[entryIndex],
+    row: dataArr[entryIndex],
     detailData: detailData
   };
 

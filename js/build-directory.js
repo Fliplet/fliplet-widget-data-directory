@@ -91,15 +91,20 @@ DataDirectory.prototype.trigger = function(event, detail){
   var detail = $.extend({
     context: this
   }, detail || {});
-  var customEvent = new CustomEvent(
-    event,
-    {
-      bubbles: true,
-      cancelable: true,
-      detail: detail
-    }
-  );
-  document.dispatchEvent(customEvent);
+  try {
+    var customEvent = new CustomEvent(
+      event,
+      {
+        bubbles: true,
+        cancelable: true,
+        detail: detail
+      }
+    );
+    document.dispatchEvent(customEvent);
+  } catch (e) {
+    var evt = document.createEvent("CustomEvent");
+    evt.initCustomEvent(event, true, true, detail);
+  }
 };
 
 DataDirectory.prototype.get = function(key){

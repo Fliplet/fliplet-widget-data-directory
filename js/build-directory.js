@@ -742,6 +742,12 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     }
   }
 
+  // Set current entry
+  _this.currentEntry = {
+    row: _this.data[entryIndex],
+    detailData: detailData
+  };
+
   var directoryDetailsTemplate = (this.config.directoryDetailsTemplate !== '')
     ? Handlebars.compile(this.config.directoryDetailsTemplate)
     : Handlebars.templates.directoryDetails;
@@ -807,11 +813,6 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
       }
     });
   }
-
-  _this.currentEntry = {
-    row: _this.data[entryIndex],
-    detailData: detailData
-  };
 
   // Analytics - Track Event
   if (trackEvent) {

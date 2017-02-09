@@ -63,10 +63,12 @@ $('[data-directory-id]').each(function(){
             }
           }
 
+          // Check live data for updates
           return getData({ offline: false })
             .then(function (rows) {
               config.rows = rows;
-              Fliplet.App.Storage.set(storageKey, { rows: rows, updatedAt: dataSource.updatedAt });
+              // Store latest data with a new timestamp
+              Fliplet.App.Storage.set(storageKey, { rows: rows, updatedAt: new Date() });
 
               // If directory was already initialised with cached data
               if (dataDirectory[id]) {

@@ -296,27 +296,6 @@ DataDirectory.prototype.sortEntries = function(){
 };
 
 DataDirectory.prototype.renderEntries = function(){
-  var _this = this;
-  var listData = [];
-
-  if ( !this.config.is_alphabetical) {
-    listData = this.data;
-  } else {
-    listData = this.data.sort( function(a,b){
-      var attr = _this.config.alphabetical_field;
-      if (!a[attr] || !b[attr]) {
-        return 0;
-      }
-
-      if (a[attr].toString().toUpperCase() < b[attr].toString().toUpperCase())
-        return -1;
-      if (a[attr].toString().toUpperCase() > b[attr].toString().toUpperCase())
-        return 1;
-      return 0;
-    } );
-    this.$container.find('.directory-entries').addClass('list-index-enabled');
-  }
-  this.data = listData;
   var entriesData = {
     show_subtitle: this.config.show_subtitle ? this.config.show_subtitle : false,
     show_tags: this.config.show_tags ? this.config.show_tags : false,

@@ -68,7 +68,7 @@ $('[data-directory-id]').each(function(){
             .then(function (rows) {
               config.rows = rows;
               // Store latest data with a new timestamp
-              Fliplet.App.Storage.set(storageKey, { rows: rows, updatedAt: new Date() });
+              Fliplet.App.Storage.set(storageKey, { rows: rows, updatedAt: new Date().toISOString() });
 
               // If directory was already initialised with cached data
               if (dataDirectory[id]) {

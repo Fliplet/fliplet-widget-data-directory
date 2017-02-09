@@ -50,13 +50,9 @@ var DataDirectory = function (config, container) {
   var folderID = this.config.folderConfig;
 
   function initialize () {
-    if (_this.data.length) {
-      _this.initialiseHandlebars();
-      _this.init();
-      _this.attachObservers();
-    } else {
-      _this.directoryNotConfigured();
-    }
+    _this.initialiseHandlebars();
+    _this.init();
+    _this.attachObservers();
   }
 
   Fliplet.Media.Folders.get(folderID).then(function (response) {
@@ -220,7 +216,12 @@ DataDirectory.prototype.init = function(){
   // Custom event to fire before an entry is rendered in the detailed view.
   this.trigger('flDirectoryBeforeInit');
 
+  // This before check data length because means that we are probably trying to load something with custom code
   if (!this.config.directory_enabled) return;
+
+  if (!this.data.length) {
+    return this.directoryNotConfigured();
+  }
 
   // Function to run before initialising the directory.
   if (typeof this.config.before_init === 'function') {

@@ -57,7 +57,7 @@ $('[data-directory-id]').each(function(){
           if (cache) {
             var dsUpdated = new Date(dataSource.updatedAt);
             var cacheUpdated = new Date(cache.updatedAt);
-            if (dsUpdated > cacheUpdated) {
+            if (dsUpdated <= cacheUpdated) {
               // Cached data is up to date. Let's stop here
               return;
             }

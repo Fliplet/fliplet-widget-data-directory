@@ -3,6 +3,12 @@ body {
     background-color: transparent;
 }
 
+.fl-widget-provider {
+    border: 0;
+    width: 100%;
+    background-color: transparent;
+}
+
 .btn {
     border-radius: 6px;
     line-height: 44px;

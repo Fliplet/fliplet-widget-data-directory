@@ -544,6 +544,12 @@ DataDirectory.prototype.attachObservers = function(){
     _this.$container.find('.search').trigger('blur');
   } );
 
+  $(this.$container).on('click', '.chat-entry', function() {
+    var entryID = $(this).data('entry-id');
+    _this.config.chatLinkAction.query = "?contactConversation="+entryID;
+    Fliplet.Navigate.to(_this.config.chatLinkAction);
+  });
+
   document.addEventListener("flDirectoryEntryBeforeRender", function () {
     _this.disableClicks();
     _this.removeLoading();
@@ -711,6 +717,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
   var dataArr = (type === 'search-result-entry') ? _this.searchResultData : _this.data;
   var detailData = {
     title : title,
+    link_to_chat : this.config.enable_chat ? this.config.enable_chat : false,
     has_thumbnail : this.config.show_thumb_detail ? this.config.show_thumb_detail : false,
     fields : [],
     dataSourceEntryId: dataArr[entryIndex]['dataSourceEntryId'] || ''

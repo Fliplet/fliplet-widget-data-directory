@@ -1078,3 +1078,23 @@
         max-width: 100%;
     }
 }
+
+.button-tray {
+  margin-top: 0.5em;
+}
+
+.directory-detail-title.has-thumbnail + .button-tray {
+  text-align: center;
+}
+
+.button-tray .chat-entry,
+.button-tray .chat-entry:active,
+.button-tray .chat-entry:focus,
+.button-tray .chat-entry:hover,
+.button-tray .chat-entry:active:focus,
+.button-tray .chat-entry:active:hover {
+  background-color: transparent;
+  border: 1px solid #337ab7;
+  color: #337ab7;
+  outline: none;
+}

@@ -338,6 +338,12 @@ var DataDirectoryForm = (function() {
         $('#enable_live_data').prop('checked', true);
       }
 
+      if (_this.directoryConfig.enable_chat) {
+        $('#chat-yes').prop('checked',true);
+        $('.chat-screen-selection').removeClass('hidden')
+      } else {
+        $('#chat-no').prop('checked',true).trigger('change');
+      }
 
     },
 
@@ -489,6 +495,16 @@ var DataDirectoryForm = (function() {
       $('.tab-content').on('change', '#data-tags-fields-select, #data-alphabetical-fields-select, #data-sources, #data-thumbnail-fields-select, #data-browse-configurations select', function () {
         updateSelectText($(this));
       });
+
+      $('[name="enable_chat"]').on('change', function() {
+        var value = $(this).val();
+
+        if (value === "enable-chat") {
+          $('.chat-screen-selection').removeClass('hidden');
+        } else {
+          $('.chat-screen-selection').addClass('hidden');
+        }
+      });
     },
 
     saveDataDirectoryForm_ : function(){
@@ -509,7 +525,8 @@ var DataDirectoryForm = (function() {
         thumbnail_field: $('#data-thumbnail-fields-select').val(),
         show_thumb_list: ($('[name=enable_thumb_list]:checked').val() === "show" ? true : false),
         show_thumb_detail: ($('[name=enable_thumb_details]:checked').val() === "show" ? true : false),
-        enable_live_data: ($('#enable_live_data:checked').val() === "on" ? true : false)
+        enable_live_data: ($('#enable_live_data:checked').val() === "on" ? true : false),
+        enable_chat: ($('[name=enable_chat]:checked').val() === "enable-chat" ? true : false)
       };
 
       $('[data-type="filter"]:checked').each(function(){

@@ -70,6 +70,41 @@
         </div>
 
         <div class="title-header">
+          <p>Chat options</p>
+        </div>
+        <div class="form-group clearfix inline-radio">
+          <div class="col-sm-4 control-label">
+            <label>Do you want to allow users to chat?</label>
+            <p>Selecting "Yes" will place a <strong>Send message</strong> button in the user profile. Tapping on the button will start a conversation.</p>
+          </div>
+          <div class="col-sm-8">
+            <div class="radio-buttons clearfix">
+              <div class="radio">
+                <input type="radio" id="chat-yes" name="enable_chat" value="enable-chat">
+                <label for="chat-yes">
+                  Yes
+                </label>
+              </div>
+              <div class="radio">
+                <input type="radio" id="chat-no" name="enable_chat" value="disable-chat">
+                <label for="chat-no">
+                  No
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-screen-selection hidden">
+          <div class="row">
+              <div class="col-xs-12">
+                  <p>Which screen is the Chat screen?</p>
+              </div>
+          </div>
+          <div id="chat-screen"></div>
+        </div>
+
+        <div class="title-header">
           <p>Thumbnail options</p>
           <p>You can enable a thumbnail on your main list and/or detail views. Configure below where and how to show the thumbnails.</p>
         </div>

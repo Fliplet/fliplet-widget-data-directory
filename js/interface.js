@@ -5,8 +5,14 @@ var organizationId = Fliplet.Env.get('organizationId');
 var ignoreDataSourceTypes = ['menu'];
 
 // Set link action to screen by default
-data.chatLinkAction.action = 'screen';
-data.chatLinkAction.options = { hideAction: true };
+if (!data.chatLinkAction) {
+  data.chatLinkAction = {
+    action: 'screen',
+    options: {
+      hideAction: true
+    }
+  };
+}
 
 var linkChatProvider = Fliplet.Widget.open('com.fliplet.link', {
   // If provided, the iframe will be appended here,

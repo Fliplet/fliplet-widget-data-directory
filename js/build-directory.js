@@ -1081,6 +1081,8 @@ DataDirectory.prototype.parseQueryVars = function(){
       case 'filter':
         if (query.field && query.value) {
           this.presetFilter(query.field, query.value);
+        } else {
+          this.activateSearch();
         }
         break;
       case 'open':

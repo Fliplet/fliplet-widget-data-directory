@@ -2,7 +2,6 @@ var widgetId = Fliplet.Widget.getDefaultId();
 var data = Fliplet.Widget.getData(widgetId) || {};
 var dataDirectoryForm;
 var organizationId = Fliplet.Env.get('organizationId');
-var ignoreDataSourceTypes = ['menu'];
 
 // Set link action to screen by default
 if (!data.chatLinkAction) {
@@ -29,23 +28,13 @@ var linkChatProvider = Fliplet.Widget.open('com.fliplet.link', {
   }
 });
 
-Fliplet.DataSources.get({ organizationId: organizationId })
+Fliplet.DataSources.get({ organizationId: organizationId, type: null })
   .then(function (dataSources) {
-    var filteredDataSources = dataSources.filter(function (dataSource) {
-      for (var i = 0; i < ignoreDataSourceTypes.length; i++) {
-        if (ignoreDataSourceTypes[i] === dataSource.type) {
-          return false;
-        }
-      }
-
-      return true;
-    });
-
-    if (!filteredDataSources.length) {
+    if (!dataSources.length) {
       $('.no-data-source-prompt').show();
     }
 
-    data.dataSources = filteredDataSources;
+    data.dataSources = dataSources;
     dataDirectoryForm = new DataDirectoryForm(data);
   });
 

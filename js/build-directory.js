@@ -66,7 +66,7 @@ var DataDirectory = function (config, container) {
   function renderThumb(file) {
     // Returns placeholder if no match
     _this.data.forEach(function(entry) {
-      if (file.url.indexOf( entry[_this.config.thumbnail_field]) !== -1 && entry[_this.config.thumbnail_field].trim() !== '') {
+      if (file.name.indexOf( entry[_this.config.thumbnail_field]) !== -1 && entry[_this.config.thumbnail_field].trim() !== '') {
         entry[_this.config.thumbnail_field] = file.url;
       }
     });

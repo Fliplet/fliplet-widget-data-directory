@@ -569,6 +569,10 @@ DataDirectory.prototype.attachObservers = function(){
     $('.overlay-date-range').removeClass('active');
     _this.renderFilterValues(date_filter, _this.config.mobile_mode || !_this.deviceIsTablet);
   });
+  $(this.$container).on( 'click', '.external-link',function(){
+    var url = $(this).data('external-url');
+    Fliplet.Navigate.url(url);
+  });
 };
 
 DataDirectory.prototype.activateSearch = function(){

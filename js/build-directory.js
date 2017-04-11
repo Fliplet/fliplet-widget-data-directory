@@ -1032,18 +1032,29 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
   if (typeof callback === 'function') setTimeout(callback, 0);
 };
 
-DataDirectory.prototype.search = function( value ) {
-  var path = ':root > :has(';
+DataDirectory.prototype.search = function(search) {
+  var entries = [];
   var searchFields = this.config.search_fields;
+  this.data.forEach(function (entry) {
+    for (var i = 0; i < searchFields.length; i++) {
+      var term = new RegExp(search, "i");
+      var value = entry[searchFields[i]];
+      if (!value) {
+        return;
+      }
 
-  for (var i = 0, l = searchFields.length; i < l; i++) {
-    if (i > 0) path += ' , ';
-    path += '."' + searchFields[i] + '":contains("' + value + '")';
-  }
-  path += ')';
+      if (typeof value === 'string' && value.match(term)) {
+        return entries.push(entry);
+      }
 
-  return JSONSelect.match( path, this.data );
-}
+      if (value === search) {
+        entries.push(entry);
+      }
+    }
+  });
+
+  return entries;
+};
 
 DataDirectory.prototype.filter = function( field, value ) {
   if (this.config.field_types[field] === 'date') {
@@ -1065,15 +1076,16 @@ DataDirectory.prototype.filter = function( field, value ) {
   });
 }
 
-DataDirectory.prototype.getFilterValues = function( field ) {
-  var path = '."'+field+'"';
-  var values = JSONSelect.match( path, this.data )
-    .filter(
-      function(value){
-        return value !== null && value !== ''
-      }
-    );
-  return _.sortedUniq(_.sortBy(values));
+DataDirectory.prototype.getFilterValues = function(field) {
+  var values = [];
+  this.data.forEach(function getValues(entry) {
+    var entryValue = entry[field];
+    if (entryValue && values.indexOf(entryValue) === -1) {
+      values.push(entryValue);
+    }
+  });
+
+  return values.sort();
 };
 
 DataDirectory.prototype.parseQueryVars = function(){

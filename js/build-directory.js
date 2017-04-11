@@ -1067,7 +1067,12 @@ DataDirectory.prototype.filter = function( field, value ) {
 
 DataDirectory.prototype.getFilterValues = function( field ) {
   var path = '."'+field+'"';
-  var values = JSONSelect.match( path, this.data ).filter(function(value){ return value !== null && value !== ''; });
+  var values = JSONSelect.match( path, this.data )
+    .filter(
+      function(value){
+        return value !== null && value !== ''
+      }
+    );
   return _.sortedUniq(_.sortBy(values));
 };
 

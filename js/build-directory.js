@@ -1040,7 +1040,7 @@ DataDirectory.prototype.search = function(search) {
       var term = new RegExp(search, "i");
       var value = entry[searchFields[i]];
       if (!value) {
-        return;
+        break;
       }
 
       if (typeof value === 'string' && value.match(term)) {

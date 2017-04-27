@@ -905,7 +905,7 @@ DataDirectory.prototype.getEntryField = function( entryIndex, fieldIndex, type )
         value = moment(value).format("DD MMM YYYY");
       }
 
-      valueHTML = Handlebars.templates['directoryFieldType' + fieldType](value);
+      valueHTML = Handlebars.templates['directoryFieldType-' + fieldType](value);
     }
   } else {
     valueHTML = '';

@@ -1037,7 +1037,10 @@ DataDirectory.prototype.search = function(search) {
   var searchFields = this.config.search_fields;
   this.data.forEach(function (entry) {
     for (var i = 0; i < searchFields.length; i++) {
-      var term = new RegExp(search, "i");
+      // Escape search
+      var s = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+      var term = new RegExp(s, "i");
       var value = entry[searchFields[i]];
       if (!value) {
         break;

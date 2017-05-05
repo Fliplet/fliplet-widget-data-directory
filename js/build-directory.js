@@ -1043,7 +1043,7 @@ DataDirectory.prototype.search = function(search) {
     for (var i = 0; i < searchFields.length; i++) {
       var value = entry[searchFields[i]];
       if (!value) {
-        break;
+        continue;
       }
 
       if (typeof value === 'string' && value.match(term)) {

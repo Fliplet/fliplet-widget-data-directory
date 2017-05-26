@@ -491,6 +491,12 @@ DataDirectory.prototype.attachObservers = function(){
 
   _this.data.forEach(function(entry, i) {
     var imgURL = entry[_this.config.thumbnail_field];
+
+    if (/api\.fliplet\.(com|local)/.test(imgURL)) {
+      // attach auth token
+      imgURL += (imgURL.indexOf('?') === -1 ? '?' : '&') + 'auth_token=' + Fliplet.User.getAuthToken();
+    }
+
     if ( /^(f|ht)tps?:\/\//i.test(imgURL) ) {
 
       var img = new Image();

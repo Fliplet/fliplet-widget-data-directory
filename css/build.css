@@ -116,7 +116,7 @@
     margin-top: -25px;
     background-position: center center;
     background-size: cover;
-    background-image: url('../img/thumb-placeholder.png');
+    background-image: url('./img/thumb-placeholder.png');
     background-repeat: no-repeat;
 }
 
@@ -608,7 +608,7 @@
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url('../img/thumb-placeholder.png');
+    background-image: url('./img/thumb-placeholder.png');
     border: 1px solid #cfcfcf;
     overflow: hidden;
 }

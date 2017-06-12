@@ -175,10 +175,6 @@ var DataDirectoryForm = (function() {
     this.parseSelectedTable(this.source);
     this.loadDataDirectoryForm();
     this.attachObservers_();
-
-    if ( typeof this.columns !== 'undefined' && this.columns.length ) {
-      $('a[href="#data-browse"]').tab('show');
-    }
   }
 
   DataDirectoryForm.prototype = {
@@ -238,14 +234,18 @@ var DataDirectoryForm = (function() {
             _this.source = _this.tables[i].id;
             _this.columns = _this.tables[i].columns;
 
-            if (autoConfigure) {
-              _this.autoConfigureSearch();
-              _this.autoConfigureFilter();
-              _this.autoConfigureBrowse();
-              _this.autoConfigureDetails();
+            if (!_this.columns || !_this.columns.length) {
+              return;
             }
 
-            return;
+            if (!autoConfigure) {
+              return;
+            }
+
+            _this.autoConfigureSearch();
+            _this.autoConfigureFilter();
+            _this.autoConfigureBrowse();
+            _this.autoConfigureDetails();
           }
         }
       }
@@ -268,20 +268,26 @@ var DataDirectoryForm = (function() {
         _this.loadConfigurations_();
       }
 
-      if ( typeof _this.columns !== "undefined" && _this.columns.constructor.name === "Array" ) {
-        $('#sample-label').html( _this.columns.length > 1 ? '{{' + _this.columns[0] + '}}, {{' + _this.columns[1] + '}}' : '{{' + _this.columns[0] + '}}' );
+      if (!_this.columns || _this.columns.constructor.name !== "Array") {
+        _this.loadEmptyDataSource_();
+        return;
       }
+
+      $('#sample-label').html( _this.columns.length > 1 ? '{{' + _this.columns[0] + '}}, {{' + _this.columns[1] + '}}' : '{{' + _this.columns[0] + '}}' );
     },
 
     autoConfigureSearch : function(){
-      _this.directoryConfig.search_fields = (_this.columns.length <= 4) ? _this.columns : _this.columns.slice(0,4);
+      _this.directoryConfig.search_fields = (_this.columns && _this.columns.length > 4) ? _this.columns.slice(0,4) : _this.columns;
     },
 
     autoConfigureFilter : function(){
-      _this.directoryConfig.filter_fields = (_this.columns.length <= 3) ? _this.columns : _this.columns.slice(1,3);
+      _this.directoryConfig.filter_fields = (_this.columns && _this.columns.length > 3) ? _this.columns.slice(1,3) : _this.columns;
     },
 
     autoConfigureBrowse : function(){
+      if (!_this.columns || !_this.columns.length) {
+        return;
+      }
       _this.directoryConfig.label_template = "{{" + _this.columns[0] + "}}";
       _this.directoryConfig.alphabetical_field = _this.columns[0];
     },
@@ -345,6 +351,10 @@ var DataDirectoryForm = (function() {
         $('#chat-no').prop('checked',true).trigger('change');
       }
 
+    },
+
+    loadEmptyDataSource_ : function(){
+      // @TODO No columns found
     },
 
     attachObservers_ : function(){
@@ -561,11 +571,17 @@ var DataDirectoryForm = (function() {
 
     dataSourceChanged_ : function(e){
       if ( _this.source === "" || confirm("Are you sure you want to change the data source? This will reset your previous configuration for the directory.") ) {
-        $('.options').show();
-        $('.nav-tabs li.disabled').removeClass('disabled');
         _this.parseSelectedTable( $(e.target).val(), true );
         _this.loadDataDirectoryForm();
-        // $('a[href="#data-browse"]').tab('show');
+        if (!_this.columns || !_this.columns.length) {
+          $('.options').hide();
+          $('.options-no-columns').show();
+          $('.nav-tabs li#main-list-control').addClass('disabled');
+          return;
+        }
+        $('.options').show();
+        $('.options-no-columns').hide();
+        $('.nav-tabs li#main-list-control').removeClass('disabled');
       } else {
         _this.source;
       }

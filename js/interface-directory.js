@@ -267,7 +267,6 @@ var DataDirectoryForm = (function() {
       }
 
       if (!_this.columns || !_this.columns.length) {
-        _this.loadEmptyDataSource_();
         $('.options').hide();
         $('.options-no-columns').show();
         $('.nav-tabs li#main-list-control').addClass('disabled');
@@ -358,10 +357,6 @@ var DataDirectoryForm = (function() {
         $('#chat-no').prop('checked',true).trigger('change');
       }
 
-    },
-
-    loadEmptyDataSource_ : function(){
-      // @TODO No columns found
     },
 
     attachObservers_ : function(){

@@ -137,8 +137,6 @@ var DataDirectoryForm = (function() {
 
     if (configuration.source) {
       this.source = configuration.source;
-      $('.options').show();
-      $('.nav-tabs li.disabled').removeClass('disabled');
     }
     delete configuration.dataSources;
 
@@ -268,20 +266,29 @@ var DataDirectoryForm = (function() {
         _this.loadConfigurations_();
       }
 
-      if (!_this.columns || _this.columns.constructor.name !== "Array") {
+      if (!_this.columns || !_this.columns.length) {
         _this.loadEmptyDataSource_();
+        $('.options').hide();
+        $('.options-no-columns').show();
+        $('.nav-tabs li#main-list-control').addClass('disabled');
         return;
       }
+      $('.options').show();
+      $('.options-no-columns').hide();
+      $('.nav-tabs li#main-list-control').removeClass('disabled');
 
-      $('#sample-label').html( _this.columns.length > 1 ? '{{' + _this.columns[0] + '}}, {{' + _this.columns[1] + '}}' : '{{' + _this.columns[0] + '}}' );
     },
 
     autoConfigureSearch : function(){
-      _this.directoryConfig.search_fields = (_this.columns && _this.columns.length > 4) ? _this.columns.slice(0,4) : _this.columns;
+      _this.directoryConfig.search_fields = (_this.columns && _this.columns.length > 4)
+        ? _this.columns.slice(0,4)
+        : _this.columns;
     },
 
     autoConfigureFilter : function(){
-      _this.directoryConfig.filter_fields = (_this.columns && _this.columns.length > 3) ? _this.columns.slice(1,3) : _this.columns;
+      _this.directoryConfig.filter_fields = (_this.columns && _this.columns.length > 3)
+        ? _this.columns.slice(1,3)
+        : _this.columns;
     },
 
     autoConfigureBrowse : function(){
@@ -573,15 +580,6 @@ var DataDirectoryForm = (function() {
       if ( _this.source === "" || confirm("Are you sure you want to change the data source? This will reset your previous configuration for the directory.") ) {
         _this.parseSelectedTable( $(e.target).val(), true );
         _this.loadDataDirectoryForm();
-        if (!_this.columns || !_this.columns.length) {
-          $('.options').hide();
-          $('.options-no-columns').show();
-          $('.nav-tabs li#main-list-control').addClass('disabled');
-          return;
-        }
-        $('.options').show();
-        $('.options-no-columns').hide();
-        $('.nav-tabs li#main-list-control').removeClass('disabled');
       } else {
         _this.source;
       }

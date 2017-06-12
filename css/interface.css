@@ -358,6 +358,7 @@ table .checkbox label {
 
 .no-data-source-prompt,
 .options,
+.options-no-columns,
 .thumbs-options {
     display: none;
 }

@@ -156,7 +156,10 @@ DataDirectory.prototype.initialiseHandlebars = function(){
     if (!_this.config.is_alphabetical) return '';
 
     var entryTitleTemplate = Handlebars.compile( "{{["+_this.config.alphabetical_field+"]}}" );
-    var firstCharacterOfTitle = entryTitleTemplate( this )[0].toString().toUpperCase();
+    if (!entryTitleTemplate(this).length) {
+      return '';
+    }
+    var firstCharacterOfTitle = entryTitleTemplate(this)[0].toString().toUpperCase();
     if ( "1234567890".indexOf(firstCharacterOfTitle) > -1 ) firstCharacterOfTitle = '#';
     if ( firstCharacterOfTitle !== lastAlphabetIndex ) {
       lastAlphabetIndex = firstCharacterOfTitle;

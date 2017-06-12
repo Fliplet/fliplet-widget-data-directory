@@ -268,7 +268,9 @@ var DataDirectoryForm = (function() {
 
       if (!_this.columns || !_this.columns.length) {
         $('.options').hide();
-        $('.options-no-columns').show();
+        if (_this.source) {
+          $('.options-no-columns').show();
+        }
         $('.nav-tabs li#main-list-control').addClass('disabled');
         return;
       }

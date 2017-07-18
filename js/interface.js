@@ -1,7 +1,6 @@
 var widgetId = Fliplet.Widget.getDefaultId();
 var data = Fliplet.Widget.getData(widgetId) || {};
 var dataDirectoryForm;
-var organizationId = Fliplet.Env.get('organizationId');
 
 // Set link action to screen by default
 if (!data.chatLinkAction) {
@@ -28,7 +27,7 @@ var linkChatProvider = Fliplet.Widget.open('com.fliplet.link', {
   }
 });
 
-Fliplet.DataSources.get({ organizationId: organizationId, type: null })
+Fliplet.DataSources.get({ type: null })
   .then(function (dataSources) {
     if (!dataSources.length) {
       $('.no-data-source-prompt').show();

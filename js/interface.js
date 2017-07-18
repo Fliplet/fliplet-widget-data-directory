@@ -28,7 +28,7 @@ var linkChatProvider = Fliplet.Widget.open('com.fliplet.link', {
   }
 });
 
-Fliplet.DataSources.get({ organizationId: organizationId, type: null })
+Fliplet.DataSources.get({ type: null })
   .then(function (dataSources) {
     if (!dataSources.length) {
       $('.no-data-source-prompt').show();

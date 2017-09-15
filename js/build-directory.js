@@ -4,9 +4,9 @@
 
 var messageTimeout,
   loadingTimeout,
-  messageDelay = 5000,        // "Loading..." text delay to display
+  messageDelay = 5000, // "Loading..." text delay to display
   loadingOverlayDelay = 1000, // Time it takes to display the loading overlay after a click
-  date_filter;                // Filter used before pick date range when filtering by a date type field
+  date_filter; // Filter used before pick date range when filtering by a date type field
 
 function html_entity_decode(html) {
   var txt = document.createElement("textarea");
@@ -14,19 +14,19 @@ function html_entity_decode(html) {
   return txt.value;
 }
 
-var DataDirectory = function (config, container) {
+var DataDirectory = function(config, container) {
   var _this = this;
 
   this.config = $.extend({
-    is_alphabetical : false,
-    alphabetical_field : "",
-    label_template : "",
-    data_fields : [],
-    filter_fields : [],
-    search_fields : [],
-    field_types : "", // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
-    tags_field : "",
-    thumbnail_field : "",
+    is_alphabetical: false,
+    alphabetical_field: "",
+    label_template: "",
+    data_fields: [],
+    filter_fields: [],
+    search_fields: [],
+    field_types: "", // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
+    tags_field: "",
+    thumbnail_field: "",
     search_only: false,
     mobile_mode: false,
     directory_enabled: true,
@@ -54,13 +54,13 @@ var DataDirectory = function (config, container) {
 
   var folderID = this.config.folderConfig;
 
-  function initialize () {
+  function initialize() {
     _this.initialiseHandlebars();
     _this.init();
     _this.attachObservers();
   }
 
-  Fliplet.Media.Folders.get(folderID).then(function (response) {
+  Fliplet.Media.Folders.get(folderID).then(function(response) {
     response.files.forEach(renderThumb);
     initialize();
   }, function onMediaFolderError(err) {
@@ -71,31 +71,30 @@ var DataDirectory = function (config, container) {
   function renderThumb(file) {
     // Returns placeholder if no match
     _this.data.forEach(function(entry) {
-      if (file.name.indexOf( entry[_this.config.thumbnail_field]) !== -1 && entry[_this.config.thumbnail_field].trim() !== '') {
+      if (file.name.indexOf(entry[_this.config.thumbnail_field]) !== -1 && entry[_this.config.thumbnail_field].trim() !== '') {
         entry[_this.config.thumbnail_field] = file.url;
       }
     });
   }
 
-  if ( typeof this.config.is_alphabetical === 'string' ) {
+  if (typeof this.config.is_alphabetical === 'string') {
     this.config.is_alphabetical = this.config.is_alphabetical.toLowerCase().trim() === 'true';
   }
 
-  if ( typeof this.config.field_types === 'string' && this.config.field_types.length ) {
+  if (typeof this.config.field_types === 'string' && this.config.field_types.length) {
     this.config.field_types = JSON.parse(this.config.field_types);
   }
 
   return this;
 };
 
-DataDirectory.prototype.trigger = function(event, detail){
+DataDirectory.prototype.trigger = function(event, detail) {
   var detail = $.extend({
     context: this
   }, detail || {});
   try {
     var customEvent = new CustomEvent(
-      event,
-      {
+      event, {
         bubbles: true,
         cancelable: true,
         detail: detail
@@ -109,36 +108,36 @@ DataDirectory.prototype.trigger = function(event, detail){
   }
 };
 
-DataDirectory.prototype.get = function(key){
+DataDirectory.prototype.get = function(key) {
   if (key.length && this.hasOwnProperty(key)) {
     return this[key];
   }
 };
 
-DataDirectory.prototype.set = function(key, value){
+DataDirectory.prototype.set = function(key, value) {
   if (key.length) {
     this[key] = value;
   }
 };
 
-DataDirectory.prototype.getConfig = function(key){
+DataDirectory.prototype.getConfig = function(key) {
   if (key.length && this.config.hasOwnProperty(key)) {
     return this.config[key];
   }
 };
 
-DataDirectory.prototype.setConfig = function(key, value){
+DataDirectory.prototype.setConfig = function(key, value) {
   if (key.length) {
     this.config[key] = value;
   }
 };
 
-DataDirectory.prototype.initialiseHandlebars = function(){
+DataDirectory.prototype.initialiseHandlebars = function() {
   var _this = this;
 
   var lastAlphabetIndex = '';
 
-  Handlebars.registerHelper('plaintext', function(partial, context){
+  Handlebars.registerHelper('plaintext', function(partial, context) {
     // Create compiler function for said partial
     var output = Handlebars.compile(Handlebars.partials[partial]);
 
@@ -148,26 +147,26 @@ DataDirectory.prototype.initialiseHandlebars = function(){
     return $('<div></div>').html(result).text();
   });
 
-  Handlebars.registerHelper('moment', function(key, format, obj){
+  Handlebars.registerHelper('moment', function(key, format, obj) {
     return moment(obj[key]).format(format);
   });
 
-  Handlebars.registerHelper('alphabet_divider', function(){
+  Handlebars.registerHelper('alphabet_divider', function() {
     if (!_this.config.is_alphabetical) return '';
 
-    var entryTitleTemplate = Handlebars.compile( "{{["+_this.config.alphabetical_field+"]}}" );
+    var entryTitleTemplate = Handlebars.compile("{{[" + _this.config.alphabetical_field + "]}}");
     if (!entryTitleTemplate(this).length) {
       return '';
     }
     var firstCharacterOfTitle = entryTitleTemplate(this)[0].toString().toUpperCase();
-    if ( "1234567890".indexOf(firstCharacterOfTitle) > -1 ) firstCharacterOfTitle = '#';
-    if ( firstCharacterOfTitle !== lastAlphabetIndex ) {
+    if ("1234567890".indexOf(firstCharacterOfTitle) > -1) firstCharacterOfTitle = '#';
+    if (firstCharacterOfTitle !== lastAlphabetIndex) {
       lastAlphabetIndex = firstCharacterOfTitle;
       return Handlebars.templates.directoryListDivider(firstCharacterOfTitle);
     }
   });
 
-  Handlebars.registerHelper('search_result_header', function( data ){
+  Handlebars.registerHelper('search_result_header', function(data) {
     var output = '';
 
     switch (data.type) {
@@ -183,7 +182,7 @@ DataDirectory.prototype.initialiseHandlebars = function(){
     return output;
   });
 
-  Handlebars.registerHelper('search_result_clear', function( data ){
+  Handlebars.registerHelper('search_result_clear', function(data) {
     switch (data.type) {
       case 'filter':
         return 'Clear filter';
@@ -204,14 +203,14 @@ DataDirectory.prototype.initialiseHandlebars = function(){
   }
 
   if (this.config.hasOwnProperty('tags_field')) {
-    Handlebars.registerHelper('entry_tags', function (entry) {
+    Handlebars.registerHelper('entry_tags', function(entry) {
       var tags = entry[_this.config.tags_field];
       if (!tags) {
         return '';
       }
       var splitTags = tags.split(",");
       return new Handlebars.SafeString(
-        splitTags.map(function (tag) {
+        splitTags.map(function(tag) {
           tag = tag.trim();
           if (tag !== '') {
             return '<a class="data-linked" data-type="filter-value-tag" data-value="' + tag + '" data-filter="' + _this.config.tags_field + '" href="#">' + tag + '</a> ';
@@ -226,7 +225,7 @@ DataDirectory.prototype.initialiseHandlebars = function(){
   Handlebars.registerPartial('directory_filter_values', Handlebars.templates.directoryFilterValue);
 };
 
-DataDirectory.prototype.init = function(){
+DataDirectory.prototype.init = function() {
   // Custom event to fire before an entry is rendered in the detailed view.
   this.trigger('flDirectoryBeforeInit');
 
@@ -248,7 +247,7 @@ DataDirectory.prototype.init = function(){
 
   if (this.config.search_only) {
     this.activateSearch();
-    setTimeout(function(){
+    setTimeout(function() {
       // _this.$container.find('.search').trigger( 'focus' );
     }, 0);
     return;
@@ -262,32 +261,32 @@ DataDirectory.prototype.init = function(){
   this.trigger('flDirectoryListRendered');
 };
 
-DataDirectory.prototype.verifyFields = function(fieldConfig){
-  if ( this.config[fieldConfig].constructor.name !== 'Array' ) return;
+DataDirectory.prototype.verifyFields = function(fieldConfig) {
+  if (this.config[fieldConfig].constructor.name !== 'Array') return;
 
   var arr = [];
-  for ( var i = 0, l = this.config[fieldConfig].length; i < l; i++ ) {
-    if ( this.config.data_fields.indexOf( this.config[fieldConfig][i] ) > -1 ) {
-      arr.push( this.config[fieldConfig][i] );
+  for (var i = 0, l = this.config[fieldConfig].length; i < l; i++) {
+    if (this.config.data_fields.indexOf(this.config[fieldConfig][i]) > -1) {
+      arr.push(this.config[fieldConfig][i]);
     }
   }
   this.config[fieldConfig] = arr;
 };
 
-DataDirectory.prototype.verifyConfig = function(){
+DataDirectory.prototype.verifyConfig = function() {
   this.verifyFields('filter_fields');
   this.verifyFields('search_fields');
   this.verifyFields('detail_fields');
 };
 
-DataDirectory.prototype.sortEntries = function(){
+DataDirectory.prototype.sortEntries = function() {
   var _this = this;
   var listData = [];
 
-  if ( !this.config.is_alphabetical) {
+  if (!this.config.is_alphabetical) {
     listData = this.data;
   } else {
-    listData = this.data.sort( function(a,b){
+    listData = this.data.sort(function(a, b) {
       var attr = _this.config.alphabetical_field;
       if (!a[attr] || !b[attr]) {
         return 0;
@@ -298,44 +297,45 @@ DataDirectory.prototype.sortEntries = function(){
       if (a[attr].toString().toUpperCase() > b[attr].toString().toUpperCase())
         return 1;
       return 0;
-    } );
+    });
     this.$container.find('.directory-entries').addClass('list-index-enabled');
   }
   this.data = listData;
 };
 
-DataDirectory.prototype.renderEntries = function(){
+DataDirectory.prototype.renderEntries = function() {
   var entriesData = {
     show_subtitle: this.config.show_subtitle ? this.config.show_subtitle : false,
     show_tags: this.config.show_tags ? this.config.show_tags : false,
-    has_thumbnail: (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field !== null && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_list ? this.config.show_thumb_list : false ),
+    has_thumbnail: (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field !== null && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_list ? this.config.show_thumb_list : false),
+    thumbShape: (typeof this.config.thumbShape !== 'undefined' && this.config.thumbShape !== null && this.config.thumbShape ? this.config.thumbShape : 'circular'),
     entries: this.data
   };
-  var directoryListTemplate = (this.config.directoryListTemplate !== '')
-    ? Handlebars.compile(this.config.directoryListTemplate)
-    : Handlebars.templates.directoryListEntries;
+  var directoryListTemplate = (this.config.directoryListTemplate !== '') ?
+    Handlebars.compile(this.config.directoryListTemplate) :
+    Handlebars.templates.directoryListEntries;
   var directoryListHTML = directoryListTemplate(entriesData);
 
   this.$container.find('.directory-entries').html(directoryListHTML);
   this.renderIndexList();
 };
 
-DataDirectory.prototype.renderIndexList = function(){
-  if ( !this.config.is_alphabetical ) return;
+DataDirectory.prototype.renderIndexList = function() {
+  if (!this.config.is_alphabetical) return;
 
   var $listIndex = this.$container.find('.directory-entries + .list-index');
   $listIndex.html('');
-  this.$container.find('.directory-entries .divider').each(function(){
+  this.$container.find('.directory-entries .divider').each(function() {
     var letter = $(this).text();
     $listIndex.append('<span data-letter="' + letter + '">' + letter + '</span>');
   });
 
-  $(document).on(  'touchstart mousedown', '.list-index span', $.proxy( this.listIndexTouchStart, this ) )
-    .on( 'touchmove  mousemove', '.list-index span', $.proxy( this.listIndexTouchMove , this ) )
-    .on( 'touchend   mouseup'  , '.list-index span', $.proxy( this.listIndexTouchEnd  , this ) );
+  $(document).on('touchstart mousedown', '.list-index span', $.proxy(this.listIndexTouchStart, this))
+    .on('touchmove  mousemove', '.list-index span', $.proxy(this.listIndexTouchMove, this))
+    .on('touchend   mouseup', '.list-index span', $.proxy(this.listIndexTouchEnd, this));
 };
 
-DataDirectory.prototype.scrollToLetter = function(letter){
+DataDirectory.prototype.scrollToLetter = function(letter) {
   var scrollToEl = $('.divider[data-letter="' + letter + '"]');
   if (!scrollToEl.length) return;
   var scrollTop = scrollToEl.offset().top + this.$container.find('.directory-entries').scrollTop() - this.searchBarHeight - this.navHeight;
@@ -343,7 +343,7 @@ DataDirectory.prototype.scrollToLetter = function(letter){
   this.flViewportRedraw();
 };
 
-DataDirectory.prototype.listIndexTouchStart = function(e){
+DataDirectory.prototype.listIndexTouchStart = function(e) {
   e.preventDefault();
   this.listIndexIsTouched = true;
 
@@ -351,7 +351,7 @@ DataDirectory.prototype.listIndexTouchStart = function(e){
   this.scrollToLetter($target.data('letter'));
 };
 
-DataDirectory.prototype.listIndexTouchMove = function(e){
+DataDirectory.prototype.listIndexTouchMove = function(e) {
   if (!this.listIndexIsTouched) return;
   e.preventDefault();
   var $target;
@@ -365,26 +365,26 @@ DataDirectory.prototype.listIndexTouchMove = function(e){
   this.scrollToLetter($target.data('letter'));
 };
 
-DataDirectory.prototype.listIndexTouchEnd = function(e){
+DataDirectory.prototype.listIndexTouchEnd = function(e) {
   this.listIndexIsTouched = false;
 };
 
-DataDirectory.prototype.renderFilters = function(){
+DataDirectory.prototype.renderFilters = function() {
 
-  if ( this.config.filter_fields.length ) {
+  if (this.config.filter_fields.length) {
     // 1 or more filter fields configured
     var directoryFilterHTML = Handlebars.templates.directoryFilter(this.config.filter_fields);
     this.$container.find('.filter-list').html(directoryFilterHTML);
   } else {
     // No filter field configured
-    this.$container.find('.search').attr('placeholder','Search');
+    this.$container.find('.search').attr('placeholder', 'Search');
     this.$container.find('.filters').remove();
   }
 
 };
 
-DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
-  if ( typeof inOverlay == 'undefined' ) inOverlay = false;
+DataDirectory.prototype.renderFilterValues = function(filter, inOverlay) {
+  if (typeof inOverlay == 'undefined') inOverlay = false;
 
   var _this = this,
     tags_field = this.config.tags_field ? this.config.tags_field : '',
@@ -393,7 +393,7 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
 
   // Check if it's the tag filter
   if (tags_field === filter) {
-    this.data.forEach(function (record) {
+    this.data.forEach(function(record) {
       if (record[tags_field]) {
         var entryTags = record[tags_field].split(',');
         entryTags.forEach(function(tag) {
@@ -418,27 +418,31 @@ DataDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
       start_date = getFormatedDate($('.start_date').datepicker("getDate"));
       end_date = getFormatedDate($('.finish_date').datepicker("getDate"));
     }
-    return this.renderSearchResult( {
+    return this.renderSearchResult({
       type: 'filter',
       field: filter,
       value: [start_date, end_date]
-    } );
+    });
   } else {
-    values = this.getFilterValues( filter );
+    values = this.getFilterValues(filter);
   }
 
-  data = { filter : filter.trim(), values : values, dataType: (tags_field === filter) ? 'filter-value-tag' : 'filter-value'};
+  data = {
+    filter: filter.trim(),
+    values: values,
+    dataType: (tags_field === filter) ? 'filter-value-tag' : 'filter-value'
+  };
 
-  if ( inOverlay ) {
+  if (inOverlay) {
     var overlayContent = Handlebars.templates.directoryFilterOverlay(data);
-    this.filterOverlay = new Fliplet.Utils.Overlay(overlayContent,{
+    this.filterOverlay = new Fliplet.Utils.Overlay(overlayContent, {
       title: 'Filter by ' + filter,
       classes: 'overlay-directory',
       showOnInit: true,
       closeText: '<i class="fa fa-chevron-left"></i>',
       entranceAnim: 'slideInRight',
       exitAnim: 'slideOutRight',
-      afterClose: function(){
+      afterClose: function() {
         _this.filterOverlay = null;
       }
     });
@@ -463,7 +467,7 @@ function getFormatedDate(date) {
   return moment(date);
 }
 
-DataDirectory.prototype.switchMode = function(mode){
+DataDirectory.prototype.switchMode = function(mode) {
   /*
    * Modes: default, search, search-result, filter-values
    */
@@ -471,16 +475,16 @@ DataDirectory.prototype.switchMode = function(mode){
   var validModes = ['default', 'search', 'search-result', 'search-result-entry', 'filter-values'];
   mode = mode.trim().toLowerCase();
 
-  if ( validModes.indexOf(mode) < 0 ) {
+  if (validModes.indexOf(mode) < 0) {
     mode = 'default';
   }
 
-  this.$container.find('.container-fluid').attr('data-mode',mode);
+  this.$container.find('.container-fluid').attr('data-mode', mode);
 
-  if ( mode === 'search' ) {
+  if (mode === 'search') {
     this.searchResultData = [];
-    if ( this.config.filter_fields.length === 1 ) {
-      this.renderFilterValues( this.config.filter_fields[0] );
+    if (this.config.filter_fields.length === 1) {
+      this.renderFilterValues(this.config.filter_fields[0]);
     }
   }
 
@@ -490,11 +494,11 @@ DataDirectory.prototype.switchMode = function(mode){
   this.flViewportRedraw();
 };
 
-DataDirectory.prototype.isMode = function(mode){
+DataDirectory.prototype.isMode = function(mode) {
   return this.directoryMode === mode;
 };
 
-DataDirectory.prototype.attachObservers = function(){
+DataDirectory.prototype.attachObservers = function() {
   var _this = this;
 
   _this.data.forEach(function(entry, i) {
@@ -505,91 +509,94 @@ DataDirectory.prototype.attachObservers = function(){
       imgURL += (imgURL.indexOf('?') === -1 ? '?' : '&') + 'auth_token=' + Fliplet.User.getAuthToken();
     }
 
-    if ( /^(f|ht)tps?:\/\//i.test(imgURL) ) {
+    if (/^(f|ht)tps?:\/\//i.test(imgURL)) {
 
       var img = new Image();
 
-      img.addEventListener('load', function(){
-        $('.list-default.directory-entries li[data-index="'+i+'"] .list-image').css('background-image', 'url(' + this.src + ')');
+      img.addEventListener('load', function() {
+        $('.list-default.directory-entries li[data-index="' + i + '"] .list-image').css('background-image', 'url(' + this.src + ')');
       }, false);
 
       img.src = imgURL;
     }
   });
 
-  this.$container.on( 'click', '.data-linked', $.proxy( this.dataLinkClicked, this ) );
-  $(window).on( 'resize', function(){
+  this.$container.on('click', '.data-linked', $.proxy(this.dataLinkClicked, this));
+  $(window).on('resize', function() {
     _this.deviceIsTablet = (window.innerWidth >= 640 && window.innerHeight >= 640);
     _this.checkMobileMode();
     _this.resizeSearch();
     _this.navHeight = $('.fl-viewport-header').height() || 0;
     _this.searchBarHeight = _this.$container.find('.directory-search').outerHeight();
-  } );
-  this.$container.find('.directory-search').on( 'click', function(){
+  });
+  this.$container.find('.directory-search').on('click', function() {
     // Analytics - Track Event
-    Fliplet.Analytics.trackEvent({category: 'directory', action: 'search'});
+    Fliplet.Analytics.trackEvent({
+      category: 'directory',
+      action: 'search'
+    });
 
-    _this.$container.find('.search').trigger( 'focus' );
-  } ).on( 'submit', function(e){
+    _this.$container.find('.search').trigger('focus');
+  }).on('submit', function(e) {
     e.preventDefault();
-    _this.renderSearchResult( {
+    _this.renderSearchResult({
       type: 'search',
       value: _this.$container.find('.search').val()
-    } );
-  } );
-  this.$container.find('.search').on( 'focus', $.proxy( this.activateSearch, this ) );
-  if ( this.supportLiveSearch ) {
-    this.$container.find('.search').on( 'keydown paste change', function(e){
+    });
+  });
+  this.$container.find('.search').on('focus', $.proxy(this.activateSearch, this));
+  if (this.supportLiveSearch) {
+    this.$container.find('.search').on('keydown paste change', function(e) {
       _this.renderLiveSearch($(this).val());
-    } );
+    });
   }
-  $(this.$container).on( 'click', '.search-cancel', function(){
+  $(this.$container).on('click', '.search-cancel', function() {
     _this.$container.find('.search').val('');
     _this.deactivateSearch();
     return false;
-  } );
-  $(this.$container).on( 'click', '.search-result-clear', function(){
+  });
+  $(this.$container).on('click', '.search-result-clear', function() {
     _this.$container.find('.search').val('');
     _this.switchMode('search');
     return false;
-  } );
+  });
 
-  $(this.$container).on( 'touchmove', '.search-result ul, .filters', function(){
+  $(this.$container).on('touchmove', '.search-result ul, .filters', function() {
     _this.$container.find('.search').trigger('blur');
-  } );
+  });
 
   $(this.$container).on('click', '.chat-entry', function() {
     var entryID = $(this).data('entry-id');
-    _this.config.chatLinkAction.query = "?contactConversation="+entryID;
+    _this.config.chatLinkAction.query = "?contactConversation=" + entryID;
     Fliplet.Navigate.to(_this.config.chatLinkAction);
   });
 
-  document.addEventListener("flDirectoryEntryBeforeRender", function () {
+  document.addEventListener("flDirectoryEntryBeforeRender", function() {
     _this.disableClicks();
     _this.removeLoading();
-    loadingTimeout = setTimeout(function () {
+    loadingTimeout = setTimeout(function() {
       _this.addLoading();
     }, loadingOverlayDelay);
   }, false);
 
-  document.addEventListener("flDirectoryEntryAfterRender", function () {
+  document.addEventListener("flDirectoryEntryAfterRender", function() {
     _this.removeLoading();
   }, false);
 
-  this.$container.find('.date_cancel, .overlay-date-range .closeButton').on( 'click', function(){
+  this.$container.find('.date_cancel, .overlay-date-range .closeButton').on('click', function() {
     $('.overlay-date-range').removeClass('active');
   });
-  this.$container.find('.date_go').on( 'click', function(){
+  this.$container.find('.date_go').on('click', function() {
     $('.overlay-date-range').removeClass('active');
     _this.renderFilterValues(date_filter, _this.config.mobile_mode || !_this.deviceIsTablet);
   });
-  $(this.$container).on( 'click', '.external-link',function(){
+  $(this.$container).on('click', '.external-link', function() {
     var url = $(this).data('external-url');
     Fliplet.Navigate.url(url);
   });
 };
 
-DataDirectory.prototype.activateSearch = function(){
+DataDirectory.prototype.activateSearch = function() {
   this.$container.find('.search-cancel').css({
     'top': this.config.search_only ? '-9999px' : ''
   });
@@ -598,10 +605,10 @@ DataDirectory.prototype.activateSearch = function(){
     'pointer-events': this.config.search_only ? 'none' : ''
   });
 
-  if ( this.isMode('default') ) {
+  if (this.isMode('default')) {
     this.$container.find('.filter-selected').html('');
   }
-  if ( !this.isMode('search') && !this.isMode('filter-values') && !this.isMode('search-result') && !this.isMode('search-result-entry') ) {
+  if (!this.isMode('search') && !this.isMode('filter-values') && !this.isMode('search-result') && !this.isMode('search-result-entry')) {
     this.switchMode('search');
   }
 
@@ -612,13 +619,13 @@ DataDirectory.prototype.activateSearch = function(){
   this.flViewportRedraw();
 };
 
-DataDirectory.prototype.deactivateSearch = function(){
+DataDirectory.prototype.deactivateSearch = function() {
   if (this.config.search_only) {
     return;
   }
 
   this.$container.find('.search').trigger('blur');
-  if ( !this.config.mobile_mode && this.deviceIsTablet && this.isMode('search-result-entry') ) {
+  if (!this.config.mobile_mode && this.deviceIsTablet && this.isMode('search-result-entry')) {
     this.openDataEntry(0, 'entry', false);
   }
   this.switchMode('default');
@@ -628,7 +635,7 @@ DataDirectory.prototype.deactivateSearch = function(){
   this.flViewportRedraw();
 };
 
-DataDirectory.prototype.checkMobileMode = function(){
+DataDirectory.prototype.checkMobileMode = function() {
   if (this.config.mobile_mode) {
     this.$container.addClass('directory-mobile-mode');
   } else {
@@ -636,30 +643,30 @@ DataDirectory.prototype.checkMobileMode = function(){
   }
 };
 
-DataDirectory.prototype.resizeSearch = function(){
+DataDirectory.prototype.resizeSearch = function() {
   var _this = this;
-  setTimeout(function(){
+  setTimeout(function() {
     if (_this.config.search_only) {
-      return _this.$container.find('.search').css( 'width', '' );
+      return _this.$container.find('.search').css('width', '');
     }
 
-    if ( _this.isMode('search') || _this.isMode('filter-values') || _this.isMode('search-result') || _this.isMode('search-result-entry') ) {
-      _this.$container.find('.search').css( 'width', _this.$container.find('.directory-search').width() - _this.$container.find('.search-cancel').outerWidth() + 8 );
+    if (_this.isMode('search') || _this.isMode('filter-values') || _this.isMode('search-result') || _this.isMode('search-result-entry')) {
+      _this.$container.find('.search').css('width', _this.$container.find('.directory-search').width() - _this.$container.find('.search-cancel').outerWidth() + 8);
     } else {
-      _this.$container.find('.search').css( 'width', '' );
+      _this.$container.find('.search').css('width', '');
     }
   }, 0);
 };
 
-DataDirectory.prototype.filterOverlayIsActive = function(){
+DataDirectory.prototype.filterOverlayIsActive = function() {
   return this.filterOverlay instanceof Fliplet.Utils.Overlay;
 };
 
-DataDirectory.prototype.entryOverlayIsActive = function(){
+DataDirectory.prototype.entryOverlayIsActive = function() {
   return this.entryOverlay instanceof Fliplet.Utils.Overlay;
 };
 
-DataDirectory.prototype.dataLinkClicked = function(e){
+DataDirectory.prototype.dataLinkClicked = function(e) {
 
   this.flViewportRedraw();
 
@@ -692,28 +699,28 @@ DataDirectory.prototype.dataLinkClicked = function(e){
     case 'filter-tag':
     case 'filter':
       var filter = e.currentTarget.dataset.filter;
-      this.renderFilterValues( filter, (this.config.mobile_mode || !this.deviceIsTablet) );
+      this.renderFilterValues(filter, (this.config.mobile_mode || !this.deviceIsTablet));
       break;
     case 'filter-value-tag':
       e.stopPropagation();
     case 'filter-value':
-      this.renderSearchResult( {
+      this.renderSearchResult({
         type: e.currentTarget.dataset.type,
         field: e.currentTarget.dataset.filter,
         value: e.currentTarget.dataset.value
-      }, function(){
-        if ( _this.filterOverlayIsActive() ) {
+      }, function() {
+        if (_this.filterOverlayIsActive()) {
           _this.filterOverlay.close();
         }
-        if ( _this.entryOverlayIsActive() ) {
+        if (_this.entryOverlayIsActive()) {
           _this.entryOverlay.close();
         }
-        setTimeout(function(){
-          if ( _this.searchResultData.length === 1 ) {
+        setTimeout(function() {
+          if (_this.searchResultData.length === 1) {
             _this.openDataEntry(0, 'search-result-entry');
           }
         }, 0);
-      } );
+      });
       break;
     case 'entry':
     case 'search-result-entry':
@@ -723,33 +730,35 @@ DataDirectory.prototype.dataLinkClicked = function(e){
   }
 };
 
-DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
+DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent) {
   var _this = this;
 
-  if ( typeof type === 'undefined' ) type = 'entry';
-  if ( typeof trackEvent === 'undefined' ) trackEvent = true;
+  if (typeof type === 'undefined') type = 'entry';
+  if (typeof trackEvent === 'undefined') trackEvent = true;
 
   var $listEntry = this.$container.find('li[data-type="' + type + '"][data-index=' + entryIndex + ']');
   var $entrytitle = this.$container.find('li[data-type="' + type + '"][data-index=' + entryIndex + '] .list-title');
   var title = $entrytitle.text().trim();
   var dataArr = (type === 'search-result-entry') ? _this.searchResultData : _this.data;
   var detailData = {
-    title : title,
-    link_to_chat : this.config.enable_chat ? this.config.enable_chat : false,
-    has_thumbnail : this.config.show_thumb_detail ? this.config.show_thumb_detail : false,
-    fields : [],
+    title: title,
+    link_to_chat: this.config.enable_chat ? this.config.enable_chat : false,
+    has_thumbnail: this.config.show_thumb_detail ? this.config.show_thumb_detail : false,
+    thumbShape: this.config.thumbShape ? this.config.thumbShape : 'circular',
+    fields: [],
     dataSourceEntryId: dataArr[entryIndex]['dataSourceEntryId'] || ''
   };
 
   if (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '') {
-    detailData['has_thumbnail'] = (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_detail ? this.config.show_thumb_detail : false );
+    detailData['has_thumbnail'] = (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_detail ? this.config.show_thumb_detail : false);
+    detailData['thumbShape'] = (typeof this.config.thumbShape !== 'undefined' && this.config.thumbShape ? this.config.thumbShape : 'circular');
     detailData['thumbnail'] = (type == 'search-result-entry') ? this.searchResultData[entryIndex][this.config.thumbnail_field] : this.data[entryIndex][this.config.thumbnail_field];
   }
 
   for (var fieldIndex = 0, l = this.config.detail_fields.length; fieldIndex < l; fieldIndex++) {
-    var fieldObj = this.getEntryField( entryIndex, fieldIndex, type );
+    var fieldObj = this.getEntryField(entryIndex, fieldIndex, type);
     if (fieldObj.value.length) {
-      detailData.fields.push( fieldObj );
+      detailData.fields.push(fieldObj);
     }
   }
 
@@ -759,43 +768,63 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     detailData: detailData
   };
 
-  var directoryDetailsTemplate = (this.config.directoryDetailsTemplate !== '')
-    ? Handlebars.compile(this.config.directoryDetailsTemplate)
-    : Handlebars.templates.directoryDetails;
+  var directoryDetailsTemplate = (this.config.directoryDetailsTemplate !== '') ?
+    Handlebars.compile(this.config.directoryDetailsTemplate) :
+    Handlebars.templates.directoryDetails;
   var detailHTML = directoryDetailsTemplate(detailData);
 
-  if ( type === 'search-result-entry' ) {
+  if (type === 'search-result-entry') {
     this.switchMode('search-result-entry');
   }
 
   // Custom event to fire before an entry is rendered in the detailed view.
-  this.trigger('flDirectoryEntryBeforeRender', {detailData: detailData});
+  this.trigger('flDirectoryEntryBeforeRender', {
+    detailData: detailData
+  });
 
   var after_render = function() {
     // Link taps listeners
-    $(".directory-detail-value a").not(".data-linked").on("click", function(e){
+    $(".directory-detail-value a").not(".data-linked").on("click", function(e) {
       if ($(e.target).attr("href").indexOf("mailto") === 0) {
         // Analytics - Track Event
-        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: title });
+        Fliplet.Analytics.trackEvent({
+          category: 'directory',
+          action: 'entry_email',
+          title: title
+        });
 
       } else if ($(e.target).attr("href").indexOf("tel") === 0) {
         // Analytics - Track Event
-        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_phone', title: title });
+        Fliplet.Analytics.trackEvent({
+          category: 'directory',
+          action: 'entry_phone',
+          title: title
+        });
       } else {
         // Analytics - Track Event
-        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: title });
+        Fliplet.Analytics.trackEvent({
+          category: 'directory',
+          action: 'entry_email',
+          title: title
+        });
       }
     });
-    $(".directory-detail-value a.data-linked").on("click", function(e){
+    $(".directory-detail-value a.data-linked").on("click", function(e) {
       var filterType = (typeof $(e.target).data("type") !== "undefined") ? $(e.target).data("type") : "";
       var filterValue = (typeof $(e.target).data("value") !== "undefined") ? $(e.target).data("value") : "";
 
       // Analytics - Track Event
-      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: filterType + ": " + filterValue });
+      Fliplet.Analytics.trackEvent({
+        category: 'directory',
+        action: 'entry_email',
+        title: filterType + ": " + filterValue
+      });
     });
 
     // Custom event to fire after an entry is rendered in the detailed view.
-    _this.trigger('flDirectoryEntryAfterRender', {detailData: detailData});
+    _this.trigger('flDirectoryEntryAfterRender', {
+      detailData: detailData
+    });
   };
 
   // Function to run before rendering the entry
@@ -803,22 +832,22 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
     detailHTML = this.config.before_render_entry(detailData, detailHTML);
   }
 
-  if ( !this.config.mobile_mode && this.deviceIsTablet ) {
+  if (!this.config.mobile_mode && this.deviceIsTablet) {
     this.$container.find('.directory-details .directory-details-content').html(html_entity_decode(detailHTML));
     after_render();
-    setTimeout(function(){
+    setTimeout(function() {
       _this.$container.find('li[data-type=' + type + '].active').removeClass('active');
       $listEntry.addClass('active');
-    },0);
+    }, 0);
   } else {
-    this.entryOverlay = new Fliplet.Utils.Overlay( detailHTML, {
-      showOnInit : true,
+    this.entryOverlay = new Fliplet.Utils.Overlay(detailHTML, {
+      showOnInit: true,
       classes: 'overlay-directory',
       closeText: '<i class="fa fa-chevron-left"></i>',
       entranceAnim: 'slideInRight',
       exitAnim: 'slideOutRight',
       afterOpen: after_render,
-      afterClose: function(){
+      afterClose: function() {
         _this.entryOverlay = null;
         _this.currentEntry = null;
       }
@@ -827,16 +856,20 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent){
 
   // Analytics - Track Event
   if (trackEvent) {
-    Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_open', title: title });
+    Fliplet.Analytics.trackEvent({
+      category: 'directory',
+      action: 'entry_open',
+      title: title
+    });
   }
 };
 
-DataDirectory.prototype.disableClicks = function () {
+DataDirectory.prototype.disableClicks = function() {
   this.$container.find('.directory-list, .directory-details').addClass('disabled'); // Disables List
 };
 
 // Function that will fade in the loading overlay
-DataDirectory.prototype.addLoading = function () {
+DataDirectory.prototype.addLoading = function() {
   // The following adds Loading Overlay to a specific area depending on the device width
   if (this.config.mobile_mode || !this.deviceIsTablet) {
     this.$container.find('.directory-list').find('.directory-loading').fadeIn(400);
@@ -845,13 +878,13 @@ DataDirectory.prototype.addLoading = function () {
   }
 
   // Delay to display the "Loading..." text
-  messageTimeout = setTimeout(function () {
+  messageTimeout = setTimeout(function() {
     $('.directory-loading .loading-text').hide().text("Loading...").fadeIn(250);
   }, messageDelay);
 };
 
 // Function that will remove the loading overlay and enable clicks
-DataDirectory.prototype.removeLoading = function () {
+DataDirectory.prototype.removeLoading = function() {
   clearTimeout(loadingTimeout); // Clears delay loading overlay
   clearTimeout(messageTimeout); // Clears delay for text to appear
   // The following removes Loading Overlay from a specific area depending on the device width
@@ -865,8 +898,8 @@ DataDirectory.prototype.removeLoading = function () {
   $('.directory-loading .loading-text').text(""); // Resets Loading text
 };
 
-DataDirectory.prototype.getEntryField = function( entryIndex, fieldIndex, type ){
-  if ( typeof type === 'undefined' ) type = 'entry';
+DataDirectory.prototype.getEntryField = function(entryIndex, fieldIndex, type) {
+  if (typeof type === 'undefined') type = 'entry';
 
   var output = {};
   var label = this.config.detail_fields[fieldIndex];
@@ -876,39 +909,39 @@ DataDirectory.prototype.getEntryField = function( entryIndex, fieldIndex, type )
 
   if (typeof value === 'undefined') {
     return {
-      'label' : label,
-      'value' : ''
+      'label': label,
+      'value': ''
     }
   }
 
-  if ( this.config.hasOwnProperty('field_types') && this.config.field_types.hasOwnProperty(label) ) {
+  if (this.config.hasOwnProperty('field_types') && this.config.field_types.hasOwnProperty(label)) {
     fieldType = this.config.field_types[label];
   }
 
-  if ( fieldType === 'text' && this.config.filter_fields.indexOf(label) > -1 ) {
+  if (fieldType === 'text' && this.config.filter_fields.indexOf(label) > -1) {
     fieldType = 'filter';
     value = {
-      filter : label,
-      value : value
+      filter: label,
+      value: value
     };
   }
 
-  if ( fieldType === 'accordion' ) {
+  if (fieldType === 'accordion') {
     fieldType = 'accordion';
     value = {
-      id : fieldIndex,
-      value : value,
-      label : label
+      id: fieldIndex,
+      value: value,
+      label: label
     };
   }
 
   var valueHTML;
-  if ( (typeof value === 'object' && value && value.value && value.value.length) || (typeof value === 'string' && value.length) || (typeof value === 'number')) {
+  if ((typeof value === 'object' && value && value.value && value.value.length) || (typeof value === 'string' && value.length) || (typeof value === 'number')) {
     if (this.config.show_tags && this.config.tags_field === label && fieldType === 'filter') {
-      valueHTML = value.value.split(",").map(function (tag) {
+      valueHTML = value.value.split(",").map(function(tag) {
         tag = tag.trim();
         if (tag !== '') {
-          return '<a class="data-linked" data-type="filter-value-tag" data-value="'+tag+'" data-filter="'+value.filter+'" href="#">'+tag+'</a>';
+          return '<a class="data-linked" data-type="filter-value-tag" data-value="' + tag + '" data-filter="' + value.filter + '" href="#">' + tag + '</a>';
         }
 
         return '';
@@ -926,12 +959,12 @@ DataDirectory.prototype.getEntryField = function( entryIndex, fieldIndex, type )
   }
 
   return {
-    'label' : label,
-    'value' : valueHTML
+    'label': label,
+    'value': valueHTML
   }
 };
 
-DataDirectory.prototype.renderLiveSearch = function( value ) {
+DataDirectory.prototype.renderLiveSearch = function(value) {
 
   this.flViewportRedraw();
 
@@ -939,16 +972,16 @@ DataDirectory.prototype.renderLiveSearch = function( value ) {
   if (this.liveSearchTimeout) {
     clearTimeout(this.liveSearchTimeout);
   }
-  this.liveSearchTimeout = setTimeout(function(){
-    _this.renderSearchResult( {
+  this.liveSearchTimeout = setTimeout(function() {
+    _this.renderSearchResult({
       type: 'search',
       value: value
-    } );
+    });
   }, this.liveSearchInterval);
 
 };
 
-DataDirectory.prototype.renderSearchResult = function( options, callback ){
+DataDirectory.prototype.renderSearchResult = function(options, callback) {
   options = options || {};
 
   if (!options.hasOwnProperty('userTriggered')) {
@@ -968,6 +1001,7 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
   var _this = this;
   var data = {
     has_thumbnail: this.config.show_thumb_list ? this.config.show_thumb_list : false,
+    thumbShape: this.config.thumbShape ? this.config.thumbShape : 'circular',
     show_subtitle: this.config.show_subtitle ? this.config.show_subtitle : false,
     show_tags: this.config.show_tags ? this.config.show_tags : false,
     type: options.type,
@@ -980,14 +1014,18 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
       data.type = 'filter';
       data.field = options.field;
       data.value = options.value;
-      data.result = this.filter( options.field, options.value );
+      data.result = this.filter(options.field, options.value);
       if (this.config.field_types[options.field] === 'date') {
         var startDate = options.value[0];
         var endDate = options.value[1];
         data.value = startDate.format("DD MMM ‘YY") + '&mdash;' + endDate.format("DD MMM ‘YY");
       }
       // Analytics - Track Event
-      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'filter', title: options.type + ": " + options.value });
+      Fliplet.Analytics.trackEvent({
+        category: 'directory',
+        action: 'filter',
+        title: options.type + ": " + options.value
+      });
       break;
     case 'filter-value-tag':
       var filterByTag = function(value) {
@@ -1008,29 +1046,37 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
       data.result = this.data.filter(filterByTag);
 
       // Analytics - Track Event
-      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'list_tag_filter', title: options.type + ": " + options.value });
+      Fliplet.Analytics.trackEvent({
+        category: 'directory',
+        action: 'list_tag_filter',
+        title: options.type + ": " + options.value
+      });
 
       break;
     case 'search':
     default:
       data.type = 'search';
       data.value = options.value;
-      data.result = this.search( options.value );
+      data.result = this.search(options.value);
 
       // Analytics - Track Event
-      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'search', title: options.type + ": " + options.value });
+      Fliplet.Analytics.trackEvent({
+        category: 'directory',
+        action: 'search',
+        title: options.type + ": " + options.value
+      });
 
       break;
   }
 
   data.result.forEach(function(entry, i) {
     var imgURL = entry[_this.config.thumbnail_field];
-    if ( /^(f|ht)tps?:\/\//i.test(imgURL) ) {
+    if (/^(f|ht)tps?:\/\//i.test(imgURL)) {
 
       var img = new Image();
 
-      img.addEventListener('load', function(){
-        $('.list-default.search-result li[data-index="'+i+'"] .list-image').css('background-image', 'url(' + this.src + ')');
+      img.addEventListener('load', function() {
+        $('.list-default.search-result li[data-index="' + i + '"] .list-image').css('background-image', 'url(' + this.src + ')');
       }, false);
 
       img.src = imgURL;
@@ -1038,9 +1084,8 @@ DataDirectory.prototype.renderSearchResult = function( options, callback ){
   });
 
   this.searchResultData = data.result;
-  var searchResultTemplate = (this.config.searchResultTemplate !== '')
-    ? Handlebars.compile(this.config.searchResultTemplate)
-    : Handlebars.templates.directorySearchResult;
+  var searchResultTemplate = (this.config.searchResultTemplate !== '') ?
+    Handlebars.compile(this.config.searchResultTemplate) : Handlebars.templates.directorySearchResult;
   var directorySearchResultHTML = searchResultTemplate(data);
   this.$container.find('.search-result').html(directorySearchResultHTML).scrollTop(0);
   if (typeof callback === 'function') setTimeout(callback, 0);
@@ -1053,7 +1098,7 @@ DataDirectory.prototype.search = function(search) {
   var s = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
   var term = new RegExp(s, "i");
 
-  this.data.forEach(function (entry) {
+  this.data.forEach(function(entry) {
     for (var i = 0; i < searchFields.length; i++) {
       var value = entry[searchFields[i]];
       if (!value) {
@@ -1073,22 +1118,22 @@ DataDirectory.prototype.search = function(search) {
   return entries;
 };
 
-DataDirectory.prototype.filter = function( field, value ) {
+DataDirectory.prototype.filter = function(field, value) {
   if (this.config.field_types[field] === 'date') {
     var startDate = value[0];
     var endDate = value[1];
-    var output = _.filter(this.data, function(o){
+    var output = _.filter(this.data, function(o) {
       if (!o.hasOwnProperty(field) || !o[field]) {
         return false;
       }
       return moment(o[field]).isBetween(startDate, endDate, 'day', '[]');
     });
-    return _.sortBy(output, [function(o){
+    return _.sortBy(output, [function(o) {
       return parseInt(moment(o[field]).format('x'));
     }]);
   }
 
-  return this.data.filter(function (x) {
+  return this.data.filter(function(x) {
     return x[field] == value;
   });
 }
@@ -1105,7 +1150,7 @@ DataDirectory.prototype.getFilterValues = function(field) {
   return values.sort();
 };
 
-DataDirectory.prototype.parseQueryVars = function(){
+DataDirectory.prototype.parseQueryVars = function() {
   var query = Fliplet.Navigate.query;
   if (query.action) {
     switch (query.action) {
@@ -1124,21 +1169,21 @@ DataDirectory.prototype.parseQueryVars = function(){
       case 'open':
         break;
     }
-  } else if ( !this.config.mobile_mode && this.deviceIsTablet && !this.config.search_only ) {
+  } else if (!this.config.mobile_mode && this.deviceIsTablet && !this.config.search_only) {
     // Open the first entry if on a tablet and search_only mode isn't on
     this.openDataEntry(0, 'entry', false);
   }
 };
 
-DataDirectory.prototype.presetSearch = function( value ){
-  this.$container.find('.search').val( value );
-  this.renderSearchResult( {
-    type : 'search',
-    value : value,
-    userTriggered : false
-  } );
+DataDirectory.prototype.presetSearch = function(value) {
+  this.$container.find('.search').val(value);
+  this.renderSearchResult({
+    type: 'search',
+    value: value,
+    userTriggered: false
+  });
   if (this.searchResultData.length === 1 && !this.currentEntry) {
-    this.openDataEntry(0,'search-result-entry');
+    this.openDataEntry(0, 'search-result-entry');
     if (this.config.mobile_mode || !this.deviceIsTablet) {
       this.switchMode('default');
     }
@@ -1146,23 +1191,23 @@ DataDirectory.prototype.presetSearch = function( value ){
   this.flViewportRedraw();
 };
 
-DataDirectory.prototype.presetFilter = function( field, value ){
-  this.renderSearchResult( {
-    type : 'filter',
-    field : field,
-    value : value,
-    userTriggered : false
-  } );
+DataDirectory.prototype.presetFilter = function(field, value) {
+  this.renderSearchResult({
+    type: 'filter',
+    field: field,
+    value: value,
+    userTriggered: false
+  });
   this.flViewportRedraw();
 };
 
-DataDirectory.prototype.directoryNotConfigured = function(){
+DataDirectory.prototype.directoryNotConfigured = function() {
   this.$container.find('.directory-entries').addClass('not-configured').html('No data is found for the directory');
 };
 
-DataDirectory.prototype.flViewportRedraw = function(){
+DataDirectory.prototype.flViewportRedraw = function() {
   $(document.body).css('-webkit-transform', 'scale(1)');
-  setTimeout(function(){
+  setTimeout(function() {
     $(document.body).css('-webkit-transform', '');
   }, 0);
 };

@@ -32,16 +32,19 @@ var DataDirectoryForm = (function() {
     return Handlebars.compile($('#template-' + name).html());
   }
 
-  var upTo = [{ back: openRoot, name: 'Root'}];
+  var upTo = [{
+    back: openRoot,
+    name: 'Root'
+  }];
   var folders,
-      apps,
-      organizations;
+    apps,
+    organizations;
 
   function getApps() {
     return Fliplet.Apps
       .get()
-      .then(function (apps) {
-        return apps.filter(function (app) {
+      .then(function(apps) {
+        return apps.filter(function(app) {
           return !app.legacy;
         });
       });
@@ -56,9 +59,9 @@ var DataDirectoryForm = (function() {
 
     var organizationId = Fliplet.Env.get('organizationId');
     return Promise.all([
-      Fliplet.Organizations.get(),
-      getApps()
-    ])
+        Fliplet.Organizations.get(),
+        getApps()
+      ])
       .then(function renderRoot(values) {
         organizations = values[0];
         apps = values[1];
@@ -69,17 +72,26 @@ var DataDirectoryForm = (function() {
   }
 
   function openFolder(folderId) {
-    Fliplet.Media.Folders.get({ type: 'folders', folderId: folderId })
+    Fliplet.Media.Folders.get({
+        type: 'folders',
+        folderId: folderId
+      })
       .then(renderFolderContent);
   }
 
   function openApp(appId) {
-    Fliplet.Media.Folders.get({ type: 'folders', appId: appId })
+    Fliplet.Media.Folders.get({
+        type: 'folders',
+        appId: appId
+      })
       .then(renderFolderContent);
   }
 
   function openOrganization(organizationId) {
-    Fliplet.Media.Folders.get({ type: 'folders', organizationId: organizationId })
+    Fliplet.Media.Folders.get({
+        type: 'folders',
+        organizationId: organizationId
+      })
       .then(renderFolderContent);
   }
 
@@ -129,7 +141,7 @@ var DataDirectoryForm = (function() {
   var _this;
 
   // Constructor
-  function DataDirectoryForm( configuration ) {
+  function DataDirectoryForm(configuration) {
     _this = this;
 
     this.tables = configuration.dataSources;
@@ -140,18 +152,24 @@ var DataDirectoryForm = (function() {
     }
     delete configuration.dataSources;
 
-    this.directoryConfig = $.extend( {
-      is_alphabetical : true,
-      alphabetical_field : "",
-      label_template : "",
-      filter_fields : [],
-      search_fields : [],
-      detail_fields : [],
+    if (!configuration.thumbShape) {
+      $('[name=thumb_shape][value="square"]').prop('checked', true);
+    } else {
+      $('[name=thumb_shape][value="' + configuration.thumbShape + '"]').prop('checked', true);
+    }
+
+    this.directoryConfig = $.extend({
+      is_alphabetical: true,
+      alphabetical_field: "",
+      label_template: "",
+      filter_fields: [],
+      search_fields: [],
+      detail_fields: [],
       source: '',
-      field_types : {},
-      folderConfig : {}
+      field_types: {},
+      folderConfig: {}
     }, configuration);
-    if ( typeof this.directoryConfig.field_types === 'string' && this.directoryConfig.field_types.length ) {
+    if (typeof this.directoryConfig.field_types === 'string' && this.directoryConfig.field_types.length) {
       this.directoryConfig.field_types = JSON.parse(this.directoryConfig.field_types);
     }
 
@@ -161,11 +179,11 @@ var DataDirectoryForm = (function() {
 
     if (typeof configuration.folderConfig !== 'undefined' && configuration.thumbnail_field !== null && configuration.thumbnail_field.length) {
       if ('organizationId' in configuration.folderConfig) {
-        $('.item-holder[data-organization-id="'+configuration.folderConfig.organizationId+'"]').addClass('selected');
+        $('.item-holder[data-organization-id="' + configuration.folderConfig.organizationId + '"]').addClass('selected');
       } else if ('appId' in configuration.folderConfig) {
-        $('.item-holder[data-app-id="'+configuration.folderConfig.appId+'"]').addClass('selected');
+        $('.item-holder[data-app-id="' + configuration.folderConfig.appId + '"]').addClass('selected');
       } else if ('folderId' in configuration.folderConfig) {
-        $('.item-holder[data-folder-id="'+configuration.folderConfig.folderId+'"]').addClass('selected');
+        $('.item-holder[data-folder-id="' + configuration.folderConfig.folderId + '"]').addClass('selected');
       }
     }
 
@@ -177,46 +195,46 @@ var DataDirectoryForm = (function() {
 
   DataDirectoryForm.prototype = {
     // Public functions
-    constructor : DataDirectoryForm,
+    constructor: DataDirectoryForm,
 
     // Public variables
-    varName : null,
+    varName: null,
 
-    initialiseHandlebars : function(){
-      Handlebars.registerHelper("select", function(value, options){
-        var $el = $('<select />').html( options.fn(this) );
+    initialiseHandlebars: function() {
+      Handlebars.registerHelper("select", function(value, options) {
+        var $el = $('<select />').html(options.fn(this));
         $el.find('[value="' + value + '"]').attr('selected', true);
         return $el.html();
       });
 
-      Handlebars.registerHelper("filterCheckbox", function(field){
-        var $input = $("<div class='checkbox'><input data-field='"+field+"' data-type='filter' type='checkbox' id='filter_"+field+"'><label for='filter_"+field+"'><span class='check'><i class='fa fa-check'></i></span></label></div>");
+      Handlebars.registerHelper("filterCheckbox", function(field) {
+        var $input = $("<div class='checkbox'><input data-field='" + field + "' data-type='filter' type='checkbox' id='filter_" + field + "'><label for='filter_" + field + "'><span class='check'><i class='fa fa-check'></i></span></label></div>");
 
-        if ( _this.directoryConfig.filter_fields.indexOf(field) > -1 ) {
-          $input.find('input').attr('checked',true);
+        if (_this.directoryConfig.filter_fields.indexOf(field) > -1) {
+          $input.find('input').attr('checked', true);
         }
 
         return $input[0].outerHTML;
       });
 
-      Handlebars.registerHelper("searchCheckbox", function(field){
-        var $input = $("<div class='checkbox'><input data-field='"+field+"' data-type='search' type='checkbox' id='search_"+field+"'><label for='search_"+field+"'><span class='check'><i class='fa fa-check'></i></span></label></div>");
+      Handlebars.registerHelper("searchCheckbox", function(field) {
+        var $input = $("<div class='checkbox'><input data-field='" + field + "' data-type='search' type='checkbox' id='search_" + field + "'><label for='search_" + field + "'><span class='check'><i class='fa fa-check'></i></span></label></div>");
 
-        if ( _this.directoryConfig.search_fields.indexOf(field) > -1 ) {
-          $input.find('input').attr('checked',true);
+        if (_this.directoryConfig.search_fields.indexOf(field) > -1) {
+          $input.find('input').attr('checked', true);
         }
 
         return $input[0].outerHTML;
       });
 
-      Handlebars.registerHelper("typeSelector", function(field){
+      Handlebars.registerHelper("typeSelector", function(field) {
         var typeSelectorTemplate = $('#data-type-selector-template').html();
         var fieldType = 'text';
-        if ( typeof _this.directoryConfig.field_types[field] !== 'undefined' ) {
+        if (typeof _this.directoryConfig.field_types[field] !== 'undefined') {
           fieldType = _this.directoryConfig.field_types[field];
         }
 
-        var $select = $( typeSelectorTemplate );
+        var $select = $(typeSelectorTemplate);
         $select.attr('data-field', field);
         $select.attr('data-type', 'type');
         $select.find('[value="' + fieldType + '"]').attr('selected', true);
@@ -225,10 +243,10 @@ var DataDirectoryForm = (function() {
       });
     },
 
-    parseSelectedTable : function(tableID, autoConfigure){
+    parseSelectedTable: function(tableID, autoConfigure) {
       if (tableID !== '') {
         for (var i = 0, l = _this.tables.length; i < l; i++) {
-          if ( _this.tables[i].hasOwnProperty('id') && _this.tables[i].id == tableID ) {
+          if (_this.tables[i].hasOwnProperty('id') && _this.tables[i].id == tableID) {
             _this.source = _this.tables[i].id;
             _this.columns = _this.tables[i].columns;
 
@@ -249,7 +267,7 @@ var DataDirectoryForm = (function() {
       }
     },
 
-    loadDataDirectoryForm : function(){
+    loadDataDirectoryForm: function() {
       $('#data-sources').html(Handlebars.templates.dataSourceOptions(_this.tables));
       $('#data-alphabetical-fields').html(Handlebars.templates.dataAlphabeticalField(_this.columns));
       $('#data-tags-fields').html(Handlebars.templates.dataTagsField(_this.columns));
@@ -280,19 +298,19 @@ var DataDirectoryForm = (function() {
 
     },
 
-    autoConfigureSearch : function(){
-      _this.directoryConfig.search_fields = (_this.columns && _this.columns.length > 4)
-        ? _this.columns.slice(0,4)
-        : _this.columns;
+    autoConfigureSearch: function() {
+      _this.directoryConfig.search_fields = (_this.columns && _this.columns.length > 4) ?
+        _this.columns.slice(0, 4) :
+        _this.columns;
     },
 
-    autoConfigureFilter : function(){
-      _this.directoryConfig.filter_fields = (_this.columns && _this.columns.length > 3)
-        ? _this.columns.slice(1,3)
-        : _this.columns;
+    autoConfigureFilter: function() {
+      _this.directoryConfig.filter_fields = (_this.columns && _this.columns.length > 3) ?
+        _this.columns.slice(1, 3) :
+        _this.columns;
     },
 
-    autoConfigureBrowse : function(){
+    autoConfigureBrowse: function() {
       if (!_this.columns || !_this.columns.length) {
         return;
       }
@@ -300,14 +318,14 @@ var DataDirectoryForm = (function() {
       _this.directoryConfig.alphabetical_field = _this.columns[0];
     },
 
-    autoConfigureDetails : function(){
-      _this.directoryConfig.detail_fields = $.extend([],_this.columns);
-      if ( _this.directoryConfig.detail_fields.length > 1 ) {
+    autoConfigureDetails: function() {
+      _this.directoryConfig.detail_fields = $.extend([], _this.columns);
+      if (_this.directoryConfig.detail_fields.length > 1) {
         _this.directoryConfig.detail_fields.shift();
       }
     },
 
-    loadConfigurations_ : function(){
+    loadConfigurations_: function() {
       $('#data-sources option[value=""]').remove();
       $('a[href="#data-source"][data-toggle="tab"]').html('Change data source');
       $('.nav.nav-stacked li.disabled').removeClass('disabled');
@@ -318,32 +336,32 @@ var DataDirectoryForm = (function() {
       });
 
 
-      $('#directory-browse-label').val( _this.directoryConfig.label_template );
+      $('#directory-browse-label').val(_this.directoryConfig.label_template);
 
-      $('#data-alphabetical-fields-select').val( _this.directoryConfig.alphabetical_field );
+      $('#data-alphabetical-fields-select').val(_this.directoryConfig.alphabetical_field);
       updateSelectText($('#data-alphabetical-fields-select'));
 
-      if ( typeof _this.directoryConfig.is_alphabetical === 'string' ) {
-        _this.directoryConfig.is_alphabetical = ( _this.directoryConfig.is_alphabetical.toLowerCase().trim() === 'true' );
+      if (typeof _this.directoryConfig.is_alphabetical === 'string') {
+        _this.directoryConfig.is_alphabetical = (_this.directoryConfig.is_alphabetical.toLowerCase().trim() === 'true');
       }
-      $('[name=is_alphabetical][value="' + (_this.directoryConfig.is_alphabetical ? 'true' : 'false') + '"]').attr('checked',true);
+      $('[name=is_alphabetical][value="' + (_this.directoryConfig.is_alphabetical ? 'true' : 'false') + '"]').attr('checked', true);
 
 
-      $('#data-thumbnail-fields-select').val( _this.directoryConfig.thumbnail_field );
+      $('#data-thumbnail-fields-select').val(_this.directoryConfig.thumbnail_field);
       updateSelectText($('#data-thumbnail-fields-select'));
 
       $('#data-detail-fields').val(_this.directoryConfig.detail_fields.join(','));
 
       if (_this.directoryConfig.show_subtitle) {
         $('#show_subtitle').prop('checked', true);
-        $('#directory-browse-subtitle').val( _this.directoryConfig.subtitle );
+        $('#directory-browse-subtitle').val(_this.directoryConfig.subtitle);
         updateSelectText($('#directory-browse-subtitle'));
         $('.show-subtitle').show();
       }
 
       if (_this.directoryConfig.show_tags) {
         $('#show_tags').prop('checked', true);
-        $('#data-tags-fields-select').val( _this.directoryConfig.tags_field );
+        $('#data-tags-fields-select').val(_this.directoryConfig.tags_field);
         updateSelectText($('#data-tags-fields-select'));
         $('.show-tags').show();
       }
@@ -353,24 +371,24 @@ var DataDirectoryForm = (function() {
       }
 
       if (_this.directoryConfig.enable_chat) {
-        $('#chat-yes').prop('checked',true);
+        $('#chat-yes').prop('checked', true);
         $('.chat-screen-selection').removeClass('hidden')
       } else {
-        $('#chat-no').prop('checked',true).trigger('change');
+        $('#chat-no').prop('checked', true).trigger('change');
       }
 
     },
 
-    attachObservers_ : function(){
+    attachObservers_: function() {
       $('.image-library')
-        .on('dblclick', '[data-folder-id]', function () {
+        .on('dblclick', '[data-folder-id]', function() {
           var $el = $(this);
           var id = $el.data('folder-id');
           var backItem;
 
           // Store to nav stack
           backItem = _.find(folders, ['id', id]);
-          backItem.back = function () {
+          backItem.back = function() {
             openFolder(id);
           };
           upTo.push(backItem);
@@ -381,14 +399,14 @@ var DataDirectoryForm = (function() {
           // Update paths
           updatePaths();
         })
-        .on('dblclick', '[data-app-id]', function () {
+        .on('dblclick', '[data-app-id]', function() {
           var $el = $(this);
           var id = $el.data('app-id');
           var backItem;
 
           // Store to nav stack
           backItem = _.find(apps, ['id', id]);
-          backItem.back = function () {
+          backItem.back = function() {
             openApp(id);
           };
           upTo.push(backItem);
@@ -399,14 +417,14 @@ var DataDirectoryForm = (function() {
           // Update paths
           updatePaths();
         })
-        .on('dblclick', '[data-organization-id]', function () {
+        .on('dblclick', '[data-organization-id]', function() {
           var $el = $(this);
           var id = $el.data('organization-id');
           var backItem;
 
           // Store to nav stack
           backItem = _.find(organizations, ['id', id]);
-          backItem.back = function () {
+          backItem.back = function() {
             openOrganization(id);
           };
           upTo.push(backItem);
@@ -418,10 +436,10 @@ var DataDirectoryForm = (function() {
           updatePaths();
 
         })
-        .on('click', '[data-folder-id]', function () {
+        .on('click', '[data-folder-id]', function() {
           var $el = $(this);
           // Removes any selected folder
-          $('.folder').not(this).each(function(){
+          $('.folder').not(this).each(function() {
             $(this).removeClass('selected');
           });
 
@@ -430,15 +448,17 @@ var DataDirectoryForm = (function() {
             _this.folderConfig = {};
           } else {
             $('.folder-selection span').html('You have selected a folder');
-            _this.folderConfig = { folderId: $el.data('folder-id') };
+            _this.folderConfig = {
+              folderId: $el.data('folder-id')
+            };
           }
 
           $el.toggleClass('selected');
         })
-        .on('click', '[data-app-id]', function () {
+        .on('click', '[data-app-id]', function() {
           var $el = $(this);
           // Removes any selected folder
-          $('.folder').not(this).each(function(){
+          $('.folder').not(this).each(function() {
             $(this).removeClass('selected');
           });
 
@@ -447,15 +467,17 @@ var DataDirectoryForm = (function() {
             _this.folderConfig = {};
           } else {
             $('.folder-selection span').html('You have selected a folder');
-            _this.folderConfig = { appId: $el.data('app-id') };
+            _this.folderConfig = {
+              appId: $el.data('app-id')
+            };
           }
 
           $el.toggleClass('selected');
         })
-        .on('click', '[data-organization-id]', function () {
+        .on('click', '[data-organization-id]', function() {
           var $el = $(this);
           // Removes any selected folder
-          $('.folder').not(this).each(function(){
+          $('.folder').not(this).each(function() {
             $(this).removeClass('selected');
           });
 
@@ -464,28 +486,30 @@ var DataDirectoryForm = (function() {
             _this.folderConfig = {};
           } else {
             $('.folder-selection span').html('You have selected a folder');
-            _this.folderConfig = { organizationId: $el.data('organization-id') };
+            _this.folderConfig = {
+              organizationId: $el.data('organization-id')
+            };
           }
 
           $el.toggleClass('selected');
         });
 
-      $('.back-btn').click(function () {
+      $('.back-btn').click(function() {
         if (upTo.length === 1) {
           return;
         }
 
         upTo.pop();
-        upTo[upTo.length-1].back();
+        upTo[upTo.length - 1].back();
         updatePaths();
       });
 
-      $(document).on( "click", "#save-link", _this.saveDataDirectoryForm_ );
-      $('#data-sources').on( 'change', $.proxy(_this.dataSourceChanged_,this) );
-      $('#data-source-tab').on( 'change', '#data-thumbnail-fields-select', _this.showThumbOptions_);
-      $('.nav.nav-stacked').on( 'click', 'li.disabled', function(){
+      $(document).on("click", "#save-link", _this.saveDataDirectoryForm_);
+      $('#data-sources').on('change', $.proxy(_this.dataSourceChanged_, this));
+      $('#data-source-tab').on('change', '#data-thumbnail-fields-select', _this.showThumbOptions_);
+      $('.nav.nav-stacked').on('click', 'li.disabled', function() {
         return false;
-      } );
+      });
 
       $('#show_subtitle').on('change', function() {
         if ($(this).is(":checked")) {
@@ -506,7 +530,7 @@ var DataDirectoryForm = (function() {
         }
       });
 
-      $('.tab-content').on('change', '#data-tags-fields-select, #data-alphabetical-fields-select, #data-sources, #data-thumbnail-fields-select, #data-browse-configurations select', function () {
+      $('.tab-content').on('change', '#data-tags-fields-select, #data-alphabetical-fields-select, #data-sources, #data-thumbnail-fields-select, #data-browse-configurations select', function() {
         updateSelectText($(this));
       });
 
@@ -521,46 +545,47 @@ var DataDirectoryForm = (function() {
       });
     },
 
-    saveDataDirectoryForm_ : function(){
+    saveDataDirectoryForm_: function() {
       var data = {
         source: $("#data-sources").val(),
         filter_fields: [],
         search_fields: [],
         data_fields: this.columns,
         field_types: {},
-        folderConfig : _this.folderConfig,
+        folderConfig: _this.folderConfig,
         label_template: $('#directory-browse-label').val(),
         show_subtitle: $("#show_subtitle").is(':checked'),
         subtitle: $("#show_subtitle").is(':checked') ? $('#directory-browse-subtitle').val() : '',
-        is_alphabetical: ( $('[name=is_alphabetical]:checked').val() === "true" ),
+        is_alphabetical: ($('[name=is_alphabetical]:checked').val() === "true"),
         alphabetical_field: $('#data-alphabetical-fields-select').val(),
         show_tags: $("#show_tags").is(':checked'),
         tags_field: $("#show_tags").is(':checked') ? $('#data-tags-fields-select').val() : '',
         thumbnail_field: $('#data-thumbnail-fields-select').val(),
         show_thumb_list: ($('[name=enable_thumb_list]:checked').val() === "show" ? true : false),
         show_thumb_detail: ($('[name=enable_thumb_details]:checked').val() === "show" ? true : false),
+        thumbShape: $('[name=thumb_shape]:checked').val(),
         enable_live_data: ($('#enable_live_data:checked').val() === "on" ? true : false),
         enable_chat: ($('[name=enable_chat]:checked').val() === "enable-chat" ? true : false)
       };
 
-      $('[data-type="filter"]:checked').each(function(){
-        data.filter_fields.push( $(this).data('field') );
+      $('[data-type="filter"]:checked').each(function() {
+        data.filter_fields.push($(this).data('field'));
       });
 
-      $('[data-type="search"]:checked').each(function(){
-        data.search_fields.push( $(this).data('field') );
+      $('[data-type="search"]:checked').each(function() {
+        data.search_fields.push($(this).data('field'));
       });
 
-      $('[data-type="type"]').each(function(){
+      $('[data-type="type"]').each(function() {
         data.field_types[$(this).data('field')] = $(this).find('select').val();
       });
       data.field_types = JSON.stringify(data.field_types);
 
       var detailFields = $('#data-detail-fields').val().trim();
       if (detailFields !== "") {
-        detailFields = detailFields.split(",").map(function (field) {
+        detailFields = detailFields.split(",").map(function(field) {
           return field.trim();
-        }).filter(function (field) {
+        }).filter(function(field) {
           return !(field.trim() === '');
 
         });
@@ -573,17 +598,17 @@ var DataDirectoryForm = (function() {
       this.directoryConfig = data;
     },
 
-    dataSourceChanged_ : function(e){
-      if ( _this.source === "" || confirm("Are you sure you want to change the data source? This will reset your previous configuration for the directory.") ) {
-        _this.parseSelectedTable( $(e.target).val(), true );
+    dataSourceChanged_: function(e) {
+      if (_this.source === "" || confirm("Are you sure you want to change the data source? This will reset your previous configuration for the directory.")) {
+        _this.parseSelectedTable($(e.target).val(), true);
         _this.loadDataDirectoryForm();
       } else {
         _this.source;
       }
     },
 
-    showThumbOptions_ : function(e){
-      if ( $(this).val() !== '' ) {
+    showThumbOptions_: function(e) {
+      if ($(this).val() !== '') {
         $('.thumbs-options').addClass('show');
       } else {
         $('.thumbs-options.show').removeClass('show');

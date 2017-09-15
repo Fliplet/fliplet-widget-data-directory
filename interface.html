@@ -97,9 +97,9 @@
 
         <div class="chat-screen-selection hidden">
           <div class="row">
-              <div class="col-xs-12">
-                  <p>Which screen is the Chat screen?</p>
-              </div>
+            <div class="col-xs-12">
+              <p>Which screen is the Chat screen?</p>
+            </div>
           </div>
           <div id="chat-screen"></div>
         </div>
@@ -126,7 +126,7 @@
         <div class="thumbs-options">
           <div class="form-group clearfix inline-radio">
             <div class="col-sm-4 control-label">
-              <label for="swipe-to-save">Enable thumbnails on the Main list</label>
+              <label>Enable thumbnails on the Main list</label>
             </div>
             <div class="col-sm-8">
               <div class="radio-buttons clearfix">
@@ -148,7 +148,7 @@
 
           <div class="form-group clearfix inline-radio">
             <div class="col-sm-4 control-label">
-              <label for="swipe-to-save">Enable thumbnails on the Details</label>
+              <label>Enable thumbnails on the Details</label>
             </div>
             <div class="col-sm-8">
               <div class="radio-buttons clearfix">
@@ -168,6 +168,28 @@
             </div>
           </div>
 
+          <div class="form-group clearfix inline-radio">
+            <div class="col-sm-4 control-label">
+              <label>In what shape do you want your thumbnails?</label>
+            </div>
+            <div class="col-sm-8">
+              <div class="radio-buttons clearfix">
+                <div class="radio">
+                  <input type="radio" id="thumb-shape-square" name="thumb_shape" value="square">
+                  <label for="thumb-shape-square">
+                    Square
+                  </label>
+                </div>
+                <div class="radio">
+                  <input type="radio" id="thumb-shape-circle" name="thumb_shape" value="circular">
+                  <label for="thumb-shape-circle">
+                    Circular
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="title-header">
             <p>Select the thumbnails folder</p>
             <p>Select the folder where your thumbnails are stored.</p>
@@ -178,11 +200,11 @@
               <div class="helper"><strong>Root</strong></div>
             </div>
             <div class="back-btn">
-                Up to <span class="up-to">Folder Name</span>
+              Up to <span class="up-to">Folder Name</span>
             </div>
           </div>
           <div class="folder-selection">
-              <span>Select a folder below</span>
+            <span>Select a folder below</span>
           </div>
           <div class="image-library"></div>
 

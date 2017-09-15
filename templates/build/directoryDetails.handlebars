@@ -1,6 +1,6 @@
 <div data-source-entry-id="{{dataSourceEntryId}}">
     <div class="directory-detail-title {{#if has_thumbnail}}has-thumbnail{{/if}}">
-        {{#if has_thumbnail}}<span class="thumbnail"><span class="helper"></span><span class="img-wrapper circular" {{#if thumbnail}} style="background-image: url('{{thumbnail}}');" {{/if}}></span></span>
+        {{#if has_thumbnail}}<span class="thumbnail"><span class="helper"></span><span class="img-wrapper {{thumbShape}}" {{#if thumbnail}} style="background-image: url('{{thumbnail}}');" {{/if}}></span></span>
         {{/if}}{{title}}</div>
         {{#if link_to_chat}}
         <div class="button-tray">

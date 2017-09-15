@@ -308,7 +308,7 @@ DataDirectory.prototype.renderEntries = function() {
     show_subtitle: this.config.show_subtitle ? this.config.show_subtitle : false,
     show_tags: this.config.show_tags ? this.config.show_tags : false,
     has_thumbnail: (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field !== null && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_list ? this.config.show_thumb_list : false),
-    thumbShape: (typeof this.config.thumbShape !== 'undefined' && this.config.thumbShape !== null && this.config.thumbShape ? this.config.thumbShape : 'square'),
+    thumbShape: (typeof this.config.thumbShape !== 'undefined' && this.config.thumbShape !== null && this.config.thumbShape ? this.config.thumbShape : 'circular'),
     entries: this.data
   };
   var directoryListTemplate = (this.config.directoryListTemplate !== '') ?
@@ -744,14 +744,14 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent) {
     title: title,
     link_to_chat: this.config.enable_chat ? this.config.enable_chat : false,
     has_thumbnail: this.config.show_thumb_detail ? this.config.show_thumb_detail : false,
-    thumbShape: this.config.thumbShape ? this.config.thumbShape : 'square',
+    thumbShape: this.config.thumbShape ? this.config.thumbShape : 'circular',
     fields: [],
     dataSourceEntryId: dataArr[entryIndex]['dataSourceEntryId'] || ''
   };
 
   if (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '') {
     detailData['has_thumbnail'] = (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_detail ? this.config.show_thumb_detail : false);
-    detailData['thumbShape'] = (typeof this.config.thumbShape !== 'undefined' && this.config.thumbShape ? this.config.thumbShape : 'square');
+    detailData['thumbShape'] = (typeof this.config.thumbShape !== 'undefined' && this.config.thumbShape ? this.config.thumbShape : 'circular');
     detailData['thumbnail'] = (type == 'search-result-entry') ? this.searchResultData[entryIndex][this.config.thumbnail_field] : this.data[entryIndex][this.config.thumbnail_field];
   }
 
@@ -1001,7 +1001,7 @@ DataDirectory.prototype.renderSearchResult = function(options, callback) {
   var _this = this;
   var data = {
     has_thumbnail: this.config.show_thumb_list ? this.config.show_thumb_list : false,
-    thumbShape: this.config.thumbShape ? this.config.thumbShape : 'square',
+    thumbShape: this.config.thumbShape ? this.config.thumbShape : 'circular',
     show_subtitle: this.config.show_subtitle ? this.config.show_subtitle : false,
     show_tags: this.config.show_tags ? this.config.show_tags : false,
     type: options.type,

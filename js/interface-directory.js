@@ -153,7 +153,7 @@ var DataDirectoryForm = (function() {
     delete configuration.dataSources;
 
     if (!configuration.thumbShape) {
-      $('[name=thumb_shape][value="square"]').prop('checked', true);
+      $('[name=thumb_shape][value="circular"]').prop('checked', true);
     } else {
       $('[name=thumb_shape][value="' + configuration.thumbShape + '"]').prop('checked', true);
     }

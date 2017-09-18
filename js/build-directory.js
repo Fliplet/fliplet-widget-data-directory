@@ -52,7 +52,7 @@ var DataDirectory = function(config, container) {
 
   this.checkMobileMode();
 
-  var folderID = this.config.folderConfig;
+  var folderID = this.config.folder.selectFiles[0].id;
 
   function initialize() {
     _this.initialiseHandlebars();
@@ -69,12 +69,14 @@ var DataDirectory = function(config, container) {
   });
 
   function renderThumb(file) {
-    // Returns placeholder if no match
-    _this.data.forEach(function(entry) {
-      if (file.name.indexOf(entry[_this.config.thumbnail_field]) !== -1 && entry[_this.config.thumbnail_field].trim() !== '') {
-        entry[_this.config.thumbnail_field] = file.url;
-      }
-    });
+    if (_this.data) {
+      // Returns placeholder if no match
+      _this.data.forEach(function(entry) {
+        if (file.name.indexOf(entry[_this.config.thumbnail_field]) !== -1 && entry[_this.config.thumbnail_field].trim() !== '') {
+          entry[_this.config.thumbnail_field] = file.url;
+        }
+      });
+    }
   }
 
   if (typeof this.config.is_alphabetical === 'string') {
@@ -232,7 +234,7 @@ DataDirectory.prototype.init = function() {
   // This before check data length because means that we are probably trying to load something with custom code
   if (!this.config.directory_enabled) return;
 
-  if (!this.data.length) {
+  if (!this.data || !this.data.length) {
     return this.directoryNotConfigured();
   }
 
@@ -501,25 +503,27 @@ DataDirectory.prototype.isMode = function(mode) {
 DataDirectory.prototype.attachObservers = function() {
   var _this = this;
 
-  _this.data.forEach(function(entry, i) {
-    var imgURL = entry[_this.config.thumbnail_field];
+  if (_this.data) {
+    _this.data.forEach(function(entry, i) {
+      var imgURL = entry[_this.config.thumbnail_field];
 
-    if (/api\.fliplet\.(com|local)/.test(imgURL)) {
-      // attach auth token
-      imgURL += (imgURL.indexOf('?') === -1 ? '?' : '&') + 'auth_token=' + Fliplet.User.getAuthToken();
-    }
+      if (/api\.fliplet\.(com|local)/.test(imgURL)) {
+        // attach auth token
+        imgURL += (imgURL.indexOf('?') === -1 ? '?' : '&') + 'auth_token=' + Fliplet.User.getAuthToken();
+      }
 
-    if (/^(f|ht)tps?:\/\//i.test(imgURL)) {
+      if (/^(f|ht)tps?:\/\//i.test(imgURL)) {
 
-      var img = new Image();
+        var img = new Image();
 
-      img.addEventListener('load', function() {
-        $('.list-default.directory-entries li[data-index="' + i + '"] .list-image').css('background-image', 'url(' + this.src + ')');
-      }, false);
+        img.addEventListener('load', function() {
+          $('.list-default.directory-entries li[data-index="' + i + '"] .list-image').css('background-image', 'url(' + this.src + ')');
+        }, false);
 
-      img.src = imgURL;
-    }
-  });
+        img.src = imgURL;
+      }
+    });
+  }
 
   this.$container.on('click', '.data-linked', $.proxy(this.dataLinkClicked, this));
   $(window).on('resize', function() {

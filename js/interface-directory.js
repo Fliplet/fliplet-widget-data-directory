@@ -3,135 +3,6 @@
 /*****************  DataDirectoryForm  *****************/
 
 var DataDirectoryForm = (function() {
-
-  var $imagesContainer = $('.image-library');
-  var templates = {
-    folder: template('folder'),
-    app: template('app'),
-    organization: template('organization'),
-    noFiles: template('nofiles')
-  };
-
-  function addFolder(folder) {
-    $imagesContainer.append(templates.folder(folder));
-  }
-
-  function addApp(app) {
-    $imagesContainer.append(templates.app(app));
-  }
-
-  function addOrganization(organization) {
-    $imagesContainer.append(templates.organization(organization));
-  }
-
-  function noFiles() {
-    $imagesContainer.html(templates.noFiles());
-  }
-
-  function template(name) {
-    return Handlebars.compile($('#template-' + name).html());
-  }
-
-  var upTo = [{
-    back: openRoot,
-    name: 'Root'
-  }];
-  var folders,
-    apps,
-    organizations;
-
-  function getApps() {
-    return Fliplet.Apps
-      .get()
-      .then(function(apps) {
-        return apps.filter(function(app) {
-          return !app.legacy;
-        });
-      });
-  }
-
-  function openRoot() {
-    // Clean library container
-    $imagesContainer.html('');
-
-    // Update paths
-    updatePaths();
-
-    var organizationId = Fliplet.Env.get('organizationId');
-    return Promise.all([
-        Fliplet.Organizations.get(),
-        getApps()
-      ])
-      .then(function renderRoot(values) {
-        organizations = values[0];
-        apps = values[1];
-
-        values[0].forEach(addOrganization);
-        values[1].forEach(addApp);
-      });
-  }
-
-  function openFolder(folderId) {
-    Fliplet.Media.Folders.get({
-        type: 'folders',
-        folderId: folderId
-      })
-      .then(renderFolderContent);
-  }
-
-  function openApp(appId) {
-    Fliplet.Media.Folders.get({
-        type: 'folders',
-        appId: appId
-      })
-      .then(renderFolderContent);
-  }
-
-  function openOrganization(organizationId) {
-    Fliplet.Media.Folders.get({
-        type: 'folders',
-        organizationId: organizationId
-      })
-      .then(renderFolderContent);
-  }
-
-  function renderFolderContent(values) {
-    $('.folder-selection span').html('Select an folder below');
-    $imagesContainer.html('');
-
-    if (!values.folders.length) {
-      return noFiles();
-    }
-
-    folders = values.folders;
-
-    // Render folders and files
-    _.sortBy(values.folders, ['name']).forEach(addFolder);
-  }
-
-  function updatePaths() {
-    if (upTo.length === 1) {
-      // Hide them
-      $('.back-btn').hide();
-      $('.breadcrumbs-select').hide();
-
-      return;
-    }
-
-    // Show them
-    $('.breadcrumbs-select').show();
-    $('.back-btn').show();
-
-    // Parent folder
-    $('.up-to').html(upTo[upTo.length - 2].name);
-
-    // Current folder
-    $('.helper strong').html(upTo[upTo.length - 1].name);
-  }
-
-  // init
-  openRoot();
-
   function updateSelectText($el) {
     var selectedText = $el.find('option:selected').text();
     $el.parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
@@ -167,7 +38,7 @@ var DataDirectoryForm = (function() {
       detail_fields: [],
       source: '',
       field_types: {},
-      folderConfig: {}
+      folder: {}
     }, configuration);
     if (typeof this.directoryConfig.field_types === 'string' && this.directoryConfig.field_types.length) {
       this.directoryConfig.field_types = JSON.parse(this.directoryConfig.field_types);
@@ -175,16 +46,6 @@ var DataDirectoryForm = (function() {
 
     if (typeof configuration.thumbnail_field !== 'undefined' && configuration.thumbnail_field !== null && configuration.thumbnail_field !== '') {
       $('.thumbs-options').addClass('show');
-    }
-
-    if (typeof configuration.folderConfig !== 'undefined' && configuration.thumbnail_field !== null && configuration.thumbnail_field.length) {
-      if ('organizationId' in configuration.folderConfig) {
-        $('.item-holder[data-organization-id="' + configuration.folderConfig.organizationId + '"]').addClass('selected');
-      } else if ('appId' in configuration.folderConfig) {
-        $('.item-holder[data-app-id="' + configuration.folderConfig.appId + '"]').addClass('selected');
-      } else if ('folderId' in configuration.folderConfig) {
-        $('.item-holder[data-folder-id="' + configuration.folderConfig.folderId + '"]').addClass('selected');
-      }
     }
 
     this.initialiseHandlebars();
@@ -290,12 +151,15 @@ var DataDirectoryForm = (function() {
           $('.options-no-columns').show();
         }
         $('.nav-tabs li#main-list-control').addClass('disabled');
+        $('.nav-tabs li#details-control').addClass('disabled');
+        $('.nav-tabs li#advanced-control').addClass('disabled');
         return;
       }
       $('.options').show();
       $('.options-no-columns').hide();
       $('.nav-tabs li#main-list-control').removeClass('disabled');
-
+      $('.nav-tabs li#details-control').removeClass('disabled');
+      $('.nav-tabs li#advanced-control').removeClass('disabled');
     },
 
     autoConfigureSearch: function() {
@@ -380,133 +244,9 @@ var DataDirectoryForm = (function() {
     },
 
     attachObservers_: function() {
-      $('.image-library')
-        .on('dblclick', '[data-folder-id]', function() {
-          var $el = $(this);
-          var id = $el.data('folder-id');
-          var backItem;
-
-          // Store to nav stack
-          backItem = _.find(folders, ['id', id]);
-          backItem.back = function() {
-            openFolder(id);
-          };
-          upTo.push(backItem);
-
-          // Open
-          openFolder(id);
-
-          // Update paths
-          updatePaths();
-        })
-        .on('dblclick', '[data-app-id]', function() {
-          var $el = $(this);
-          var id = $el.data('app-id');
-          var backItem;
-
-          // Store to nav stack
-          backItem = _.find(apps, ['id', id]);
-          backItem.back = function() {
-            openApp(id);
-          };
-          upTo.push(backItem);
-
-          // Open
-          openApp(id);
-
-          // Update paths
-          updatePaths();
-        })
-        .on('dblclick', '[data-organization-id]', function() {
-          var $el = $(this);
-          var id = $el.data('organization-id');
-          var backItem;
-
-          // Store to nav stack
-          backItem = _.find(organizations, ['id', id]);
-          backItem.back = function() {
-            openOrganization(id);
-          };
-          upTo.push(backItem);
-
-          // Open
-          openOrganization(id);
-
-          // Update paths
-          updatePaths();
-
-        })
-        .on('click', '[data-folder-id]', function() {
-          var $el = $(this);
-          // Removes any selected folder
-          $('.folder').not(this).each(function() {
-            $(this).removeClass('selected');
-          });
-
-          if ($el.hasClass('selected')) {
-            $('.folder-selection span').html('Select a folder below');
-            _this.folderConfig = {};
-          } else {
-            $('.folder-selection span').html('You have selected a folder');
-            _this.folderConfig = {
-              folderId: $el.data('folder-id')
-            };
-          }
-
-          $el.toggleClass('selected');
-        })
-        .on('click', '[data-app-id]', function() {
-          var $el = $(this);
-          // Removes any selected folder
-          $('.folder').not(this).each(function() {
-            $(this).removeClass('selected');
-          });
-
-          if ($el.hasClass('selected')) {
-            $('.folder-selection span').html('Select a folder below');
-            _this.folderConfig = {};
-          } else {
-            $('.folder-selection span').html('You have selected a folder');
-            _this.folderConfig = {
-              appId: $el.data('app-id')
-            };
-          }
-
-          $el.toggleClass('selected');
-        })
-        .on('click', '[data-organization-id]', function() {
-          var $el = $(this);
-          // Removes any selected folder
-          $('.folder').not(this).each(function() {
-            $(this).removeClass('selected');
-          });
-
-          if ($el.hasClass('selected')) {
-            $('.folder-selection span').html('Select a folder below');
-            _this.folderConfig = {};
-          } else {
-            $('.folder-selection span').html('You have selected a folder');
-            _this.folderConfig = {
-              organizationId: $el.data('organization-id')
-            };
-          }
-
-          $el.toggleClass('selected');
-        });
-
-      $('.back-btn').click(function() {
-        if (upTo.length === 1) {
-          return;
-        }
-
-        upTo.pop();
-        upTo[upTo.length - 1].back();
-        updatePaths();
-      });
-
       $(document).on("click", "#save-link", _this.saveDataDirectoryForm_);
       $('#data-sources').on('change', $.proxy(_this.dataSourceChanged_, this));
-      $('#data-source-tab').on('change', '#data-thumbnail-fields-select', _this.showThumbOptions_);
+      $('#advanced-tab').on('change', '#data-thumbnail-fields-select', _this.showThumbOptions_);
       $('.nav.nav-stacked').on('click', 'li.disabled', function() {
         return false;
       });
@@ -552,7 +292,7 @@ var DataDirectoryForm = (function() {
         search_fields: [],
         data_fields: this.columns,
         field_types: {},
-        folderConfig: _this.folderConfig,
+        folder: _this.folder,
         label_template: $('#directory-browse-label').val(),
         show_subtitle: $("#show_subtitle").is(':checked'),
         subtitle: $("#show_subtitle").is(':checked') ? $('#directory-browse-subtitle').val() : '',

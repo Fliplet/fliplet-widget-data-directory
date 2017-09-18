@@ -1,31 +1,105 @@
 var widgetId = Fliplet.Widget.getDefaultId();
 var data = Fliplet.Widget.getData(widgetId) || {};
 var dataDirectoryForm;
-
+var providerFilePickerInstance;
+var filePickerData = {};
+var folder;
+var chatLinkAction;
+var linkChatProvider;
 // Set link action to screen by default
-if (!data.chatLinkAction) {
-  data.chatLinkAction = {
-    action: 'screen',
-    options: {
-      hideAction: true
-    }
-  };
+var chatLinkData = $.extend(true, {
+  action: 'screen',
+  page: 'none',
+  transition: 'slide.left',
+  options: {
+    hideAction: true
+  }
+}, data.chatLinkAction);
+
+function filePickerDataInit() {
+  folder = $.extend(true, {
+    selectedFiles: {},
+    selectFiles: [], // To use the restore on File Picker
+    selectMultiple: false,
+    type: 'folder'
+  }, data.folder);
 }
 
-var linkChatProvider = Fliplet.Widget.open('com.fliplet.link', {
-  // If provided, the iframe will be appended here,
-  // otherwise will be displayed as a full-size iframe overlay
-  selector: '#chat-screen',
-  // Also send the data I have locally, so that
-  // the interface gets repopulated with the same stuff
-  data: data.chatLinkAction,
-  // Events fired from the provider
-  onEvent: function (event, data) {
-    if (event === 'interface-validate') {
-      Fliplet.Widget.toggleSaveButton(data.isValid === true);
-    }
+function filePickerInit() {
+  filePickerDataInit();
+  if (providerFilePickerInstance) {
+    providerFilePickerInstance = null;
+    $('.file-picker-holder').html('');
   }
-});
+  providerFilePickerInstance = Fliplet.Widget.open('com.fliplet.file-picker', {
+    selector: '.file-picker-holder',
+    data: folder,
+    onEvent: function(e, data) {
+      switch (e) {
+        case 'widget-set-info':
+          Fliplet.Studio.emit('widget-save-label-reset');
+          var msg = data.length ? data.length + ' folder selected' : 'no selected folders';
+          Fliplet.Widget.info(msg);
+          break;
+      }
+    },
+    closeOnSave: false
+  });
+
+  providerFilePickerInstance.then(function(data) {
+    filePickerData.selectFiles = data.data.length ? data.data : [];
+    save(true);
+  });
+}
+
+function linkProviderInit() {
+  linkChatProvider = Fliplet.Widget.open('com.fliplet.link', {
+    // If provided, the iframe will be appended here,
+    // otherwise will be displayed as a full-size iframe overlay
+    selector: '#chat-screen',
+    // Also send the data I have locally, so that
+    // the interface gets repopulated with the same stuff
+    data: chatLinkData,
+    // Events fired from the provider
+    onEvent: function (event, data) {
+      if (event === 'interface-validate') {
+        Fliplet.Widget.toggleSaveButton(data.isValid === true);
+      }
+    }
+  });
+  linkChatProvider.then(function (result) {
+    chatLinkAction = result.data || {};
+  })
+}
+
+function init() {
+  filePickerInit();
+  linkProviderInit();
+  attahObservers()
+}
+
+function attahObservers() {
+  $(document).on('show.bs.collapse', '.panel-collapse', function() {
+      $(this).siblings('.panel-heading').find('.fa-chevron-down').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+    })
+    .on('hide.bs.collapse', '.panel-collapse', function() {
+      $(this).siblings('.panel-heading').find('.fa-chevron-up').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+    });
+
+  // 1. Fired from Fliplet Studio when the external save button is clicked
+  Fliplet.Widget.onSaveRequest(function() {
+    if (linkChatProvider) {
+      linkChatProvider.forwardSaveRequest();
+    }
+
+    if (providerFilePickerInstance) {
+      providerFilePickerInstance.forwardSaveRequest();
+      return;
+    }
+
+    save(true);
+  });
+}
 
 Fliplet.DataSources.get({ type: null })
   .then(function (dataSources) {
@@ -37,16 +111,20 @@ Fliplet.DataSources.get({ type: null })
     dataDirectoryForm = new DataDirectoryForm(data);
   });
 
-// Fired from Fliplet Studio when the external save button is clicked
-Fliplet.Widget.onSaveRequest(function () {
-  linkChatProvider.forwardSaveRequest();
-  dataDirectoryForm.saveDataDirectoryForm_();
-  linkChatProvider.then(function (result) {
-    dataDirectoryForm.directoryConfig.chatLinkAction = result.data || {};
 
-    Fliplet.Widget.save(dataDirectoryForm.directoryConfig).then(function () {
-      Fliplet.Studio.emit('reload-page-preview');
+function save(notifyComplete) {
+  dataDirectoryForm.saveDataDirectoryForm_();
+  dataDirectoryForm.directoryConfig.chatLinkAction = chatLinkAction;
+  dataDirectoryForm.directoryConfig.folder = filePickerData;
+
+  return Fliplet.Widget.save(dataDirectoryForm.directoryConfig).then(function() {
+    if (notifyComplete) {
       Fliplet.Widget.complete();
-    });
+      Fliplet.Studio.emit('reload-page-preview');
+    } else {
+      Fliplet.Studio.emit('reload-widget-instance', widgetId);
+    }
   });
-});
+}
+
+init();

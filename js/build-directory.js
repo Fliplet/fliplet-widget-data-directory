@@ -311,7 +311,11 @@ DataDirectory.prototype.renderEntries = function() {
     show_tags: this.config.show_tags ? this.config.show_tags : false,
     has_thumbnail: (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field !== null && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_list ? this.config.show_thumb_list : false),
     thumbShape: (typeof this.config.thumbShape !== 'undefined' && this.config.thumbShape !== null && this.config.thumbShape ? this.config.thumbShape : 'circular'),
-    entries: this.data
+    entries: this.data,
+    addEntry: {
+      enabled: typeof this.config.addEntry !== 'undefined' && this.config.addEntry ? this.config.addEntry.enabled : false,
+      dataSourceId: typeof this.config.addEntry !== 'undefined' && this.config.addEntry ? this.config.addEntry.dataSourceId : undefined
+    }
   };
   var directoryListTemplate = (this.config.directoryListTemplate !== '') ?
     Handlebars.compile(this.config.directoryListTemplate) :
@@ -575,6 +579,19 @@ DataDirectory.prototype.attachObservers = function() {
     Fliplet.Navigate.to(_this.config.chatLinkAction);
   });
 
+  $(this.$container).on('click', '.add-new-entry', function() {
+    // @TODO: Redirect to screen
+  });
+
+  $(this.$container).on('click', '.edit-entry', function() {
+    // @TODO: Redirect to screen with query
+  });
+
+  $(this.$container).on('click', '.delete-entry', function() {
+    // @TODO: Confirm first, then delete entry
+    //        Refresh to list view
+  });
+
   document.addEventListener("flDirectoryEntryBeforeRender", function() {
     _this.disableClicks();
     _this.removeLoading();
@@ -747,6 +764,14 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent) {
   var detailData = {
     title: title,
     link_to_chat: this.config.enable_chat ? this.config.enable_chat : false,
+    editEntry: {
+      enabled: typeof this.config.editEntry !== 'undefined' && this.config.editEntry ? this.config.editEntry.enabled : false,
+      dataSourceId: typeof this.config.editEntry !== 'undefined' && this.config.editEntry ? this.config.editEntry.dataSourceId : undefined
+    },
+    deleteEntry: {
+      enabled: typeof this.config.deleteEntry !== 'undefined' && this.config.deleteEntry ? this.config.deleteEntry.enabled : false,
+      dataSourceId: typeof this.config.deleteEntry !== 'undefined' && this.config.deleteEntry ? this.config.deleteEntry.dataSourceId : undefined
+    },
     has_thumbnail: this.config.show_thumb_detail ? this.config.show_thumb_detail : false,
     thumbShape: this.config.thumbShape ? this.config.thumbShape : 'circular',
     fields: [],

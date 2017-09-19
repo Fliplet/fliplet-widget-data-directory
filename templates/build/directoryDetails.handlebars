@@ -1,4 +1,11 @@
 <div data-source-entry-id="{{dataSourceEntryId}}">
+    {{#if editEntry.enabled}}
+      <div class="edit-button-tray">
+        <div class="edit-entry" data-source-id="{{editEntry.dataSourceId}}" data-entry-id="{{dataSourceEntryId}}">
+          <i class="fa fa-pencil" aria-hidden="true"></i>
+        </div>
+      </div>
+    {{/if}}
     <div class="directory-detail-title {{#if has_thumbnail}}has-thumbnail{{/if}}">
         {{#if has_thumbnail}}<span class="thumbnail"><span class="helper"></span><span class="img-wrapper {{thumbShape}}" {{#if thumbnail}} style="background-image: url('{{thumbnail}}');" {{/if}}></span></span>
         {{/if}}{{title}}</div>
@@ -13,4 +20,11 @@
         <div class="directory-detail-value">{{{value}}}</div>
       </div>
     {{/each}}
+    {{#if deleteEntry.enabled}}
+      <div class="delete-button-tray">
+        <div class="btn btn-danger delete-entry" data-source-id="{{deleteEntry.dataSourceId}}" data-entry-id="{{dataSourceEntryId}}">
+          <i class="fa fa-trash" aria-hidden="true"></i> Delete
+        </div>
+      </div>
+    {{/if}}
 </div>

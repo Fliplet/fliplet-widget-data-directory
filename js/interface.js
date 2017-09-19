@@ -4,7 +4,11 @@ var dataDirectoryForm;
 var providerFilePickerInstance;
 var filePickerData = {};
 var folder;
+var addEntryLinkAction;
+var editEntryLinkAction;
 var chatLinkAction;
+var linkAddEntryProvider;
+var linkEditEntryProvider;
 var linkChatProvider;
 // Set link action to screen by default
 var chatLinkData = $.extend(true, {
@@ -15,6 +19,22 @@ var chatLinkData = $.extend(true, {
     hideAction: true
   }
 }, data.chatLinkAction);
+var addEntryLinkData = $.extend(true, {
+  action: 'screen',
+  page: 'none',
+  transition: 'slide.left',
+  options: {
+    hideAction: true
+  }
+}, data.addEntryLinkAction);
+var editEntryLinkData = $.extend(true, {
+  action: 'screen',
+  page: 'none',
+  transition: 'slide.left',
+  options: {
+    hideAction: true
+  }
+}, data.editEntryLinkAction);
 
 function filePickerDataInit() {
   folder = $.extend(true, {
@@ -69,6 +89,40 @@ function linkProviderInit() {
   });
   linkChatProvider.then(function (result) {
     chatLinkAction = result.data || {};
+  });
+  linkAddEntryProvider = Fliplet.Widget.open('com.fliplet.link', {
+    // If provided, the iframe will be appended here,
+    // otherwise will be displayed as a full-size iframe overlay
+    selector: '#add-entry-link',
+    // Also send the data I have locally, so that
+    // the interface gets repopulated with the same stuff
+    data: addEntryLinkData,
+    // Events fired from the provider
+    onEvent: function (event, data) {
+      if (event === 'interface-validate') {
+        Fliplet.Widget.toggleSaveButton(data.isValid === true);
+      }
+    }
+  });
+  linkAddEntryProvider.then(function (result) {
+    addEntryLinkAction = result.data || {};
+  })
+  linkEditEntryProvider = Fliplet.Widget.open('com.fliplet.link', {
+    // If provided, the iframe will be appended here,
+    // otherwise will be displayed as a full-size iframe overlay
+    selector: '#edit-entry-link',
+    // Also send the data I have locally, so that
+    // the interface gets repopulated with the same stuff
+    data: editEntryLinkData,
+    // Events fired from the provider
+    onEvent: function (event, data) {
+      if (event === 'interface-validate') {
+        Fliplet.Widget.toggleSaveButton(data.isValid === true);
+      }
+    }
+  });
+  linkEditEntryProvider.then(function (result) {
+    editEntryLinkAction = result.data || {};
   })
 }
 
@@ -90,6 +144,14 @@ function attahObservers() {
   Fliplet.Widget.onSaveRequest(function() {
     if (linkChatProvider) {
       linkChatProvider.forwardSaveRequest();
+    }
+
+    if (linkAddEntryProvider) {
+      linkAddEntryProvider.forwardSaveRequest();
+    }
+
+    if (linkEditEntryProvider) {
+      linkEditEntryProvider.forwardSaveRequest();
     }
 
     if (providerFilePickerInstance) {

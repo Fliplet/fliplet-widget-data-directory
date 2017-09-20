@@ -134,6 +134,18 @@ DataDirectory.prototype.setConfig = function(key, value) {
   }
 };
 
+DataDirectory.prototype.refreshDirectory = function() {
+  this.checkMobileMode();
+  this.entryOverlay.close();
+
+  if (!this.config) {
+    return this.directoryNotConfigured();
+  }
+
+  this.init();
+  this.parseQueryVars();
+}
+
 DataDirectory.prototype.initialiseHandlebars = function() {
   var _this = this;
 
@@ -575,21 +587,42 @@ DataDirectory.prototype.attachObservers = function() {
 
   $(this.$container).on('click', '.chat-entry', function() {
     var entryID = $(this).data('entry-id');
-    _this.config.chatLinkAction.query = "?contactConversation=" + entryID;
-    Fliplet.Navigate.to(_this.config.chatLinkAction);
+    if (_this.config.chatLinkAction) {
+      _this.config.chatLinkAction.query = "?contactConversation=" + entryID;
+      Fliplet.Navigate.to(_this.config.chatLinkAction);
+    }
   });
 
   $(this.$container).on('click', '.add-new-entry', function() {
-    // @TODO: Redirect to screen
+    if (_this.config.addEntryLinkAction) {
+      Fliplet.Navigate.to(_this.config.addEntryLinkAction);
+    }
   });
 
   $(this.$container).on('click', '.edit-entry', function() {
-    // @TODO: Redirect to screen with query
+    var entryID = $(this).data('entry-id');
+    if (_this.config.addEntryLinkAction) {
+      _this.config.editEntryLinkAction.query = "?dataSourceEntryId=" + entryID;
+      Fliplet.Navigate.to(_this.config.editEntryLinkAction);
+    }
   });
 
   $(this.$container).on('click', '.delete-entry', function() {
     // @TODO: Confirm first, then delete entry
     //        Refresh to list view
+    var entryID = $(this).data('entry-id');
+    var confirmDelete = confirm("Are you sure you want to delete this entry?");
+
+    if (confirmDelete == true) {
+      Fliplet.DataSources.connect(_this.config.source).then(function (connection) {
+        return connection.removeById(entryID);
+      }).then(function onRemove() {
+        _this.data = _.remove(_this.data, function(entry) {
+          return entry.dataSourceEntryId !== parseInt(entryID, 10);
+        });
+        _this.refreshDirectory();
+      });
+    }
   });
 
   document.addEventListener("flDirectoryEntryBeforeRender", function() {

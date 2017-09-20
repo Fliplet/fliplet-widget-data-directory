@@ -58,8 +58,6 @@ function filePickerInit() {
       switch (e) {
         case 'widget-set-info':
           Fliplet.Studio.emit('widget-save-label-reset');
-          var msg = data.length ? data.length + ' folder selected' : 'no selected folders';
-          Fliplet.Widget.info(msg);
           break;
       }
     },
@@ -81,13 +79,13 @@ function linkProviderInit() {
     // the interface gets repopulated with the same stuff
     data: chatLinkData,
     // Events fired from the provider
-    onEvent: function (event, data) {
+    onEvent: function(event, data) {
       if (event === 'interface-validate') {
         Fliplet.Widget.toggleSaveButton(data.isValid === true);
       }
     }
   });
-  linkChatProvider.then(function (result) {
+  linkChatProvider.then(function(result) {
     chatLinkAction = result.data || {};
   });
   linkAddEntryProvider = Fliplet.Widget.open('com.fliplet.link', {
@@ -98,13 +96,13 @@ function linkProviderInit() {
     // the interface gets repopulated with the same stuff
     data: addEntryLinkData,
     // Events fired from the provider
-    onEvent: function (event, data) {
+    onEvent: function(event, data) {
       if (event === 'interface-validate') {
         Fliplet.Widget.toggleSaveButton(data.isValid === true);
       }
     }
   });
-  linkAddEntryProvider.then(function (result) {
+  linkAddEntryProvider.then(function(result) {
     addEntryLinkAction = result.data || {};
   })
   linkEditEntryProvider = Fliplet.Widget.open('com.fliplet.link', {
@@ -115,13 +113,13 @@ function linkProviderInit() {
     // the interface gets repopulated with the same stuff
     data: editEntryLinkData,
     // Events fired from the provider
-    onEvent: function (event, data) {
+    onEvent: function(event, data) {
       if (event === 'interface-validate') {
         Fliplet.Widget.toggleSaveButton(data.isValid === true);
       }
     }
   });
-  linkEditEntryProvider.then(function (result) {
+  linkEditEntryProvider.then(function(result) {
     editEntryLinkAction = result.data || {};
   })
 }
@@ -142,29 +140,17 @@ function attahObservers() {
 
   // 1. Fired from Fliplet Studio when the external save button is clicked
   Fliplet.Widget.onSaveRequest(function() {
-    if (linkChatProvider) {
-      linkChatProvider.forwardSaveRequest();
-    }
-
-    if (linkAddEntryProvider) {
-      linkAddEntryProvider.forwardSaveRequest();
-    }
-
-    if (linkEditEntryProvider) {
-      linkEditEntryProvider.forwardSaveRequest();
-    }
-
-    if (providerFilePickerInstance) {
-      providerFilePickerInstance.forwardSaveRequest();
-      return;
-    }
-
-    save(true);
+    return Promise.all([
+      linkChatProvider.forwardSaveRequest(),
+      linkAddEntryProvider.forwardSaveRequest(),
+      linkEditEntryProvider.forwardSaveRequest(),
+      providerFilePickerInstance.forwardSaveRequest()
+    ]);
   });
 }
 
 Fliplet.DataSources.get({ type: null })
-  .then(function (dataSources) {
+  .then(function(dataSources) {
     if (!dataSources.length) {
       $('.no-data-source-prompt').show();
     }
@@ -177,6 +163,8 @@ Fliplet.DataSources.get({ type: null })
 function save(notifyComplete) {
   dataDirectoryForm.saveDataDirectoryForm_();
   dataDirectoryForm.directoryConfig.chatLinkAction = chatLinkAction;
+  dataDirectoryForm.directoryConfig.addEntryLinkAction = addEntryLinkAction;
+  dataDirectoryForm.directoryConfig.editEntryLinkAction = editEntryLinkAction;
   dataDirectoryForm.directoryConfig.folder = filePickerData;
 
   return Fliplet.Widget.save(dataDirectoryForm.directoryConfig).then(function() {

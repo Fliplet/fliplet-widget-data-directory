@@ -185,11 +185,12 @@
     </div>
 
     <div role="tabpanel" class="tab-pane" id="advanced-tab">
+      <p>Use this area to customize your directory with thumbnails, allow users to control the data in the data source, and to send text messages to each other.</p>
       <div class="panel-group" id="advanced-options-accordion">
         <div class="panel panel-default">
           <div class="panel-heading collapsed" role="tab" id="heading2" data-toggle="collapse" data-parent="#advanced-options-accordion" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
             <h4 class="panel-title">
-                Directory thumbnails
+                Enable directory thumbnails
                 <i class="fa fa-chevron-down" aria-hidden="true"></i>
             </h4>
           </div>
@@ -207,7 +208,7 @@
                     <span class="select-value-proxy"></span>
                     <span id="data-thumbnail-fields"></span>
                   </label>
-                  <p class="help-block">Make sure the field is pointing at an image file name <em>(eg.: image.jpg)</em> or full URL to an online image.</p>
+                  <p class="help-block">Make sure the field contains an image file name <em>(eg.: image.jpg)</em> or full URL to an online image.</p>
                 </div>
               </div>
 
@@ -292,7 +293,7 @@
         <div class="panel panel-default">
           <div class="panel-heading collapsed" role="tab" id="heading0" data-toggle="collapse" data-parent="#advanced-options-accordion" data-target="#collapse0" aria-expanded="false" aria-controls="collapse0">
             <h4 class="panel-title">
-                Give users control over data
+                Allow users to add, edit and delete entries
                 <i class="fa fa-chevron-down" aria-hidden="true"></i>
             </h4>
           </div>
@@ -300,27 +301,27 @@
             <div class="panel-body">
               <div class="form-group clearfix">
                 <div class="col-sm-4 control-label">
-                  <label>I want users to be able to edit the data source by offering the following actions:</label>
+                  <label>I want users to be able to edit the data source by:</label>
                 </div>
                 <div class="col-sm-8">
                   <div class="checkbox checkbox-icon">
                     <input type="checkbox" id="add_entry" name="directory-control" value="add-entry">
                     <label for="add_entry">
-                      <span class="check"><i class="fa fa-check"></i></span> <span class="option-title">Add entries</span> - <small>You will be asked to select the screen with a form that users can use to add new entries.</small>
+                      <span class="check"><i class="fa fa-check"></i></span> <span class="option-title">Adding entries</span> - <small>You will be asked to select the screen with a form that users can use to add new entries.</small>
                     </label>
                     <div class="hidden-settings" id="add-entry-link"></div>
                   </div>
                   <div class="checkbox checkbox-icon">
                     <input type="checkbox" id="edit_entry" name="directory-control" value="edit-entry">
                     <label for="edit_entry">
-                      <span class="check"><i class="fa fa-check"></i></span> <span class="option-title">Edit entries</span> - <small>You will be asked to select the screen with a form that users can use to edit the existing entry.</small>
+                      <span class="check"><i class="fa fa-check"></i></span> <span class="option-title">Editing entries</span> - <small>You will be asked to select the screen with a form that users can use to edit the existing entry.</small>
                     </label>
                     <div class="hidden-settings" id="edit-entry-link"></div>
                   </div>
                   <div class="checkbox checkbox-icon">
                     <input type="checkbox" id="delete-entry" name="directory-control" value="delete-entry">
                     <label for="delete-entry">
-                      <span class="check"><i class="fa fa-check"></i></span> <span class="option-title">Delete entries</span>
+                      <span class="check"><i class="fa fa-check"></i></span> <span class="option-title">Deleting entries</span>
                     </label>
                   </div>
                 </div>
@@ -331,7 +332,7 @@
         <div class="panel panel-default">
           <div class="panel-heading collapsed" role="tab" id="heading1" data-toggle="collapse" data-parent="#advanced-options-accordion" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
             <h4 class="panel-title">
-                Chat integration
+                Allow users to send messages
                 <i class="fa fa-chevron-down" aria-hidden="true"></i>
             </h4>
           </div>

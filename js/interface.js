@@ -45,31 +45,6 @@ function filePickerDataInit() {
   }, data.folder);
 }
 
-function filePickerInit() {
-  filePickerDataInit();
-  if (providerFilePickerInstance) {
-    providerFilePickerInstance = null;
-    $('.file-picker-holder').html('');
-  }
-  providerFilePickerInstance = Fliplet.Widget.open('com.fliplet.file-picker', {
-    selector: '.file-picker-holder',
-    data: folder,
-    onEvent: function(e, data) {
-      switch (e) {
-        case 'widget-set-info':
-          Fliplet.Studio.emit('widget-save-label-reset');
-          break;
-      }
-    },
-    closeOnSave: false
-  });
-
-  providerFilePickerInstance.then(function(data) {
-    filePickerData.selectFiles = data.data.length ? data.data : [];
-    save(true);
-  });
-}
-
 function linkProviderInit() {
   linkChatProvider = Fliplet.Widget.open('com.fliplet.link', {
     // If provided, the iframe will be appended here,
@@ -121,13 +96,14 @@ function linkProviderInit() {
   });
   linkEditEntryProvider.then(function(result) {
     editEntryLinkAction = result.data || {};
+    save(true);
   })
 }
 
 function init() {
-  filePickerInit();
+  filePickerDataInit();
   linkProviderInit();
-  attahObservers()
+  attahObservers();
 }
 
 function attahObservers() {
@@ -138,13 +114,56 @@ function attahObservers() {
       $(this).siblings('.panel-heading').find('.fa-chevron-up').removeClass('fa-chevron-up').addClass('fa-chevron-down');
     });
 
+  $('#folder-select').on('click', '.select-folder', function() {
+
+    Fliplet.Widget.toggleSaveButton(data.folder.selectFiles && data.folder.selectFiles.length > 0);
+
+    Fliplet.Studio.emit('widget-save-label-update', {
+      text: 'Select'
+    });
+
+    providerFilePickerInstance = Fliplet.Widget.open('com.fliplet.file-picker', {
+      data: folder,
+      onEvent: function(e, data) {
+        switch (e) {
+          case 'widget-rendered':
+            break;
+          case 'widget-set-info':
+            Fliplet.Widget.toggleSaveButton(!!data.length);
+            var msg = data.length ? data.length + ' files selected' : 'no selected files';
+            Fliplet.Widget.info(msg);
+            break;
+          default:
+            break;
+        }
+      }
+    });
+
+    providerFilePickerInstance.then(function(data) {
+      Fliplet.Widget.info('');
+      Fliplet.Widget.toggleCancelButton(true);
+      Fliplet.Widget.toggleSaveButton(true);
+      filePickerData.selectFiles = data.data.length ? data.data : [];
+      providerFilePickerInstance = null;
+      Fliplet.Studio.emit('widget-save-label-update', {
+        text: 'Save & Close'
+      });
+      $('#folder-select .select-folder').text('Replace folder');
+      $('#folder-select .info-holder').removeClass('hidden');
+      $('#folder-select .folder-title span').text(filePickerData.selectFiles[0].name);
+    });
+  });
+
   // 1. Fired from Fliplet Studio when the external save button is clicked
   Fliplet.Widget.onSaveRequest(function() {
-    return Promise.all([
+    if (providerFilePickerInstance) {
+      return providerFilePickerInstance.forwardSaveRequest();
+    }
+
+    Promise.all([
       linkChatProvider.forwardSaveRequest(),
       linkAddEntryProvider.forwardSaveRequest(),
-      linkEditEntryProvider.forwardSaveRequest(),
-      providerFilePickerInstance.forwardSaveRequest()
+      linkEditEntryProvider.forwardSaveRequest()
     ]);
   });
 }

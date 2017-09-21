@@ -38,6 +38,7 @@ var DataDirectory = function(config, container) {
   delete this.config.rows;
 
   this.config.is_alphabetical = this.config.is_alphabetical && this.config.alphabetical_field !== ''; // Ensures an alphabetical field is provided
+  this.config.enable_thumbs = this.config.enable_thumbs || ( typeof this.config.enable_thumbs === 'undefined' && typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '');
   this.$container = $(container).parents('body');
   this.deviceIsTablet = (window.innerWidth >= 640 && window.innerHeight >= 640);
   this.navHeight = $('.fl-viewport-header').height() || 0;
@@ -321,7 +322,7 @@ DataDirectory.prototype.renderEntries = function() {
   var entriesData = {
     show_subtitle: this.config.show_subtitle ? this.config.show_subtitle : false,
     show_tags: this.config.show_tags ? this.config.show_tags : false,
-    has_thumbnail: (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field !== null && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_list ? this.config.show_thumb_list : false),
+    has_thumbnail: (typeof this.config.enable_thumbs !== 'undefined' && this.config.enable_thumbs && typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_list ? this.config.show_thumb_list : false),
     thumbShape: (typeof this.config.thumbShape !== 'undefined' && this.config.thumbShape !== null && this.config.thumbShape ? this.config.thumbShape : 'circular'),
     entries: this.data,
     addEntry: {
@@ -812,7 +813,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent) {
   };
 
   if (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '') {
-    detailData['has_thumbnail'] = (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_detail ? this.config.show_thumb_detail : false);
+    detailData['has_thumbnail'] = (typeof this.config.enable_thumbs !== 'undefined' && this.config.enable_thumbs && typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_detail ? this.config.show_thumb_detail : false);
     detailData['thumbShape'] = (typeof this.config.thumbShape !== 'undefined' && this.config.thumbShape ? this.config.thumbShape : 'circular');
     detailData['thumbnail'] = (type == 'search-result-entry') ? this.searchResultData[entryIndex][this.config.thumbnail_field] : this.data[entryIndex][this.config.thumbnail_field];
   }

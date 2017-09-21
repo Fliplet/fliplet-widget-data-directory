@@ -44,8 +44,8 @@ var DataDirectoryForm = (function() {
       this.directoryConfig.field_types = JSON.parse(this.directoryConfig.field_types);
     }
 
-    if (typeof configuration.thumbnail_field !== 'undefined' && configuration.thumbnail_field !== null && configuration.thumbnail_field !== '') {
-      $('.thumbs-options').addClass('show');
+    if (typeof this.directoryConfig.enable_thumbs === 'undefined' && this.directoryConfig.thumbnail_field !== '') {
+      this.directoryConfig.enable_thumbs = true;
     }
 
     this.initialiseHandlebars();
@@ -234,9 +234,16 @@ var DataDirectoryForm = (function() {
         $('#enable_live_data').prop('checked', true);
       }
 
+      if (_this.directoryConfig.enable_thumbs) {
+        $('#enable-thumb-yes').prop('checked', true).trigger('change');
+        $('.thumbs-setting').removeClass('hidden');
+      } else {
+        $('#enable-thumb-no').prop('checked', true).trigger('change');
+      }
+
       if (_this.directoryConfig.enable_chat) {
-        $('#chat-yes').prop('checked', true);
-        $('.chat-screen-selection').removeClass('hidden')
+        $('#chat-yes').prop('checked', true).trigger('change');;
+        $('.chat-screen-selection').removeClass('hidden');
       } else {
         $('#chat-no').prop('checked', true).trigger('change');
       }
@@ -256,7 +263,7 @@ var DataDirectoryForm = (function() {
     attachObservers_: function() {
       $(document).on("click", "#save-link", _this.saveDataDirectoryForm_);
       $('#data-sources').on('change', $.proxy(_this.dataSourceChanged_, this));
-      $('#advanced-tab').on('change', '#data-thumbnail-fields-select', _this.showThumbOptions_);
+      $('#advanced-tab').on('change', '[name="enable_thumbs"]', _this.showThumbOptions_);
       $('.nav.nav-stacked').on('click', 'li.disabled', function() {
         return false;
       });
@@ -302,15 +309,15 @@ var DataDirectoryForm = (function() {
         });
 
         if (values.indexOf('add-entry') !== -1) {
-          $('#add-entry-link').addClass('active');
+          $('#add-entry-link').parents('.hidden-settings').addClass('active');
         } else {
-          $('#add-entry-link').removeClass('active');
+          $('#add-entry-link').parents('.hidden-settings').removeClass('active');
         }
 
         if (values.indexOf('edit-entry') !== -1) {
-          $('#edit-entry-link').addClass('active');
+          $('#edit-entry-link').parents('.hidden-settings').addClass('active');
         } else {
-          $('#edit-entry-link').removeClass('active');
+          $('#edit-entry-link').parents('.hidden-settings').removeClass('active');
         }
       });
     },
@@ -330,6 +337,7 @@ var DataDirectoryForm = (function() {
         alphabetical_field: $('#data-alphabetical-fields-select').val(),
         show_tags: $("#show_tags").is(':checked'),
         tags_field: $("#show_tags").is(':checked') ? $('#data-tags-fields-select').val() : '',
+        enable_thumbs: ($('[name=enable_thumbs]:checked').val() === "yes" ? true : false),
         thumbnail_field: $('#data-thumbnail-fields-select').val(),
         show_thumb_list: ($('[name=enable_thumb_list]:checked').val() === "show" ? true : false),
         show_thumb_detail: ($('[name=enable_thumb_details]:checked').val() === "show" ? true : false),
@@ -408,11 +416,11 @@ var DataDirectoryForm = (function() {
       }
     },
 
-    showThumbOptions_: function(e) {
-      if ($(this).val() !== '') {
-        $('.thumbs-options').addClass('show');
+    showThumbOptions_: function() {
+      if ($(this).val() === 'yes') {
+        $('.thumbs-setting').removeClass('hidden');
       } else {
-        $('.thumbs-options.show').removeClass('show');
+        $('.thumbs-setting').addClass('hidden');
       }
     }
 

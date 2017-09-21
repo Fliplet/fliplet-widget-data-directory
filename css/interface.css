@@ -97,6 +97,15 @@ header {
   font-weight: bold;
 }
 
+#advanced-tab .title-header {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+#advanced-tab .title-header .title {
+  color: #14505e;
+}
+
 header.titles {
   font-weight: bold;
 }
@@ -322,8 +331,7 @@ table .checkbox label {
 
 .no-data-source-prompt,
 .options,
-.options-no-columns,
-.thumbs-options {
+.options-no-columns {
   display: none;
 }
 
@@ -425,4 +433,8 @@ table .checkbox label {
 
 .hidden-settings.active {
   display: block;
+}
+
+.folder-title {
+  margin-top: 10px;
 }

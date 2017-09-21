@@ -166,7 +166,7 @@
 
       <div class="form-group clearfix">
         <div class="col-sm-4 control-label">
-          <label for="data-detail-fields">Which field(s) do you want them to see?</label>
+          <label for="data-detail-fields">Which field(s) do you want users to see?</label>
         </div>
         <div class="col-sm-8">
           <input type="text" class="form-control" id="data-detail-fields" placeholder="Enter field names">
@@ -185,7 +185,7 @@
     </div>
 
     <div role="tabpanel" class="tab-pane" id="advanced-tab">
-      <p>Use this area to customize your directory with thumbnails, allow users to control the data in the data source, and to send text messages to each other.</p>
+      <p>Customize your directory with the features below:</p>
       <div class="panel-group" id="advanced-options-accordion">
         <div class="panel panel-default">
           <div class="panel-heading collapsed" role="tab" id="heading2" data-toggle="collapse" data-parent="#advanced-options-accordion" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
@@ -196,97 +196,136 @@
           </div>
           <div id="collapse2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading2" data-index="2" aria-expanded="false">
             <div class="panel-body">
-              <p>You can enable a thumbnail on your directory list and/or detail views. Configure below where and how to show the thumbnails.</p>
+              <p>Configure below where and how to show the thumbnails.</p>
 
-              <div class="form-group clearfix">
+              <div class="form-group clearfix inline-radio">
                 <div class="col-sm-4 control-label">
-                  <label for="data-thumbnail-fields-select">Select a field to use as the thumbnail</label>
+                  <label>Do you want to enable directory thumbnails?</label>
                 </div>
                 <div class="col-sm-8">
-                  <label for="data-tags-fields-select" class="select-proxy-display">
-                    <span class="icon fa fa-chevron-down"></span>
-                    <span class="select-value-proxy"></span>
-                    <span id="data-thumbnail-fields"></span>
-                  </label>
-                  <p class="help-block">Make sure the field contains an image file name <em>(eg.: image.jpg)</em> or full URL to an online image.</p>
+                  <div class="radio-buttons clearfix">
+                    <div class="radio">
+                      <input type="radio" id="enable-thumb-yes" name="enable_thumbs" value="yes">
+                      <label for="enable-thumb-yes">
+                        Yes
+                      </label>
+                    </div>
+                    <div class="radio">
+                      <input type="radio" id="enable-thumb-no" name="enable_thumbs" value="no">
+                      <label for="enable-thumb-no">
+                        No
+                      </label>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div class="thumbs-options">
-                <div class="form-group clearfix inline-radio">
+              <div class="thumbs-setting hidden">
+                <div class="form-group clearfix">
                   <div class="col-sm-4 control-label">
-                    <label>Enable thumbnails on the Main list</label>
+                    <label for="data-thumbnail-fields-select">Select the field to use as the thumbnail</label>
                   </div>
                   <div class="col-sm-8">
-                    <div class="radio-buttons clearfix">
-                      <div class="radio">
-                        <input type="radio" id="thumb-list-yes" name="enable_thumb_list" value="show" {{#if show_thumb_list}}checked{{/if}}>
-                        <label for="thumb-list-yes">
-                          Yes
-                        </label>
-                      </div>
-                      <div class="radio">
-                        <input type="radio" id="thumb-list-no" name="enable_thumb_list" value="no-show" {{#if show_thumb_list}}{{else}}checked{{/if}}>
-                        <label for="thumb-list-no">
-                          No
-                        </label>
+                    <label for="data-tags-fields-select" class="select-proxy-display">
+                      <span class="icon fa fa-chevron-down"></span>
+                      <span class="select-value-proxy"></span>
+                      <span id="data-thumbnail-fields"></span>
+                    </label>
+                    <p class="help-block">Make sure the field contains an image file name <em>(eg.: image.jpg)</em> or full URL to an online image.</p>
+                  </div>
+                </div>
+
+                <div class="thumbs-options">
+                  <div class="form-group clearfix inline-radio">
+                    <div class="col-sm-4 control-label">
+                      <label>Show thumbnails on the Main list</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="radio-buttons clearfix">
+                        <div class="radio">
+                          <input type="radio" id="thumb-list-yes" name="enable_thumb_list" value="show" {{#if show_thumb_list}}checked{{/if}}>
+                          <label for="thumb-list-yes">
+                            Yes
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <input type="radio" id="thumb-list-no" name="enable_thumb_list" value="no-show" {{#if show_thumb_list}}{{else}}checked{{/if}}>
+                          <label for="thumb-list-no">
+                            No
+                          </label>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div class="form-group clearfix inline-radio">
-                  <div class="col-sm-4 control-label">
-                    <label>Enable thumbnails on the Details</label>
-                  </div>
-                  <div class="col-sm-8">
-                    <div class="radio-buttons clearfix">
-                      <div class="radio">
-                        <input type="radio" id="thumb-details-yes" name="enable_thumb_details" value="show" {{#if show_thumb_detail}}checked{{/if}}>
-                        <label for="thumb-details-yes">
-                          Yes
-                        </label>
-                      </div>
-                      <div class="radio">
-                        <input type="radio" id="thumb-details-no" name="enable_thumb_details" value="no-show" {{#if show_thumb_detail}}{{else}}checked{{/if}}>
-                        <label for="thumb-details-no">
-                          No
-                        </label>
+                  <div class="form-group clearfix inline-radio">
+                    <div class="col-sm-4 control-label">
+                      <label>Show thumbnails on the Details</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="radio-buttons clearfix">
+                        <div class="radio">
+                          <input type="radio" id="thumb-details-yes" name="enable_thumb_details" value="show" {{#if show_thumb_detail}}checked{{/if}}>
+                          <label for="thumb-details-yes">
+                            Yes
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <input type="radio" id="thumb-details-no" name="enable_thumb_details" value="no-show" {{#if show_thumb_detail}}{{else}}checked{{/if}}>
+                          <label for="thumb-details-no">
+                            No
+                          </label>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div class="form-group clearfix inline-radio">
-                  <div class="col-sm-4 control-label">
-                    <label>In what shape do you want your thumbnails?</label>
-                  </div>
-                  <div class="col-sm-8">
-                    <div class="radio-buttons clearfix">
-                      <div class="radio">
-                        <input type="radio" id="thumb-shape-square" name="thumb_shape" value="square">
-                        <label for="thumb-shape-square">
-                          Square
-                        </label>
-                      </div>
-                      <div class="radio">
-                        <input type="radio" id="thumb-shape-circle" name="thumb_shape" value="circular">
-                        <label for="thumb-shape-circle">
-                          Circular
-                        </label>
+                  <div class="form-group clearfix inline-radio">
+                    <div class="col-sm-4 control-label">
+                      <label>In what shape do you want your thumbnails?</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="radio-buttons clearfix">
+                        <div class="radio">
+                          <input type="radio" id="thumb-shape-square" name="thumb_shape" value="square">
+                          <label for="thumb-shape-square">
+                            Square
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <input type="radio" id="thumb-shape-circle" name="thumb_shape" value="circular">
+                          <label for="thumb-shape-circle">
+                            Circular
+                          </label>
+                        </div>
                       </div>
                     </div>
                   </div>
+
+                  <div class="title-header">
+                    <p class="title">Select the thumbnails folder</p>
+                    <p>Select the folder where your thumbnails are stored.</p>
+                  </div>
+
+                  <div id="folder-select">
+                    <div class="form-group">
+                      <div class="col-sm-4 control-label">
+                        <label>Select the thumbnails folder</label>
+                      </div>
+                      <div class="col-sm-8">
+                        <div class="folder-btn-holder">
+                          <div class="btn btn-default select-folder">{{#unless folder.selectFiles}}Browse your folder library{{else}}Replace folder{{/unless}}</div>
+                          <div class="info-holder clearfix {{#unless folder.selectFiles}}hidden{{/unless}}">
+                            <div class="folder-title"><i class="fa fa-folder"></i> Selected folder: <strong><span>{{folder.selectFiles.0.name}}</span></strong></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
-
-                <div class="title-header">
-                  <p class="title">Select the thumbnails folder</p>
-                  <p>Select the folder where your thumbnails are stored.</p>
-                </div>
-
-                <div class="file-picker-holder row"></div>
-
               </div>
+              
             </div>
           </div>
         </div>
@@ -301,27 +340,39 @@
             <div class="panel-body">
               <div class="form-group clearfix">
                 <div class="col-sm-4 control-label">
-                  <label>I want users to be able to edit the data source by:</label>
+                  <label>Configure each of the options below.</label>
                 </div>
                 <div class="col-sm-8">
                   <div class="checkbox checkbox-icon">
                     <input type="checkbox" id="add_entry" name="directory-control" value="add-entry">
                     <label for="add_entry">
-                      <span class="check"><i class="fa fa-check"></i></span> <span class="option-title">Adding entries</span> - <small>You will be asked to select the screen with a form that users can use to add new entries.</small>
+                      <span class="check"><i class="fa fa-check"></i></span> <span class="option-title">Add entries</span>
                     </label>
-                    <div class="hidden-settings" id="add-entry-link"></div>
+                    <div class="hidden-settings">
+                      <div class="title-header">
+                        <p class="title">Which screen has the form to add entries?</p>
+                        <p>Select the screen with a form that users can use to add new entries.</p>
+                      </div>
+                      <div id="add-entry-link"></div>
+                    </div>
                   </div>
                   <div class="checkbox checkbox-icon">
                     <input type="checkbox" id="edit_entry" name="directory-control" value="edit-entry">
                     <label for="edit_entry">
-                      <span class="check"><i class="fa fa-check"></i></span> <span class="option-title">Editing entries</span> - <small>You will be asked to select the screen with a form that users can use to edit the existing entry.</small>
+                      <span class="check"><i class="fa fa-check"></i></span> <span class="option-title">Edit entries</span>
                     </label>
-                    <div class="hidden-settings" id="edit-entry-link"></div>
+                    <div class="hidden-settings">
+                      <div class="title-header">
+                        <p class="title">Which screen has the form to edit entries?</p>
+                        <p>Select the screen with a form that users can use to edit the existing entry.</p>
+                      </div>
+                      <div id="edit-entry-link"></div>
+                    </div>
                   </div>
                   <div class="checkbox checkbox-icon">
                     <input type="checkbox" id="delete-entry" name="directory-control" value="delete-entry">
                     <label for="delete-entry">
-                      <span class="check"><i class="fa fa-check"></i></span> <span class="option-title">Deleting entries</span>
+                      <span class="check"><i class="fa fa-check"></i></span> <span class="option-title">Delete entries</span>
                     </label>
                   </div>
                 </div>
@@ -362,10 +413,9 @@
               </div>
 
               <div class="chat-screen-selection hidden">
-                <div class="row">
-                  <div class="col-xs-12">
-                    <p>Which screen is the Chat screen?</p>
-                  </div>
+                <div class="title-header">
+                  <p class="title">Which screen is the Chat screen?</p>
+                  <p>Users will be redirected to that screen when they tap the <em>Send message</em> button.</p>
                 </div>
                 <div id="chat-screen"></div>
               </div>

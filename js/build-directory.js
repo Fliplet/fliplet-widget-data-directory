@@ -53,7 +53,7 @@ var DataDirectory = function(config, container) {
 
   this.checkMobileMode();
 
-  var folderID = this.config.folder.selectFiles[0].id;
+  var folderID = this.config.folder && this.config.folder.selectFiles ? this.config.folder.selectFiles[0].id : undefined;
 
   function initialize() {
     _this.initialiseHandlebars();

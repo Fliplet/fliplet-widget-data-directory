@@ -6,16 +6,13 @@
 
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active" id="data-source-control"><a href="#data-source-tab" aria-controls="data-source" role="tab" data-toggle="tab">Data source</a></li>
-    <li role="presentation" class="disabled" id="main-list-control"><a href="#main-list-tab" aria-controls="main-list" role="tab" data-toggle="tab">Main list</a></li>
+    <li role="presentation" class="disabled" id="main-list-control"><a href="#main-list-tab" aria-controls="main-list" role="tab" data-toggle="tab">List</a></li>
+    <li role="presentation" class="disabled" id="details-control"><a href="#details-tab" aria-controls="details" role="tab" data-toggle="tab">Details</a></li>
+    <li role="presentation" class="disabled" id="advanced-control"><a href="#advanced-tab" aria-controls="advanced" role="tab" data-toggle="tab">Advanced</a></li>
   </ul>
 
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="data-source-tab">
-      <div class="title-header">
-        <p>Select data source</p>
-        <p>Select a data source for your directory.</p>
-      </div>
-
       <div class="text-success no-data-source-prompt">
         <p>You don't have any data source set up, you can do so via <strong>Manage app data</strong> to load in your data in a table.</p>
         <p>To access it just press the <strong>My apps</strong> button in the toolbar, then you will find the button on the left menu.</p>
@@ -24,7 +21,7 @@
 
       <div class="form-group clearfix">
         <div class="col-sm-4 control-label">
-          <label for="data-sources">Which table do you want to use for your directory?</label>
+          <label for="data-sources">Which data source do you want to use for your directory?</label>
         </div>
         <div class="col-sm-8">
           <label for="data-sources" class="select-proxy-display">
@@ -54,162 +51,6 @@
           </div>
         </div>
 
-        <div class="title-header">
-          <p>Detail options</p>
-          <p>Users will see your data in detail in a side panel or overlay depending on the device they are on. Configure below what they will see in the detailed view.</p>
-        </div>
-
-        <div class="form-group clearfix">
-          <div class="col-sm-4 control-label">
-            <label for="data-detail-fields">Which field(s) do you want them to see?</label>
-          </div>
-          <div class="col-sm-8">
-            <input type="text" class="form-control" id="data-detail-fields" placeholder="Enter field names">
-            <p class="help-block">Separate multiple fields with commas (<code>,</code>). Fields will be displayed in the order provided.</p>
-          </div>
-        </div>
-
-        <div class="title-header">
-          <p>Chat options</p>
-        </div>
-        <div class="form-group clearfix inline-radio">
-          <div class="col-sm-4 control-label">
-            <label>Do you want to allow users to chat?</label>
-            <p>Selecting "Yes" will place a <strong>Send message</strong> button in the user profile. Tapping on the button will start a conversation.</p>
-          </div>
-          <div class="col-sm-8">
-            <div class="radio-buttons clearfix">
-              <div class="radio">
-                <input type="radio" id="chat-yes" name="enable_chat" value="enable-chat">
-                <label for="chat-yes">
-                  Yes
-                </label>
-              </div>
-              <div class="radio">
-                <input type="radio" id="chat-no" name="enable_chat" value="disable-chat">
-                <label for="chat-no">
-                  No
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="chat-screen-selection hidden">
-          <div class="row">
-            <div class="col-xs-12">
-              <p>Which screen is the Chat screen?</p>
-            </div>
-          </div>
-          <div id="chat-screen"></div>
-        </div>
-
-        <div class="title-header">
-          <p>Thumbnail options</p>
-          <p>You can enable a thumbnail on your main list and/or detail views. Configure below where and how to show the thumbnails.</p>
-        </div>
-
-        <div class="form-group clearfix">
-          <div class="col-sm-4 control-label">
-            <label for="data-thumbnail-fields-select">Select a field to use as the thumbnail</label>
-          </div>
-          <div class="col-sm-8">
-            <label for="data-tags-fields-select" class="select-proxy-display">
-              <span class="icon fa fa-chevron-down"></span>
-              <span class="select-value-proxy"></span>
-              <span id="data-thumbnail-fields"></span>
-            </label>
-            <p class="help-block">Make sure the field is pointing at an image file name.</p>
-          </div>
-        </div>
-
-        <div class="thumbs-options">
-          <div class="form-group clearfix inline-radio">
-            <div class="col-sm-4 control-label">
-              <label>Enable thumbnails on the Main list</label>
-            </div>
-            <div class="col-sm-8">
-              <div class="radio-buttons clearfix">
-                <div class="radio">
-                  <input type="radio" id="thumb-list-yes" name="enable_thumb_list" value="show" {{#if show_thumb_list}}checked{{/if}}>
-                  <label for="thumb-list-yes">
-                    Yes
-                  </label>
-                </div>
-                <div class="radio">
-                  <input type="radio" id="thumb-list-no" name="enable_thumb_list" value="no-show" {{#if show_thumb_list}}{{else}}checked{{/if}}>
-                  <label for="thumb-list-no">
-                    No
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group clearfix inline-radio">
-            <div class="col-sm-4 control-label">
-              <label>Enable thumbnails on the Details</label>
-            </div>
-            <div class="col-sm-8">
-              <div class="radio-buttons clearfix">
-                <div class="radio">
-                  <input type="radio" id="thumb-details-yes" name="enable_thumb_details" value="show" {{#if show_thumb_detail}}checked{{/if}}>
-                  <label for="thumb-details-yes">
-                    Yes
-                  </label>
-                </div>
-                <div class="radio">
-                  <input type="radio" id="thumb-details-no" name="enable_thumb_details" value="no-show" {{#if show_thumb_detail}}{{else}}checked{{/if}}>
-                  <label for="thumb-details-no">
-                    No
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group clearfix inline-radio">
-            <div class="col-sm-4 control-label">
-              <label>In what shape do you want your thumbnails?</label>
-            </div>
-            <div class="col-sm-8">
-              <div class="radio-buttons clearfix">
-                <div class="radio">
-                  <input type="radio" id="thumb-shape-square" name="thumb_shape" value="square">
-                  <label for="thumb-shape-square">
-                    Square
-                  </label>
-                </div>
-                <div class="radio">
-                  <input type="radio" id="thumb-shape-circle" name="thumb_shape" value="circular">
-                  <label for="thumb-shape-circle">
-                    Circular
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="title-header">
-            <p>Select the thumbnails folder</p>
-            <p>Select the folder where your thumbnails are stored.</p>
-          </div>
-
-          <div class="gallery-tool clearfix">
-            <div class="breadcrumbs-select">
-              <div class="helper"><strong>Root</strong></div>
-            </div>
-            <div class="back-btn">
-              Up to <span class="up-to">Folder Name</span>
-            </div>
-          </div>
-          <div class="folder-selection">
-            <span>Select a folder below</span>
-          </div>
-          <div class="image-library"></div>
-
-        </div>
-
       </div>
 
       <div class="options-no-columns">
@@ -222,7 +63,6 @@
     <div role="tabpanel" class="tab-pane" id="main-list-tab">
       <div class="options">
         <div class="title-header">
-          <p>Browse options</p>
           <p>Your data will be displayed in a list. You can set up how it's displayed and configure how users can search/filter your data.</p>
         </div>
 
@@ -247,7 +87,7 @@
                 <span class="check"><i class="fa fa-check"></i></span> Yes, please
               </label>
             </div>
-            <div class="show-subtitle">
+            <div class="hidden-settings show-subtitle">
               <div class="form-group clearfix">
                 <div class="col-xs-12">
                   <label for="directory-browse-subtitle">How do you want your subtitle displayed in the main list?</label>
@@ -272,7 +112,7 @@
                 <span class="check"><i class="fa fa-check"></i></span> Yes, please
               </label>
             </div>
-            <div class="show-tags">
+            <div class="hidden-settings show-tags">
               <div class="form-group clearfix">
                 <div class="col-xs-12">
                   <label for="directory-browse-tags-select">In which field can the tags be found?</label>
@@ -316,102 +156,268 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <div class="form-group clearfix">
-          <div class="col-sm-4 control-label">
-            <label>How do you want to use the information in each field?</label>
+    <div role="tabpanel" class="tab-pane" id="details-tab">
+      <div class="title-header">
+        <p>Users will see your data in detail in a side panel or overlay depending on the device they are on. Configure below what they will see in the detailed view.</p>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-sm-4 control-label">
+          <label for="data-detail-fields">Which field(s) do you want users to see?</label>
+        </div>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="data-detail-fields" placeholder="Enter field names">
+          <p class="help-block">Separate multiple fields with commas (<code>,</code>). Fields will be displayed in the order provided.</p>
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-sm-4 control-label">
+          <label>How do you want to use the information in each field?</label>
+        </div>
+        <div class="col-xs-12" id="data-browse-configurations">
+
+        </div>
+      </div>
+    </div>
+
+    <div role="tabpanel" class="tab-pane" id="advanced-tab">
+      <p>Customize your directory with the following features:</p>
+      <div class="panel-group" id="advanced-options-accordion">
+        <div class="panel panel-default">
+          <div class="panel-heading collapsed" role="tab" id="heading2" data-toggle="collapse" data-parent="#advanced-options-accordion" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+            <h4 class="panel-title">
+                Enable directory thumbnails
+                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+            </h4>
           </div>
-          <div class="col-xs-12" id="data-browse-configurations">
+          <div id="collapse2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading2" data-index="2" aria-expanded="false">
+            <div class="panel-body">
 
+              <div class="form-group clearfix inline-radio">
+                <div class="col-sm-4 control-label">
+                  <label>Do you want to enable directory thumbnails?</label>
+                </div>
+                <div class="col-sm-8">
+                  <div class="radio-buttons clearfix">
+                    <div class="radio">
+                      <input type="radio" id="enable-thumb-yes" name="enable_thumbs" value="yes">
+                      <label for="enable-thumb-yes">
+                        Yes
+                      </label>
+                    </div>
+                    <div class="radio">
+                      <input type="radio" id="enable-thumb-no" name="enable_thumbs" value="no">
+                      <label for="enable-thumb-no">
+                        No
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="thumbs-setting hidden">
+                <div class="form-group clearfix">
+                  <div class="col-sm-4 control-label">
+                    <label for="data-thumbnail-fields-select">Select the field to use as the thumbnail</label>
+                  </div>
+                  <div class="col-sm-8">
+                    <label for="data-tags-fields-select" class="select-proxy-display">
+                      <span class="icon fa fa-chevron-down"></span>
+                      <span class="select-value-proxy"></span>
+                      <span id="data-thumbnail-fields"></span>
+                    </label>
+                    <p class="help-block">Make sure the field contains an image file name <em>(eg.: image.jpg)</em> or full URL to an online image.</p>
+                  </div>
+                </div>
+
+                <div class="thumbs-options">
+                  <div class="form-group clearfix inline-radio">
+                    <div class="col-sm-4 control-label">
+                      <label>Show thumbnails on the Main list</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="radio-buttons clearfix">
+                        <div class="radio">
+                          <input type="radio" id="thumb-list-yes" name="enable_thumb_list" value="show" {{#if show_thumb_list}}checked{{/if}}>
+                          <label for="thumb-list-yes">
+                            Yes
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <input type="radio" id="thumb-list-no" name="enable_thumb_list" value="no-show" {{#if show_thumb_list}}{{else}}checked{{/if}}>
+                          <label for="thumb-list-no">
+                            No
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group clearfix inline-radio">
+                    <div class="col-sm-4 control-label">
+                      <label>Show thumbnails on the Details</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="radio-buttons clearfix">
+                        <div class="radio">
+                          <input type="radio" id="thumb-details-yes" name="enable_thumb_details" value="show" {{#if show_thumb_detail}}checked{{/if}}>
+                          <label for="thumb-details-yes">
+                            Yes
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <input type="radio" id="thumb-details-no" name="enable_thumb_details" value="no-show" {{#if show_thumb_detail}}{{else}}checked{{/if}}>
+                          <label for="thumb-details-no">
+                            No
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group clearfix inline-radio">
+                    <div class="col-sm-4 control-label">
+                      <label>In what shape do you want your thumbnails?</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="radio-buttons clearfix">
+                        <div class="radio">
+                          <input type="radio" id="thumb-shape-square" name="thumb_shape" value="square">
+                          <label for="thumb-shape-square">
+                            Square
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <input type="radio" id="thumb-shape-circle" name="thumb_shape" value="circular">
+                          <label for="thumb-shape-circle">
+                            Circular
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="title-header">
+                    <p class="title">Select the thumbnails folder</p>
+                    <p>Select the folder where your thumbnails are stored.</p>
+                  </div>
+
+                  <div id="folder-select">
+                    <div class="form-group">
+                      <div class="col-sm-4 control-label">
+                        <label>Select the thumbnails folder</label>
+                      </div>
+                      <div class="col-sm-8">
+                        <div class="folder-btn-holder">
+                          <div class="btn btn-default select-folder">{{#unless folder.selectFiles}}Browse your folder library{{else}}Replace folder{{/unless}}</div>
+                          <div class="info-holder clearfix {{#unless folder.selectFiles}}hidden{{/unless}}">
+                            <div class="folder-title"><i class="fa fa-folder"></i> Selected folder: <strong><span>{{folder.selectFiles.0.name}}</span></strong></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading collapsed" role="tab" id="heading0" data-toggle="collapse" data-parent="#advanced-options-accordion" data-target="#collapse0" aria-expanded="false" aria-controls="collapse0">
+            <h4 class="panel-title">
+                Allow users to add, edit and delete entries
+                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+            </h4>
+          </div>
+          <div id="collapse0" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading0" data-index="0" aria-expanded="false">
+            <div class="panel-body">
+              <div class="form-group clearfix">
+                <div class="col-sm-4 control-label">
+                  <label>Configure each of the options below.</label>
+                </div>
+                <div class="col-sm-8">
+                  <div class="checkbox checkbox-icon">
+                    <input type="checkbox" id="add_entry" name="directory-control" value="add-entry">
+                    <label for="add_entry">
+                      <span class="check"><i class="fa fa-check"></i></span> <span class="option-title">Add entries</span>
+                    </label>
+                    <div class="hidden-settings">
+                      <p>Select the screen where users can add new entries.</p>
+                      <div id="add-entry-link"></div>
+                    </div>
+                  </div>
+                  <div class="checkbox checkbox-icon">
+                    <input type="checkbox" id="edit_entry" name="directory-control" value="edit-entry">
+                    <label for="edit_entry">
+                      <span class="check"><i class="fa fa-check"></i></span> <span class="option-title">Edit entries</span>
+                    </label>
+                    <div class="hidden-settings">
+                      <p>Select the screen where users can edit existing entries.</p>
+                      <div id="edit-entry-link"></div>
+                    </div>
+                  </div>
+                  <div class="checkbox checkbox-icon">
+                    <input type="checkbox" id="delete-entry" name="directory-control" value="delete-entry">
+                    <label for="delete-entry">
+                      <span class="check"><i class="fa fa-check"></i></span> <span class="option-title">Delete entries</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading collapsed" role="tab" id="heading1" data-toggle="collapse" data-parent="#advanced-options-accordion" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+            <h4 class="panel-title">
+                Allow users to send messages
+                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+            </h4>
+          </div>
+          <div id="collapse1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading1" data-index="1" aria-expanded="false">
+            <div class="panel-body">
+              <div class="form-group clearfix inline-radio">
+                <div class="col-sm-4 control-label">
+                  <label>Do you want to allow users to chat?</label>
+                  <p>Selecting "Yes" will place a <em>Send message</em> button in the user profile. Tapping on the button will start a conversation.</p>
+                </div>
+                <div class="col-sm-8">
+                  <div class="radio-buttons clearfix">
+                    <div class="radio">
+                      <input type="radio" id="chat-yes" name="enable_chat" value="enable-chat">
+                      <label for="chat-yes">
+                        Yes
+                      </label>
+                    </div>
+                    <div class="radio">
+                      <input type="radio" id="chat-no" name="enable_chat" value="disable-chat">
+                      <label for="chat-no">
+                        No
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chat-screen-selection hidden">
+                <p>Select the screen where users can find the chat feature.</p>
+                <div id="chat-screen"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-
-
-
-
-
 </div>
 
 <!-- Templates -->
-<template id="template-folder">
-    <div class="col-xs-4 item-holder folder" data-folder-id="\{{id}}" data-parent-id="\{{parentId}}" }>
-        <div class="image-holder">
-            <div class="image-overlay">
-                <i class="fa fa-folder" aria-hidden="true"></i>
-            </div>
-            <div class="image-info">
-                <p>
-                    <strong>\{{name}}</strong>
-                </p>
-                <p>
-                    Double click to open the folder
-                </p>
-            </div>
-        </div>
-        <div class="image-title">
-            <p>
-                <strong>\{{name}}</strong>
-            </p>
-        </div>
-    </div>
-</template>
-
-<template id="template-app">
-    <div class="col-xs-4 item-holder folder" data-app-id="\{{id}}">
-        <div class="image-holder">
-            <div class="image-overlay">
-                <i class="fa fa-folder" aria-hidden="true"></i>
-            </div>
-            <div class="image-info">
-                <p>
-                    <strong>\{{name}}</strong>
-                </p>
-                <p>
-                    Double click to open the folder
-                </p>
-            </div>
-        </div>
-        <div class="image-title">
-            <p>
-                <strong>\{{name}}</strong>
-            </p>
-        </div>
-    </div>
-</template>
-
-<template id="template-organization">
-    <div class="col-xs-4 item-holder folder" data-organization-id="\{{id}}">
-        <div class="image-holder">
-            <div class="image-overlay">
-                <i class="fa fa-folder" aria-hidden="true"></i>
-            </div>
-            <div class="image-info">
-                <p>
-                    <strong>\{{name}}</strong>
-                </p>
-                <p>
-                    Double click to open the folder
-                </p>
-            </div>
-        </div>
-        <div class="image-title">
-            <p>
-                <strong>\{{name}}</strong>
-            </p>
-        </div>
-    </div>
-</template>
-
-<template id="template-nofiles">
-    <div class="nofiles-msg">
-        <p>This folder is empty.</p>
-    </div>
-</template>
-
 <template id="data-type-selector-template">
   <label class="select-proxy-display">
     <span class="icon fa fa-chevron-down"></span>

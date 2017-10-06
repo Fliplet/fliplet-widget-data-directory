@@ -1,4 +1,5 @@
 /* Compatbility with new Drag & Drop interface */
+
 .mode-interact [data-fl-edit] .fl-widget-instance {
   position: static;
 }
@@ -648,6 +649,7 @@
 }
 
 
+
 /* Loading Overlay */
 
 .directory-list.disabled li {
@@ -728,6 +730,7 @@
 }
 
 
+
 /* LOADER */
 
 .loader-wrapper {
@@ -800,6 +803,7 @@
     height: 3em;
   }
 }
+
 
 
 /** DATE RANGE OVERLAY **/
@@ -1050,6 +1054,7 @@
 }
 
 
+
 /* Buttons */
 
 .btn-primary {
@@ -1127,4 +1132,82 @@
   border: 1px solid #337ab7;
   color: #337ab7;
   outline: none;
+}
+
+.directory-list .add-new-entry {
+  background-color: #428bca;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  z-index: 2;
+  right: 15px;
+  bottom: 15px;
+  font-size: 22px;
+  color: #FFFFFF;
+  margin-right: 0;
+  cursor: pointer;
+}
+
+.edit-button-tray .edit-entry {
+  background-color: #428bca;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  /* box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2); */
+  position: fixed;
+  z-index: 2;
+  right: 15px;
+  top: 15px;
+  font-size: 22px;
+  color: #FFFFFF;
+  margin-right: 0;
+  cursor: pointer;
+}
+
+.delete-button-tray {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(51, 51, 51, 0.2);
+  text-align: center;
+}
+
+.delete-button-tray .btn-danger {
+  display: block;
+  clear: both;
+  width: 100%;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 24px;
+  border: 2px solid #d43f3a;
+  color: #d43f3a;
+  background: transparent;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.delete-button-tray .btn-danger,
+.delete-button-tray .btn-danger:active,
+.delete-button-tray .btn-danger:active:focus,
+.delete-button-tray .btn-danger:active:hover,
+.delete-button-tray .btn-danger:focus,
+.delete-button-tray .btn-danger:hover {
+  background-color: transparent;
+  border: 2px solid #d43f3a;
+  color: #d43f3a;
+  outline: none;
+}
+
+@media screen and (min-width: 640px) {
+  .delete-button-tray .btn-danger {
+    display: inline-block;
+    width: auto;
+  }
 }

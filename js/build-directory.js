@@ -38,6 +38,7 @@ var DataDirectory = function(config, container) {
   delete this.config.rows;
 
   this.config.is_alphabetical = this.config.is_alphabetical && this.config.alphabetical_field !== ''; // Ensures an alphabetical field is provided
+  this.config.enable_thumbs = this.config.enable_thumbs || ( typeof this.config.enable_thumbs === 'undefined' && typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '');
   this.$container = $(container).parents('body');
   this.deviceIsTablet = (window.innerWidth >= 640 && window.innerHeight >= 640);
   this.navHeight = $('.fl-viewport-header').height() || 0;
@@ -52,7 +53,7 @@ var DataDirectory = function(config, container) {
 
   this.checkMobileMode();
 
-  var folderID = this.config.folderConfig;
+  var folderID = this.config.folder && this.config.folder.selectFiles ? this.config.folder.selectFiles[0].id : undefined;
 
   function initialize() {
     _this.initialiseHandlebars();
@@ -69,12 +70,14 @@ var DataDirectory = function(config, container) {
   });
 
   function renderThumb(file) {
-    // Returns placeholder if no match
-    _this.data.forEach(function(entry) {
-      if (file.name.indexOf(entry[_this.config.thumbnail_field]) !== -1 && entry[_this.config.thumbnail_field].trim() !== '') {
-        entry[_this.config.thumbnail_field] = file.url;
-      }
-    });
+    if (_this.data) {
+      // Returns placeholder if no match
+      _this.data.forEach(function(entry) {
+        if (file.name.indexOf(entry[_this.config.thumbnail_field]) !== -1 && entry[_this.config.thumbnail_field].trim() !== '') {
+          entry[_this.config.thumbnail_field] = file.url;
+        }
+      });
+    }
   }
 
   if (typeof this.config.is_alphabetical === 'string') {
@@ -131,6 +134,18 @@ DataDirectory.prototype.setConfig = function(key, value) {
     this.config[key] = value;
   }
 };
+
+DataDirectory.prototype.refreshDirectory = function() {
+  this.checkMobileMode();
+  this.entryOverlay.close();
+
+  if (!this.config) {
+    return this.directoryNotConfigured();
+  }
+
+  this.init();
+  this.parseQueryVars();
+}
 
 DataDirectory.prototype.initialiseHandlebars = function() {
   var _this = this;
@@ -232,7 +247,7 @@ DataDirectory.prototype.init = function() {
   // This before check data length because means that we are probably trying to load something with custom code
   if (!this.config.directory_enabled) return;
 
-  if (!this.data.length) {
+  if (!this.data || !this.data.length) {
     return this.directoryNotConfigured();
   }
 
@@ -307,9 +322,13 @@ DataDirectory.prototype.renderEntries = function() {
   var entriesData = {
     show_subtitle: this.config.show_subtitle ? this.config.show_subtitle : false,
     show_tags: this.config.show_tags ? this.config.show_tags : false,
-    has_thumbnail: (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field !== null && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_list ? this.config.show_thumb_list : false),
+    has_thumbnail: (typeof this.config.enable_thumbs !== 'undefined' && this.config.enable_thumbs && typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_list ? this.config.show_thumb_list : false),
     thumbShape: (typeof this.config.thumbShape !== 'undefined' && this.config.thumbShape !== null && this.config.thumbShape ? this.config.thumbShape : 'circular'),
-    entries: this.data
+    entries: this.data,
+    addEntry: {
+      enabled: typeof this.config.addEntry !== 'undefined' && this.config.addEntry ? this.config.addEntry.enabled : false,
+      dataSourceId: typeof this.config.addEntry !== 'undefined' && this.config.addEntry ? this.config.addEntry.dataSourceId : undefined
+    }
   };
   var directoryListTemplate = (this.config.directoryListTemplate !== '') ?
     Handlebars.compile(this.config.directoryListTemplate) :
@@ -501,25 +520,27 @@ DataDirectory.prototype.isMode = function(mode) {
 DataDirectory.prototype.attachObservers = function() {
   var _this = this;
 
-  _this.data.forEach(function(entry, i) {
-    var imgURL = entry[_this.config.thumbnail_field];
+  if (_this.data) {
+    _this.data.forEach(function(entry, i) {
+      var imgURL = entry[_this.config.thumbnail_field];
 
-    if (/api\.fliplet\.(com|local)/.test(imgURL)) {
-      // attach auth token
-      imgURL += (imgURL.indexOf('?') === -1 ? '?' : '&') + 'auth_token=' + Fliplet.User.getAuthToken();
-    }
+      if (/api\.fliplet\.(com|local)/.test(imgURL)) {
+        // attach auth token
+        imgURL += (imgURL.indexOf('?') === -1 ? '?' : '&') + 'auth_token=' + Fliplet.User.getAuthToken();
+      }
 
-    if (/^(f|ht)tps?:\/\//i.test(imgURL)) {
+      if (/^(f|ht)tps?:\/\//i.test(imgURL)) {
 
-      var img = new Image();
+        var img = new Image();
 
-      img.addEventListener('load', function() {
-        $('.list-default.directory-entries li[data-index="' + i + '"] .list-image').css('background-image', 'url(' + this.src + ')');
-      }, false);
+        img.addEventListener('load', function() {
+          $('.list-default.directory-entries li[data-index="' + i + '"] .list-image').css('background-image', 'url(' + this.src + ')');
+        }, false);
 
-      img.src = imgURL;
-    }
-  });
+        img.src = imgURL;
+      }
+    });
+  }
 
   this.$container.on('click', '.data-linked', $.proxy(this.dataLinkClicked, this));
   $(window).on('resize', function() {
@@ -567,8 +588,43 @@ DataDirectory.prototype.attachObservers = function() {
 
   $(this.$container).on('click', '.chat-entry', function() {
     var entryID = $(this).data('entry-id');
-    _this.config.chatLinkAction.query = "?contactConversation=" + entryID;
-    Fliplet.Navigate.to(_this.config.chatLinkAction);
+    if (_this.config.chatLinkAction) {
+      _this.config.chatLinkAction.query = "?contactConversation=" + entryID;
+      Fliplet.Navigate.to(_this.config.chatLinkAction);
+    }
+  });
+
+  $(this.$container).on('click', '.add-new-entry', function() {
+    if (_this.config.addEntryLinkAction) {
+      _this.config.addEntryLinkAction.query = '?mode="add"';
+      Fliplet.Navigate.to(_this.config.addEntryLinkAction);
+    }
+  });
+
+  $(this.$container).on('click', '.edit-entry', function() {
+    var entryID = $(this).data('entry-id');
+    if (_this.config.addEntryLinkAction) {
+      _this.config.editEntryLinkAction.query = "?dataSourceEntryId=" + entryID;
+      Fliplet.Navigate.to(_this.config.editEntryLinkAction);
+    }
+  });
+
+  $(this.$container).on('click', '.delete-entry', function() {
+    // @TODO: Confirm first, then delete entry
+    //        Refresh to list view
+    var entryID = $(this).data('entry-id');
+    var confirmDelete = confirm("Are you sure you want to delete this entry?");
+
+    if (confirmDelete == true) {
+      Fliplet.DataSources.connect(_this.config.source).then(function (connection) {
+        return connection.removeById(entryID);
+      }).then(function onRemove() {
+        _this.data = _.remove(_this.data, function(entry) {
+          return entry.dataSourceEntryId !== parseInt(entryID, 10);
+        });
+        _this.refreshDirectory();
+      });
+    }
   });
 
   document.addEventListener("flDirectoryEntryBeforeRender", function() {
@@ -743,6 +799,14 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent) {
   var detailData = {
     title: title,
     link_to_chat: this.config.enable_chat ? this.config.enable_chat : false,
+    editEntry: {
+      enabled: typeof this.config.editEntry !== 'undefined' && this.config.editEntry ? this.config.editEntry.enabled : false,
+      dataSourceId: typeof this.config.editEntry !== 'undefined' && this.config.editEntry ? this.config.editEntry.dataSourceId : undefined
+    },
+    deleteEntry: {
+      enabled: typeof this.config.deleteEntry !== 'undefined' && this.config.deleteEntry ? this.config.deleteEntry.enabled : false,
+      dataSourceId: typeof this.config.deleteEntry !== 'undefined' && this.config.deleteEntry ? this.config.deleteEntry.dataSourceId : undefined
+    },
     has_thumbnail: this.config.show_thumb_detail ? this.config.show_thumb_detail : false,
     thumbShape: this.config.thumbShape ? this.config.thumbShape : 'circular',
     fields: [],
@@ -750,7 +814,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent) {
   };
 
   if (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '') {
-    detailData['has_thumbnail'] = (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_detail ? this.config.show_thumb_detail : false);
+    detailData['has_thumbnail'] = (typeof this.config.enable_thumbs !== 'undefined' && this.config.enable_thumbs && typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_detail ? this.config.show_thumb_detail : false);
     detailData['thumbShape'] = (typeof this.config.thumbShape !== 'undefined' && this.config.thumbShape ? this.config.thumbShape : 'circular');
     detailData['thumbnail'] = (type == 'search-result-entry') ? this.searchResultData[entryIndex][this.config.thumbnail_field] : this.data[entryIndex][this.config.thumbnail_field];
   }

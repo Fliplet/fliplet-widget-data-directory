@@ -2,15 +2,25 @@
     <div class="directory-detail-title {{#if has_thumbnail}}has-thumbnail{{/if}}">
         {{#if has_thumbnail}}<span class="thumbnail"><span class="helper"></span><span class="img-wrapper {{thumbShape}}" {{#if thumbnail}} style="background-image: url('{{thumbnail}}');" {{/if}}></span></span>
         {{/if}}{{title}}</div>
+      <div class="button-tray">
         {{#if link_to_chat}}
-        <div class="button-tray">
-          <div class="btn btn-default chat-entry" data-entry-id="{{dataSourceEntryId}}"><i class="fa fa-comments" aria-hidden="true"></i> Send message</div>
-        </div>
+        <div class="btn btn-default chat-entry" data-entry-id="{{dataSourceEntryId}}"><i class="fa fa-comments" aria-hidden="true"></i> Send message</div>
         {{/if}}
+        {{#if editEntry.enabled}}
+        <div class="btn btn-default edit-entry" data-source-id="{{editEntry.dataSourceId}}" data-entry-id="{{dataSourceEntryId}}"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</div>
+        {{/if}}
+      </div>
     {{#each fields}}
       <div class="directory-detail-field" data-field="{{label}}">
         <div class="directory-detail-label">{{label}}</div>
         <div class="directory-detail-value">{{{value}}}</div>
       </div>
     {{/each}}
+    {{#if deleteEntry.enabled}}
+      <div class="delete-button-tray">
+        <div class="btn btn-danger delete-entry" data-source-id="{{deleteEntry.dataSourceId}}" data-entry-id="{{dataSourceEntryId}}">
+          <i class="fa fa-trash" aria-hidden="true"></i> Delete
+        </div>
+      </div>
+    {{/if}}
 </div>

@@ -1,19 +1,19 @@
 <ul>{{#each entries}}
-    {{{alphabet_divider}}}
-    <li class="linked data-linked {{#if ../has_thumbnail}}has-thumbs{{/if}} {{../thumbShape}}" data-type="entry" data-index="{{@index}}" data-source-entry-id="{{dataSourceEntryId}}">
-        <span class="icon fa fa-angle-right"></span>
-        {{#if ../has_thumbnail}}<div class="list-image"></div>{{/if}}
-        <div class="list-desc">
-            <p class="list-title">{{plaintext "entry_title" this}}</p>
-            {{#if ../show_subtitle}}
-                <p class="list-subtitle">{{plaintext "entry_subtitle" this}}</p>
-            {{/if}}
-        </div>
-        {{#if ../show_tags}}
-            <div class="list-tags">
-                {{entry_tags this}}
-            </div>
-        {{/if}}
-        <span class="buttonControl"></span>
-    </li>
+  {{{alphabet_divider}}}
+  <li class="linked data-linked {{#if ../has_thumbnail}}has-thumbs{{/if}} {{../thumbShape}}" data-type="entry" data-index="{{@index}}" data-source-entry-id="{{dataSourceEntryId}}">
+    <span class="icon fa fa-angle-right"></span>
+    {{#if ../has_thumbnail}}<div class="list-image"></div>{{/if}}
+    <div class="list-desc">
+      <p class="list-title">{{plaintext "entry_title" this}}</p>
+      {{#if ../show_subtitle}}
+        <p class="list-subtitle">{{plaintext "entry_subtitle" this}}</p>
+      {{/if}}
+    </div>
+    {{#if ../show_tags}}
+      <div class="list-tags">
+        {{entry_tags this}}
+      </div>
+    {{/if}}
+    <span class="buttonControl"></span>
+  </li>
 {{/each}}</ul>

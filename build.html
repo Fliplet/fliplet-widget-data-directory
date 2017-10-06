@@ -2,6 +2,9 @@
   <div class="row">
     <div class="directory-wrapper">
       <div class="directory-list">
+        {{#if addEntry.enabled}}
+          <div class="add-new-entry"><i class="fa fa-plus"></i></div>
+        {{/if}}
         <div class="directory-loading">
           <div class="directory-loading-screen"></div>
           <div class="directory-loading-body">

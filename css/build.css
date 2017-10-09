@@ -4,6 +4,10 @@
   position: static;
 }
 
+.mode-interact .fl-widget-instance .directory-list {
+  pointer-events: none;
+}
+
 .directory-details,
 .directory-list,
 [data-directory],

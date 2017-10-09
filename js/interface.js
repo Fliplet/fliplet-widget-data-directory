@@ -116,7 +116,7 @@ function attahObservers() {
 
   $('#folder-select').on('click', '.select-folder', function() {
 
-    Fliplet.Widget.toggleSaveButton(data.folder.selectFiles && data.folder.selectFiles.length > 0);
+    Fliplet.Widget.toggleSaveButton(data.folder && data.folder.selectFiles && data.folder.selectFiles.length > 0);
 
     Fliplet.Studio.emit('widget-save-label-update', {
       text: 'Select'

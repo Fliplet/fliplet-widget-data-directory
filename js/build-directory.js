@@ -61,7 +61,7 @@ var DataDirectory = function(config, container) {
     _this.attachObservers();
   }
 
-  Fliplet.Media.Folders.get(folderID).then(function(response) {
+  Fliplet.Media.Folders.get({ folderId: folderID }).then(function(response) {
     response.files.forEach(renderThumb);
     initialize();
   }, function onMediaFolderError(err) {

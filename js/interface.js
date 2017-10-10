@@ -148,9 +148,11 @@ function attahObservers() {
       Fliplet.Studio.emit('widget-save-label-update', {
         text: 'Save & Close'
       });
-      $('#folder-select .select-folder').text('Replace folder');
-      $('#folder-select .info-holder').removeClass('hidden');
-      $('#folder-select .folder-title span').text(filePickerData.selectFiles[0].name);
+      if (filePickerData.selectFiles.length) {
+        $('#folder-select .select-folder').text('Replace folder');
+        $('#folder-select .info-holder').removeClass('hidden');
+        $('#folder-select .folder-title span').text(filePickerData.selectFiles[0].name);
+      }
     });
   });
 

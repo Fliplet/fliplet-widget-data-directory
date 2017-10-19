@@ -277,7 +277,7 @@ DataDirectory.prototype.init = function() {
 };
 
 DataDirectory.prototype.verifyFields = function(fieldConfig) {
-  if (this.config[fieldConfig].constructor.name !== 'Array') return;
+  if (!Array.isArray(this.config[fieldConfig])) return;
 
   var arr = [];
   for (var i = 0, l = this.config[fieldConfig].length; i < l; i++) {

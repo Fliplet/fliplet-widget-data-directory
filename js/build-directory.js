@@ -237,6 +237,21 @@ DataDirectory.prototype.initialiseHandlebars = function() {
     });
   }
 
+  Handlebars.registerHelper('entry_thumbnail', function(entry) {
+    var thumbnail = entry[_this.config.thumbnail_field];
+
+    if (!thumbnail) {
+      return '';
+    }
+
+    if (/api\.fliplet\.(com|local)/.test(thumbnail)) {
+      // attach auth token
+      thumbnail += (thumbnail.indexOf('?') === -1 ? '?' : '&') + 'auth_token=' + Fliplet.User.getAuthToken();
+    }
+
+    return thumbnail;
+  });
+
   Handlebars.registerPartial('directory_filter_values', Handlebars.templates.directoryFilterValue);
 };
 
@@ -519,28 +534,6 @@ DataDirectory.prototype.isMode = function(mode) {
 
 DataDirectory.prototype.attachObservers = function() {
   var _this = this;
-
-  if (_this.data) {
-    _this.data.forEach(function(entry, i) {
-      var imgURL = entry[_this.config.thumbnail_field];
-
-      if (/api\.fliplet\.(com|local)/.test(imgURL)) {
-        // attach auth token
-        imgURL += (imgURL.indexOf('?') === -1 ? '?' : '&') + 'auth_token=' + Fliplet.User.getAuthToken();
-      }
-
-      if (/^(f|ht)tps?:\/\//i.test(imgURL)) {
-
-        var img = new Image();
-
-        img.addEventListener('load', function() {
-          $('.list-default.directory-entries li[data-index="' + i + '"] .list-image').css('background-image', 'url(' + this.src + ')');
-        }, false);
-
-        img.src = imgURL;
-      }
-    });
-  }
 
   this.$container.on('click', '.data-linked', $.proxy(this.dataLinkClicked, this));
   $(window).on('resize', function() {
@@ -1062,7 +1055,6 @@ DataDirectory.prototype.renderSearchResult = function(options, callback) {
   };
 
   this.switchMode('search-result');
-  var _this = this;
   var data = {
     has_thumbnail: this.config.show_thumb_list ? this.config.show_thumb_list : false,
     thumbShape: this.config.thumbShape ? this.config.thumbShape : 'circular',
@@ -1132,20 +1124,6 @@ DataDirectory.prototype.renderSearchResult = function(options, callback) {
 
       break;
   }
-
-  data.result.forEach(function(entry, i) {
-    var imgURL = entry[_this.config.thumbnail_field];
-    if (/^(f|ht)tps?:\/\//i.test(imgURL)) {
-
-      var img = new Image();
-
-      img.addEventListener('load', function() {
-        $('.list-default.search-result li[data-index="' + i + '"] .list-image').css('background-image', 'url(' + this.src + ')');
-      }, false);
-
-      img.src = imgURL;
-    }
-  });
 
   this.searchResultData = data.result;
   var searchResultTemplate = (this.config.searchResultTemplate !== '') ?

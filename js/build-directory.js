@@ -237,7 +237,7 @@ DataDirectory.prototype.initialiseHandlebars = function() {
     });
   }
 
-  Handlebars.registerHelper('entry_thumbnail', function(entry) {
+  Handlebars.registerHelper('entry_thumbnail_bg', function(entry) {
     var thumbnail = entry[_this.config.thumbnail_field];
 
     if (!thumbnail) {
@@ -249,7 +249,7 @@ DataDirectory.prototype.initialiseHandlebars = function() {
       thumbnail += (thumbnail.indexOf('?') === -1 ? '?' : '&') + 'auth_token=' + Fliplet.User.getAuthToken();
     }
 
-    return thumbnail;
+    return 'background-image:url('+thumbnail+')';
   });
 
   Handlebars.registerPartial('directory_filter_values', Handlebars.templates.directoryFilterValue);

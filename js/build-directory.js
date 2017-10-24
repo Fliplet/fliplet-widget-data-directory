@@ -240,13 +240,13 @@ DataDirectory.prototype.initialiseHandlebars = function() {
   Handlebars.registerHelper('entry_thumbnail', function(entry) {
     var thumbnail = entry[_this.config.thumbnail_field];
 
+    if (!thumbnail) {
+      return '';
+    }
+
     if (/api\.fliplet\.(com|local)/.test(thumbnail)) {
       // attach auth token
       thumbnail += (thumbnail.indexOf('?') === -1 ? '?' : '&') + 'auth_token=' + Fliplet.User.getAuthToken();
-    }
-    
-    if (!thumbnail) {
-      return '';
     }
 
     return thumbnail;
@@ -1055,7 +1055,6 @@ DataDirectory.prototype.renderSearchResult = function(options, callback) {
   };
 
   this.switchMode('search-result');
-  var _this = this;
   var data = {
     has_thumbnail: this.config.show_thumb_list ? this.config.show_thumb_list : false,
     thumbShape: this.config.thumbShape ? this.config.thumbShape : 'circular',

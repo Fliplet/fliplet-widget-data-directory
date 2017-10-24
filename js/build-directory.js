@@ -237,10 +237,18 @@ DataDirectory.prototype.initialiseHandlebars = function() {
     });
   }
 
+  Handlebars.registerHelper('ifHasImage', function (entry, options) {
+    if (entry[_this.config.thumbnail_field] && entry[_this.config.thumbnail_field] !== '') {
+      return options.fn(this)
+    } else {
+      return options.inverse(this);
+    }
+  })
+
   Handlebars.registerHelper('entry_thumbnail', function(entry) {
     var thumbnail = entry[_this.config.thumbnail_field];
 
-    if (!thumbnail) {
+    if (!thumbnail || thumbnail === '') {
       return '';
     }
 

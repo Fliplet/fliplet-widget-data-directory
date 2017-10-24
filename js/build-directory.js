@@ -237,6 +237,16 @@ DataDirectory.prototype.initialiseHandlebars = function() {
     });
   }
 
+  Handlebars.registerHelper('entry_thumbnail', function(entry) {
+    var thumbnail = entry[_this.config.thumbnail_field];
+    
+    if (!thumbnail) {
+      return '';
+    }
+
+    return thumbnail;
+  });
+
   Handlebars.registerPartial('directory_filter_values', Handlebars.templates.directoryFilterValue);
 };
 

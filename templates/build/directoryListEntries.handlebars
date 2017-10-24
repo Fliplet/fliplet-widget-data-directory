@@ -2,7 +2,7 @@
   {{{alphabet_divider}}}
   <li class="linked data-linked {{#if ../has_thumbnail}}has-thumbs{{/if}} {{../thumbShape}}" data-type="entry" data-index="{{@index}}" data-source-entry-id="{{dataSourceEntryId}}">
     <span class="icon fa fa-angle-right"></span>
-    {{#if ../has_thumbnail}}<div class="list-image" {{#ifHasImage this}}style="background-image: url('{{entry_thumbnail this}}');"{{/ifHasImage}}></div>{{/if}}
+    {{#if ../has_thumbnail}}<div class="list-image" style="{{entry_thumbnail_bg this}}"></div>{{/if}}
     <div class="list-desc">
       <p class="list-title">{{plaintext "entry_title" this}}</p>
       {{#if ../show_subtitle}}

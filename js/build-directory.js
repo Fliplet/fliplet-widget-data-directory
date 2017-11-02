@@ -240,7 +240,7 @@ DataDirectory.prototype.initialiseHandlebars = function() {
   Handlebars.registerHelper('entry_thumbnail_bg', function(entry) {
     var thumbnail = entry[_this.config.thumbnail_field];
 
-    if ((!thumbnail || !/^(http|https):\/\//.test(thumbnail)) && !Array.isArray(thumbnail)) {
+    if ((!thumbnail || !/^https?:\/\//.test(thumbnail)) && !Array.isArray(thumbnail)) {
       return '';
     }
 

@@ -29,7 +29,7 @@ var DataDirectoryForm = (function() {
       $('[name=thumb_shape][value="' + configuration.thumbShape + '"]').prop('checked', true);
     }
 
-    this.directoryConfig = $.extend({
+    this.directoryConfig = $.extend(true, {
       is_alphabetical: true,
       alphabetical_field: "",
       label_template: "",
@@ -329,7 +329,7 @@ var DataDirectoryForm = (function() {
         search_fields: [],
         data_fields: this.columns,
         field_types: {},
-        folder: _this.folder,
+        folder: _this.directoryConfig && _this.directoryConfig.folder ? _this.directoryConfig.folder : {},
         label_template: $('#directory-browse-label').val(),
         show_subtitle: $("#show_subtitle").is(':checked'),
         subtitle: $("#show_subtitle").is(':checked') ? $('#directory-browse-subtitle').val() : '',

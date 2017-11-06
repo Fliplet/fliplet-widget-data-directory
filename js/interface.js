@@ -186,7 +186,7 @@ function save(notifyComplete) {
   dataDirectoryForm.directoryConfig.chatLinkAction = chatLinkAction;
   dataDirectoryForm.directoryConfig.addEntryLinkAction = addEntryLinkAction;
   dataDirectoryForm.directoryConfig.editEntryLinkAction = editEntryLinkAction;
-  dataDirectoryForm.directoryConfig.folder = filePickerData;
+  dataDirectoryForm.directoryConfig.folder = filePickerData && !_.isEmpty(filePickerData) ? filePickerData : dataDirectoryForm.directoryConfig.folder;
 
   return Fliplet.Widget.save(dataDirectoryForm.directoryConfig).then(function() {
     if (notifyComplete) {

@@ -73,7 +73,7 @@ var DataDirectory = function(config, container) {
     if (_this.data) {
       // Returns placeholder if no match
       _this.data.forEach(function(entry) {
-        if (file.name.indexOf(entry[_this.config.thumbnail_field]) !== -1 && entry[_this.config.thumbnail_field].trim() !== '') {
+        if (entry[_this.config.thumbnail_field] && file.name.indexOf(entry[_this.config.thumbnail_field]) !== -1 && entry[_this.config.thumbnail_field].trim() !== '') {
           entry[_this.config.thumbnail_field] = file.url;
         }
       });

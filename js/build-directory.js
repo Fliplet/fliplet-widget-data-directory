@@ -800,7 +800,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent) {
       enabled: typeof this.config.deleteEntry !== 'undefined' && this.config.deleteEntry ? this.config.deleteEntry.enabled : false,
       dataSourceId: typeof this.config.deleteEntry !== 'undefined' && this.config.deleteEntry ? this.config.deleteEntry.dataSourceId : undefined
     },
-    has_thumbnail: this.config.show_thumb_detail ? this.config.show_thumb_detail : false,
+    has_thumbnail: typeof this.config.enable_thumbs !== 'undefined' && this.config.enable_thumbs && typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_detail ? this.config.show_thumb_detail : false,
     thumbShape: this.config.thumbShape ? this.config.thumbShape : 'circular',
     fields: [],
     dataSourceEntryId: dataArr[entryIndex]['dataSourceEntryId'] || ''

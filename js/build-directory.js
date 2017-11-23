@@ -589,7 +589,7 @@ DataDirectory.prototype.attachObservers = function() {
 
   $(this.$container).on('click', '.add-new-entry', function() {
     if (_this.config.addEntryLinkAction) {
-      _this.config.addEntryLinkAction.query = '?mode="add"';
+      _this.config.addEntryLinkAction.query = '?mode=add';
       Fliplet.Navigate.to(_this.config.addEntryLinkAction);
     }
   });

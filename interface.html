@@ -421,19 +421,21 @@
 <template id="data-type-selector-template">
   <label class="select-proxy-display">
     <span class="icon fa fa-chevron-down"></span>
-    <span class="select-value-proxy">Display as text</span>
+    <span class="select-value-proxy">Text</span>
     <select class="hidden-select form-control">
-      <option value="text">Display as text</option>
-      <option value="html">Display as HTML</option>
-      <option value="tel">Tap to dial the number</option>
-      <option value="email">Tap to send an email</option>
-      <option value="url">Tap to visit webpage</option>
-        <option value="file">Tap to open file</option>
+      <optgroup label="Display as">
+      <option value="text">Text</option>
+      <option value="date">Date</option>
+      <option value="html">HTML</option>
+      <option value="image">Image</option>
+      <option value="accordion">Accordion</option>
+      <optgroup label="Link as">
+      <option value="tel">Phone number</option>
+      <option value="email">Email address</option>
+      <option value="url">Web address</option>
+      <option value="file">File</option>
       <!-- <<option value="address">Address</option> -->
-      <option value="image">Display as an image</option>
-        <option value="accordion">Display as an accordion</option>
       <!-- <option value="datetime">Date/time</option> -->
-        <option value="date">Display as date</option>
     </select>
   </label>
 </template>

@@ -25,11 +25,11 @@
         </div>
         <div class="col-sm-8">
           <label for="data-sources" class="select-proxy-display">
-            <span class="icon fa fa-chevron-down"></span>
-            <span class="select-value-proxy">Select a table</span>
             <select id="data-sources" data-label="select" class="hidden-select form-control">
               <option value="">&mdash; Select a table &mdash;</option>
             </select>
+            <span class="icon fa fa-chevron-down"></span>
+            <span class="select-value-proxy">&mdash; Select a table &mdash;</span>
           </label>
         </div>
       </div>
@@ -420,8 +420,6 @@
 <!-- Templates -->
 <template id="data-type-selector-template">
   <label class="select-proxy-display">
-    <span class="icon fa fa-chevron-down"></span>
-    <span class="select-value-proxy">Text</span>
     <select class="hidden-select form-control">
       <optgroup label="Display as">
       <option value="text">Text</option>
@@ -437,6 +435,8 @@
       <!-- <<option value="address">Address</option> -->
       <!-- <option value="datetime">Date/time</option> -->
     </select>
+    <span class="icon fa fa-chevron-down"></span>
+    <span class="select-value-proxy">Text</span>
   </label>
 </template>
 <!-- End of templates -->

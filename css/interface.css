@@ -163,17 +163,6 @@ table .select-proxy-display .icon {
   font-size: 14px;
 }
 
-.select-proxy-display .hidden-select {
-  position: absolute;
-  top: -1px;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  cursor: pointer;
-  opacity: 0;
-  z-index: 1;
-}
-
 .text-helper {
   margin-top: 0.5em;
   font-size: 0.8em;

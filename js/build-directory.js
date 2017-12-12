@@ -960,7 +960,7 @@ DataDirectory.prototype.getEntryField = function(entryIndex, fieldIndex, type) {
 
   var output = {};
   var label = this.config.detail_fields[fieldIndex];
-  var value = (type == 'search-result-entry') ? this.searchResultData[entryIndex][label] : this.data[entryIndex][label];
+  var value = this[type === 'search-result-entry' ? 'searchResultData' : 'data'][entryIndex][label];
   var fieldType = 'text';
   var valueHTML = '';
 
@@ -974,13 +974,23 @@ DataDirectory.prototype.getEntryField = function(entryIndex, fieldIndex, type) {
   if (this.config.hasOwnProperty('field_types') && this.config.field_types.hasOwnProperty(label)) {
     fieldType = this.config.field_types[label];
   }
-
-  if (fieldType === 'text' && this.config.filter_fields.indexOf(label) > -1) {
-    fieldType = 'filter';
-    value = {
-      filter: label,
-      value: value
-    };
+  
+  if (fieldType === 'text') {
+    try {
+      var parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) {
+        value = parsed.join(', ');
+      }
+    } catch (e) {}
+    
+    if (this.config.filter_fields.indexOf(label) > -1) {
+      fieldType = 'filter';
+          
+      value = {
+        filter: label,
+        value: value
+      };
+    }
   }
 
   if (fieldType === 'accordion') {

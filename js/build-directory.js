@@ -73,7 +73,10 @@ var DataDirectory = function(config, container) {
     if (_this.data) {
       // Returns placeholder if no match
       _this.data.forEach(function(entry) {
-        if (entry[_this.config.thumbnail_field] && file.name.indexOf(entry[_this.config.thumbnail_field]) !== -1 && entry[_this.config.thumbnail_field].trim() !== '') {
+        if (entry[_this.config.thumbnail_field]
+          && file.name.indexOf(entry[_this.config.thumbnail_field]) !== -1
+          && entry[_this.config.thumbnail_field]
+        ) {
           entry[_this.config.thumbnail_field] = file.url;
         }
       });
@@ -220,10 +223,19 @@ DataDirectory.prototype.initialiseHandlebars = function() {
   if (this.config.hasOwnProperty('tags_field')) {
     Handlebars.registerHelper('entry_tags', function(entry) {
       var tags = entry[_this.config.tags_field];
+      var splitTags = [];
       if (!tags) {
         return '';
       }
-      var splitTags = tags.split(",");
+
+      if (Array.isArray(tags)) {
+        splitTags = tags;
+      }
+
+      if (typeof tags === 'string') {
+        splitTags = tags.split(",");
+      }
+      
       return new Handlebars.SafeString(
         splitTags.map(function(tag) {
           tag = tag.trim();

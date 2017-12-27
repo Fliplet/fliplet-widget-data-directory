@@ -187,7 +187,9 @@ var DataDirectoryForm = (function() {
 
     manageAppData: function() {
       console.log('TODO');
-      // @TODO: Open overlay to data sources provider
+      // @TODO:
+      // Get data source ID
+      // Open overlay to data sources provider with ID
     },
 
     autoConfigureSearch: function() {

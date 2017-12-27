@@ -119,8 +119,10 @@ header a {
   text-decoration: none;
 }
 
-
-
+#manage-data {
+  width: 100%;
+  margin-top: 10px;
+}
 
 /* FORMS */
 

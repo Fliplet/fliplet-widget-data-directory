@@ -10,6 +10,7 @@ var DataDirectoryForm = (function() {
 
   // this reference
   var _this;
+  var $dataSources = $('#data-sources');
 
   // Constructor
   function DataDirectoryForm(configuration) {
@@ -130,6 +131,9 @@ var DataDirectoryForm = (function() {
 
     loadDataDirectoryForm: function() {
       $('#data-sources').html(Handlebars.templates.dataSourceOptions(_this.tables));
+      $('#data-sources').prop('disabled', false);
+      $('#data-sources ~ .select-value-proxy').html('&mdash; Select a table &mdash;');
+
       $('#data-alphabetical-fields').html(Handlebars.templates.dataAlphabeticalField(_this.columns));
       $('#data-tags-fields').html(Handlebars.templates.dataTagsField(_this.columns));
       $('#data-thumbnail-fields').html(Handlebars.templates.dataThumbnailField(_this.columns));
@@ -139,7 +143,6 @@ var DataDirectoryForm = (function() {
       }
 
       if (_this.source !== '') {
-        $dataSources = $('#data-sources');
         $dataSources.val(_this.source);
         updateSelectText($dataSources);
         _this.loadConfigurations_();
@@ -160,6 +163,29 @@ var DataDirectoryForm = (function() {
       $('.nav-tabs li#main-list-control').removeClass('disabled');
       $('.nav-tabs li#details-control').removeClass('disabled');
       $('.nav-tabs li#advanced-control').removeClass('disabled');
+    },
+
+    createDataSource: function() {
+      event.preventDefault();
+      var name = prompt('Please type a name for your data source:');
+
+      if (!name) {
+        return;
+      }
+
+      Fliplet.DataSources.create({
+        name: name,
+        organizationId: Fliplet.Env.get('organizationId')
+      }).then(function(ds) {
+        _this.tables.push(ds);
+        $dataSources.append('<option value="' + ds.id + '">' + ds.name + '</option>');
+        $dataSources.val(ds.id).trigger('change');
+      });
+    },
+
+    manageAppData: function() {
+      console.log('TODO');
+      // @TODO: Open overlay to data sources provider
     },
 
     autoConfigureSearch: function() {
@@ -264,6 +290,8 @@ var DataDirectoryForm = (function() {
       $(document).on("click", "#save-link", _this.saveDataDirectoryForm_);
       $('#data-sources').on('change', $.proxy(_this.dataSourceChanged_, this));
       $('#advanced-tab').on('change', '[name="enable_thumbs"]', _this.showThumbOptions_);
+      $('.create-data-source').on('click', _this.createDataSource);
+      $('#manage-data').on('click', _this.manageAppData);
       $('.nav.nav-stacked').on('click', 'li.disabled', function() {
         return false;
       });

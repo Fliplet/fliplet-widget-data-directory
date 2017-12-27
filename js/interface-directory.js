@@ -150,6 +150,7 @@ var DataDirectoryForm = (function() {
 
       if (!_this.columns || !_this.columns.length) {
         $('.options').hide();
+        $('#manage-data').addClass('hidden');
         if (_this.source) {
           $('.options-no-columns').show();
         }
@@ -159,6 +160,7 @@ var DataDirectoryForm = (function() {
         return;
       }
       $('.options').show();
+      $('#manage-data').removeClass('hidden');
       $('.options-no-columns').hide();
       $('.nav-tabs li#main-list-control').removeClass('disabled');
       $('.nav-tabs li#details-control').removeClass('disabled');

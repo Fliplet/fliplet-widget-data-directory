@@ -129,6 +129,14 @@ var DataDirectoryForm = (function() {
       }
     },
 
+    reloadTables: function() {
+      return Fliplet.DataSources.get({
+          type: null
+        }, {
+          cache: false
+        });
+    },
+
     loadDataDirectoryForm: function() {
       $('#data-sources').html(Handlebars.templates.dataSourceOptions(_this.tables));
       $('#data-sources').prop('disabled', false);
@@ -186,10 +194,16 @@ var DataDirectoryForm = (function() {
     },
 
     manageAppData: function() {
-      console.log('TODO');
       var dataSourceId = $dataSources.val();
-      // @TODO:
-      // Open overlay to data sources provider with ID
+      Fliplet.Studio.emit('overlay', {
+        name: 'widget',
+        options: {
+          size: 'large',
+          package: 'com.fliplet.data-sources',
+          title: 'Edit Data Sources',
+          data: { dataSourceId: dataSourceId }
+        }
+      });
     },
 
     autoConfigureSearch: function() {
@@ -352,6 +366,15 @@ var DataDirectoryForm = (function() {
           $('#edit-entry-link').parents('.hidden-settings').removeClass('active');
         }
       });
+
+      Fliplet.Studio.onMessage(function(event) {
+        if (event.data && event.data.event === 'overlay-close') {
+          _this.reloadTables().then(function(dataSources) {
+            _this.tables = dataSources;
+            _this.dataSourceChanged_(event);
+          });
+        }
+      });
     },
 
     saveDataDirectoryForm_: function() {
@@ -440,6 +463,13 @@ var DataDirectoryForm = (function() {
     },
 
     dataSourceChanged_: function(e) {
+      if (e.data && e.data.event === 'overlay-close') {
+        _this.parseSelectedTable(e.data.data.dataSourceId, true);
+        _this.loadDataDirectoryForm();
+
+        return;
+      }
+
       if (_this.source === "" || confirm("Are you sure you want to change the data source? This will reset your previous configuration for the directory.")) {
         _this.parseSelectedTable($(e.target).val(), true);
         _this.loadDataDirectoryForm();

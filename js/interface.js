@@ -170,7 +170,11 @@ function attahObservers() {
   });
 }
 
-Fliplet.DataSources.get({ type: null })
+Fliplet.DataSources.get({
+    type: null
+  }, {
+    cache: false
+  })
   .then(function(dataSources) {
     if (!dataSources.length) {
       $('.no-data-source-prompt').show();

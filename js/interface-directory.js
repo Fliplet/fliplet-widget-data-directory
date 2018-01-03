@@ -70,7 +70,7 @@ var DataDirectoryForm = (function() {
       });
 
       Handlebars.registerHelper("filterCheckbox", function(field) {
-        var $input = $("<div class='checkbox'><input data-field='" + field + "' data-type='filter' type='checkbox' id='filter_" + field + "'><label for='filter_" + field + "'><span class='check'><i class='fa fa-check'></i></span></label></div>");
+        var $input = $("<div class='checkbox checkbox-icon'><input data-field='" + field + "' data-type='filter' type='checkbox' id='filter_" + field + "'><label for='filter_" + field + "'><span class='check'><i class='fa fa-check'></i></span></label></div>");
 
         if (_this.directoryConfig.filter_fields.indexOf(field) > -1) {
           $input.find('input').attr('checked', true);
@@ -80,7 +80,7 @@ var DataDirectoryForm = (function() {
       });
 
       Handlebars.registerHelper("searchCheckbox", function(field) {
-        var $input = $("<div class='checkbox'><input data-field='" + field + "' data-type='search' type='checkbox' id='search_" + field + "'><label for='search_" + field + "'><span class='check'><i class='fa fa-check'></i></span></label></div>");
+        var $input = $("<div class='checkbox checkbox-icon'><input data-field='" + field + "' data-type='search' type='checkbox' id='search_" + field + "'><label for='search_" + field + "'><span class='check'><i class='fa fa-check'></i></span></label></div>");
 
         if (_this.directoryConfig.search_fields.indexOf(field) > -1) {
           $input.find('input').attr('checked', true);

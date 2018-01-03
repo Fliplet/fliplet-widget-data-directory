@@ -25,12 +25,14 @@
         </div>
         <div class="col-sm-8">
           <label for="data-sources" class="select-proxy-display">
-            <span class="icon fa fa-chevron-down"></span>
-            <span class="select-value-proxy">Select a table</span>
-            <select id="data-sources" data-label="select" class="hidden-select form-control">
-              <option value="">&mdash; Select a table &mdash;</option>
+            <select id="data-sources" data-label="select" class="hidden-select form-control" disabled>
+              <option value="">&mdash; Please wait</option>
             </select>
+            <span class="icon fa fa-chevron-down"></span>
+            <span class="select-value-proxy">&mdash; Please wait</span>
           </label>
+          <small>or just <a href="#" class="create-data-source">create a new data source</a></small>
+          <div class="btn btn-default hidden" id="manage-data">Edit data</div>
         </div>
       </div>
 
@@ -55,7 +57,7 @@
 
       <div class="options-no-columns">
         <div class="alert alert-warning">
-          Data source appears to be empty or misconfigured. Please visit <a href="/data-sources" target="_blank">Manage app data</a> to make sure the data source has data entries.
+          Data source appears to be empty or misconfigured. Please click the <strong>Manage app data</strong> button above to make sure the data source has data entries.
         </div>
       </div>
     </div>
@@ -420,8 +422,6 @@
 <!-- Templates -->
 <template id="data-type-selector-template">
   <label class="select-proxy-display">
-    <span class="icon fa fa-chevron-down"></span>
-    <span class="select-value-proxy">Text</span>
     <select class="hidden-select form-control">
       <optgroup label="Display as">
       <option value="text">Text</option>
@@ -437,6 +437,8 @@
       <!-- <<option value="address">Address</option> -->
       <!-- <option value="datetime">Date/time</option> -->
     </select>
+    <span class="icon fa fa-chevron-down"></span>
+    <span class="select-value-proxy">Text</span>
   </label>
 </template>
 <!-- End of templates -->

@@ -10,6 +10,7 @@ var DataDirectoryForm = (function() {
 
   // this reference
   var _this;
+  var $dataSources = $('#data-sources');
 
   // Constructor
   function DataDirectoryForm(configuration) {
@@ -128,8 +129,19 @@ var DataDirectoryForm = (function() {
       }
     },
 
+    reloadTables: function() {
+      return Fliplet.DataSources.get({
+          type: null
+        }, {
+          cache: false
+        });
+    },
+
     loadDataDirectoryForm: function() {
       $('#data-sources').html(Handlebars.templates.dataSourceOptions(_this.tables));
+      $('#data-sources').prop('disabled', false);
+      $('#data-sources ~ .select-value-proxy').html('&mdash; Select a table &mdash;');
+
       $('#data-alphabetical-fields').html(Handlebars.templates.dataAlphabeticalField(_this.columns));
       $('#data-tags-fields').html(Handlebars.templates.dataTagsField(_this.columns));
       $('#data-thumbnail-fields').html(Handlebars.templates.dataThumbnailField(_this.columns));
@@ -139,7 +151,6 @@ var DataDirectoryForm = (function() {
       }
 
       if (_this.source !== '') {
-        $dataSources = $('#data-sources');
         $dataSources.val(_this.source);
         updateSelectText($dataSources);
         _this.loadConfigurations_();
@@ -147,6 +158,7 @@ var DataDirectoryForm = (function() {
 
       if (!_this.columns || !_this.columns.length) {
         $('.options').hide();
+        $('#manage-data').addClass('hidden');
         if (_this.source) {
           $('.options-no-columns').show();
         }
@@ -156,10 +168,42 @@ var DataDirectoryForm = (function() {
         return;
       }
       $('.options').show();
+      $('#manage-data').removeClass('hidden');
       $('.options-no-columns').hide();
       $('.nav-tabs li#main-list-control').removeClass('disabled');
       $('.nav-tabs li#details-control').removeClass('disabled');
       $('.nav-tabs li#advanced-control').removeClass('disabled');
+    },
+
+    createDataSource: function() {
+      event.preventDefault();
+      var name = prompt('Please type a name for your data source:');
+
+      if (!name) {
+        return;
+      }
+
+      Fliplet.DataSources.create({
+        name: name,
+        organizationId: Fliplet.Env.get('organizationId')
+      }).then(function(ds) {
+        _this.tables.push(ds);
+        $dataSources.append('<option value="' + ds.id + '">' + ds.name + '</option>');
+        $dataSources.val(ds.id).trigger('change');
+      });
+    },
+
+    manageAppData: function() {
+      var dataSourceId = $dataSources.val();
+      Fliplet.Studio.emit('overlay', {
+        name: 'widget',
+        options: {
+          size: 'large',
+          package: 'com.fliplet.data-sources',
+          title: 'Edit Data Sources',
+          data: { dataSourceId: dataSourceId }
+        }
+      });
     },
 
     autoConfigureSearch: function() {
@@ -264,6 +308,8 @@ var DataDirectoryForm = (function() {
       $(document).on("click", "#save-link", _this.saveDataDirectoryForm_);
       $('#data-sources').on('change', $.proxy(_this.dataSourceChanged_, this));
       $('#advanced-tab').on('change', '[name="enable_thumbs"]', _this.showThumbOptions_);
+      $('.create-data-source').on('click', _this.createDataSource);
+      $('#manage-data').on('click', _this.manageAppData);
       $('.nav.nav-stacked').on('click', 'li.disabled', function() {
         return false;
       });
@@ -318,6 +364,15 @@ var DataDirectoryForm = (function() {
           $('#edit-entry-link').parents('.hidden-settings').addClass('active');
         } else {
           $('#edit-entry-link').parents('.hidden-settings').removeClass('active');
+        }
+      });
+
+      Fliplet.Studio.onMessage(function(event) {
+        if (event.data && event.data.event === 'overlay-close') {
+          _this.reloadTables().then(function(dataSources) {
+            _this.tables = dataSources;
+            _this.dataSourceChanged_(event);
+          });
         }
       });
     },
@@ -408,6 +463,13 @@ var DataDirectoryForm = (function() {
     },
 
     dataSourceChanged_: function(e) {
+      if (e.data && e.data.event === 'overlay-close') {
+        _this.parseSelectedTable(e.data.data.dataSourceId, true);
+        _this.loadDataDirectoryForm();
+
+        return;
+      }
+
       if (_this.source === "" || confirm("Are you sure you want to change the data source? This will reset your previous configuration for the directory.")) {
         _this.parseSelectedTable($(e.target).val(), true);
         _this.loadDataDirectoryForm();

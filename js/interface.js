@@ -79,7 +79,7 @@ function linkProviderInit() {
   });
   linkAddEntryProvider.then(function(result) {
     addEntryLinkAction = result.data || {};
-  })
+  });
   linkEditEntryProvider = Fliplet.Widget.open('com.fliplet.link', {
     // If provided, the iframe will be appended here,
     // otherwise will be displayed as a full-size iframe overlay
@@ -97,7 +97,7 @@ function linkProviderInit() {
   linkEditEntryProvider.then(function(result) {
     editEntryLinkAction = result.data || {};
     save(true);
-  })
+  });
 }
 
 function init() {
@@ -186,11 +186,58 @@ Fliplet.DataSources.get({
 
 
 function save(notifyComplete) {
+  $('.alert.error').html('');
+  $('.alert.error').removeClass('show');
+  var errors = false;
+
   dataDirectoryForm.saveDataDirectoryForm_();
   dataDirectoryForm.directoryConfig.chatLinkAction = chatLinkAction;
   dataDirectoryForm.directoryConfig.addEntryLinkAction = addEntryLinkAction;
   dataDirectoryForm.directoryConfig.editEntryLinkAction = editEntryLinkAction;
   dataDirectoryForm.directoryConfig.folder = filePickerData && !_.isEmpty(filePickerData) ? filePickerData : dataDirectoryForm.directoryConfig.folder;
+
+  if (dataDirectoryForm.directoryConfig.enable_chat && (!dataDirectoryForm.directoryConfig.chatLinkAction || typeof dataDirectoryForm.directoryConfig.chatLinkAction.page === 'undefined' || dataDirectoryForm.directoryConfig.chatLinkAction.page === '')) {
+    $('.alert.error').append('<p>- You need to select a Chat screen.</p>');
+    $('.alert.error').addClass('show');
+    errors = true;
+  }
+
+  if (dataDirectoryForm.directoryConfig.addEntry.enabled && (!dataDirectoryForm.directoryConfig.addEntryLinkAction || typeof dataDirectoryForm.directoryConfig.addEntryLinkAction.page === 'undefined' || dataDirectoryForm.directoryConfig.addEntryLinkAction.page === '')) {
+    $('.alert.error').append('<p>- You need to select a screen with a Form to add entries.</p>');
+    $('.alert.error').addClass('show');
+    errors = true;
+  }
+
+  if (dataDirectoryForm.directoryConfig.editEntry.enabled && (!dataDirectoryForm.directoryConfig.editEntryLinkAction || typeof dataDirectoryForm.directoryConfig.editEntryLinkAction.page === 'undefined'  || dataDirectoryForm.directoryConfig.editEntryLinkAction.page === '')) {
+    $('.alert.error').append('<p>- You need to select a screen with a Form to edit entries.</p>');
+    $('.alert.error').addClass('show');
+    errors = true;
+  }
+
+  if (dataDirectoryForm.directoryConfig.enable_thumbs && dataDirectoryForm.directoryConfig.thumbnail_field === '') {
+    $('.alert.error').append('<p>- You need to select a field to use as the thumbnail.</p>');
+    $('.alert.error').addClass('show');
+    errors = true;
+  }
+
+  if (dataDirectoryForm.directoryConfig.enable_thumbs && !dataDirectoryForm.directoryConfig.folder.selectFiles) {
+    $('.alert.error').append('<p>- You need to select a folder that contains your thumbnails.</p>');
+    $('.alert.error').addClass('show');
+    errors = true;
+  }
+
+  if (!dataDirectoryForm.directoryConfig.source && dataDirectoryForm.directoryConfig.source === '') {
+    $('.alert.error').append('<p>- You need to select a Data Source.</p>');
+    $('.alert.error').addClass('show');
+    errors = true;
+  }
+
+  if (errors) {
+    return Fliplet.Widget.save(dataDirectoryForm.directoryConfig).then(function() {
+      filePickerDataInit();
+      linkProviderInit();
+    });
+  }
 
   return Fliplet.Widget.save(dataDirectoryForm.directoryConfig).then(function() {
     if (notifyComplete) {

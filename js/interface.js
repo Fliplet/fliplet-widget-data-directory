@@ -13,7 +13,7 @@ var linkChatProvider;
 // Set link action to screen by default
 var chatLinkData = $.extend(true, {
   action: 'screen',
-  page: 'none',
+  page: '',
   transition: 'slide.left',
   options: {
     hideAction: true
@@ -21,7 +21,7 @@ var chatLinkData = $.extend(true, {
 }, data.chatLinkAction);
 var addEntryLinkData = $.extend(true, {
   action: 'screen',
-  page: 'none',
+  page: '',
   transition: 'slide.left',
   options: {
     hideAction: true
@@ -29,7 +29,7 @@ var addEntryLinkData = $.extend(true, {
 }, data.addEntryLinkAction);
 var editEntryLinkData = $.extend(true, {
   action: 'screen',
-  page: 'none',
+  page: '',
   transition: 'slide.left',
   options: {
     hideAction: true

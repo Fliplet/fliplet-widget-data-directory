@@ -599,7 +599,11 @@ DataDirectory.prototype.attachObservers = function() {
       if (_this.config.chatLinkAction && typeof _this.config.chatLinkAction.page !== 'undefined' && _this.config.chatLinkAction.page !== '') {
         Fliplet.Navigate.to(_this.config.chatLinkAction);
       } else {
-        alert('Chat not found. Please check the directory\'s configuration.');
+        var options = {
+          popupTitle: 'Link not configured',
+          popupMessage: 'Chat not found. Please check the directory\'s configuration.',
+        };
+        Fliplet.Navigate.popup(options);
       }
     }
   });
@@ -611,7 +615,11 @@ DataDirectory.prototype.attachObservers = function() {
       if (_this.config.addEntryLinkAction && typeof _this.config.addEntryLinkAction.page !== 'undefined' && _this.config.addEntryLinkAction.page !== '') {
         Fliplet.Navigate.to(_this.config.addEntryLinkAction);
       } else {
-        alert('Form not found. Please check the directory\'s configuration.');
+        var options = {
+          popupTitle: 'Link not configured',
+          popupMessage: 'Form not found. Please check the directory\'s configuration.',
+        };
+        Fliplet.Navigate.popup(options);
       }
     }
   });
@@ -624,7 +632,11 @@ DataDirectory.prototype.attachObservers = function() {
       if (_this.config.editEntryLinkAction && typeof _this.config.editEntryLinkAction.page !== 'undefined' && _this.config.editEntryLinkAction.page !== '') {
         Fliplet.Navigate.to(_this.config.editEntryLinkAction);
       } else {
-        alert('Form not found. Please check the directory\'s configuration.');
+        var options = {
+          popupTitle: 'Link not configured',
+          popupMessage: 'Form not found. Please check the directory\'s configuration.',
+        };
+        Fliplet.Navigate.popup(options);
       }
     }
   });

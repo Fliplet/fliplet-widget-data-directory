@@ -593,24 +593,63 @@ DataDirectory.prototype.attachObservers = function() {
 
   $(this.$container).on('click', '.chat-entry', function() {
     var entryID = $(this).data('entry-id');
+    var options = {
+      popupTitle: 'Link not configured',
+      popupMessage: 'Chat not found. Please check the directory\'s configuration.',
+    };
+
     if (_this.config.chatLinkAction) {
       _this.config.chatLinkAction.query = "?contactConversation=" + entryID;
-      Fliplet.Navigate.to(_this.config.chatLinkAction);
+
+      if (typeof _this.config.chatLinkAction.page !== 'undefined' && _this.config.chatLinkAction.page !== '') {
+        Fliplet.Navigate.to(_this.config.chatLinkAction)
+          .catch(function() {
+            Fliplet.Navigate.popup(options);
+          });
+      } else {
+        Fliplet.Navigate.popup(options);
+      }
     }
   });
 
   $(this.$container).on('click', '.add-new-entry', function() {
+    var options = {
+      popupTitle: 'Link not configured',
+      popupMessage: 'Form not found. Please check the directory\'s configuration.',
+    };
+
     if (_this.config.addEntryLinkAction) {
       _this.config.addEntryLinkAction.query = '?mode=add';
-      Fliplet.Navigate.to(_this.config.addEntryLinkAction);
+
+      if (typeof _this.config.addEntryLinkAction.page !== 'undefined' && _this.config.addEntryLinkAction.page !== '') {
+        Fliplet.Navigate.to(_this.config.addEntryLinkAction)
+          .catch(function() {
+            Fliplet.Navigate.popup(options);
+          });
+      } else {
+        Fliplet.Navigate.popup(options);
+      }
     }
   });
 
   $(this.$container).on('click', '.edit-entry', function() {
     var entryID = $(this).data('entry-id');
+    var options = {
+      popupTitle: 'Link not configured',
+      popupMessage: 'Form not found. Please check the directory\'s configuration.',
+    };
+
     if (_this.config.addEntryLinkAction) {
       _this.config.editEntryLinkAction.query = "?dataSourceEntryId=" + entryID;
-      Fliplet.Navigate.to(_this.config.editEntryLinkAction);
+
+      if (typeof _this.config.editEntryLinkAction.page !== 'undefined' && _this.config.editEntryLinkAction.page !== '') {
+        Fliplet.Navigate.to(_this.config.editEntryLinkAction)
+          .catch(function() {
+            Fliplet.Navigate.popup(options);
+          });
+      } else {
+        Fliplet.Navigate.popup(options);
+      }
     }
   });
 

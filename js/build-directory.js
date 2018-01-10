@@ -572,7 +572,7 @@ DataDirectory.prototype.attachObservers = function() {
   });
   this.$container.find('.search').on('focus', $.proxy(this.activateSearch, this));
   if (this.supportLiveSearch) {
-    this.$container.find('.search').on('keydown paste change', function(e) {
+    this.$container.find('.search').on('keyup paste change', function(e) {
       _this.renderLiveSearch($(this).val());
     });
   }

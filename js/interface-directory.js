@@ -140,7 +140,7 @@ var DataDirectoryForm = (function() {
     loadDataDirectoryForm: function() {
       $('#data-sources').html(Handlebars.templates.dataSourceOptions(_this.tables));
       $('#data-sources').prop('disabled', false);
-      $('#data-sources ~ .select-value-proxy').html('&mdash; Select a table &mdash;');
+      $('#data-sources ~ .select-value-proxy').html('-- Select a data source');
 
       $('#data-alphabetical-fields').html(Handlebars.templates.dataAlphabeticalField(_this.columns));
       $('#data-tags-fields').html(Handlebars.templates.dataTagsField(_this.columns));
@@ -176,10 +176,16 @@ var DataDirectoryForm = (function() {
     },
 
     createDataSource: function() {
-      event.preventDefault();
       var name = prompt('Please type a name for your data source:');
 
-      if (!name) {
+      if (name === null) {
+        $dataSources.val(_this.source);
+        return;
+      }
+
+      if (name === '') {
+        $dataSources.val(_this.source);
+        alert('You must enter a data source name');
         return;
       }
 
@@ -201,7 +207,11 @@ var DataDirectoryForm = (function() {
           size: 'large',
           package: 'com.fliplet.data-sources',
           title: 'Edit Data Sources',
-          data: { dataSourceId: dataSourceId }
+          classes: 'data-source-overlay',
+          data: {
+            context: 'overlay',
+            dataSourceId: dataSourceId
+          }
         }
       });
     },
@@ -308,8 +318,7 @@ var DataDirectoryForm = (function() {
       $(document).on("click", "#save-link", _this.saveDataDirectoryForm_);
       $('#data-sources').on('change', $.proxy(_this.dataSourceChanged_, this));
       $('#advanced-tab').on('change', '[name="enable_thumbs"]', _this.showThumbOptions_);
-      $('.create-data-source').on('click', _this.createDataSource);
-      $('#manage-data').on('click', _this.manageAppData);
+      $('#manage-data a').on('click', _this.manageAppData);
       $('.nav.nav-stacked').on('click', 'li.disabled', function() {
         return false;
       });
@@ -470,11 +479,16 @@ var DataDirectoryForm = (function() {
         return;
       }
 
+      if (e.target.value === 'new') {
+        _this.createDataSource();
+        return;
+      }
+
       if (_this.source === "" || confirm("Are you sure you want to change the data source? This will reset your previous configuration for the directory.")) {
         _this.parseSelectedTable($(e.target).val(), true);
         _this.loadDataDirectoryForm();
       } else {
-        _this.source;
+        $dataSources.val(_this.source);
       }
     },
 

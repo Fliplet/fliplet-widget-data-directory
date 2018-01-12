@@ -1,4 +1,7 @@
-<option>&mdash; Select a table &mdash;</option>
+<option>-- Select a data source</option>
+<option disabled>------</option>
+	<option value="new">Create a new data source</option>
+<option disabled>------</option>
 {{#each this}}
-    <option value="{{id}}">{{name}}</option>
+  <option value="{{id}}">{{name}}</option>
 {{/each}}

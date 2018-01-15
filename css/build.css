@@ -1,5 +1,6 @@
 /* Compatbility with new Drag & Drop interface */
 
+.mode-interact [data-fl-edit],
 .mode-interact [data-fl-edit] .fl-widget-instance {
   position: static;
 }

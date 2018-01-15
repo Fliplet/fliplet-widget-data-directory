@@ -62,18 +62,6 @@ table .checkbox label {
   padding-left: 0;
 }
 
-/* NEEDED FOR NOT IN DOM SELECT */
-.select-proxy-display .hidden-select {
-  position: absolute;
-  top: -1px;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  cursor: pointer;
-  opacity: 0;
-  z-index: 1;
-}
-
 /* OTHER */
 
 .show-subtitle,

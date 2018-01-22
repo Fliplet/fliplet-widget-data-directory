@@ -1135,6 +1135,14 @@ body.fl-minimal-padding .directory-entries {
 }
 
 .button-tray .chat-entry,
+.button-tray .edit-entry {
+  width: auto !important;
+  padding: 6px 12px !important;
+  font-size: 14px !important; 
+  line-height: 20px !important;
+}
+
+.button-tray .chat-entry,
 .button-tray .chat-entry:active,
 .button-tray .chat-entry:active:focus,
 .button-tray .chat-entry:active:hover,

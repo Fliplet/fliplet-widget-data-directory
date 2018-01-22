@@ -39,6 +39,19 @@ body {
 }
 
 /* FORMS */
+.select-proxy-display select.hidden-select {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  cursor: pointer;
+  z-index: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+}
 
 table .select-proxy-display {
   font-size: 12px;

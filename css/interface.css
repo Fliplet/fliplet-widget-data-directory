@@ -39,7 +39,7 @@ body {
 }
 
 /* FORMS */
-.select-holder select.hidden-select {
+.select-proxy-display select.hidden-select {
   position: absolute;
   top: -1px;
   bottom: -1px;

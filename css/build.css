@@ -80,9 +80,6 @@
 }
 
 @media screen and (min-width: 640px) {
-  .fl-with-top-menu .directory-wrapper {
-    top: 55px;
-  }
   .directory-list ul {
     font-size: 16px;
     line-height: 1.5;

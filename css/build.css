@@ -27,6 +27,10 @@
   transition: top 0.2s;
 }
 
+.fl-bar-padding .directory-wrapper {
+  bottom: 44px;
+}
+
 .fl-with-top-menu .directory-wrapper {
   top: 44px;
 }

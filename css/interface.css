@@ -39,6 +39,10 @@ body {
 }
 
 /* FORMS */
+.select-holder {
+  margin-left: 25px;
+  margin-top: 8px;
+}
 .select-proxy-display .hidden-select {
   position: absolute;
   top: -1px;

@@ -236,6 +236,10 @@
   width: 66.667%;
 }
 
+.fl-minimal-padding.fl-menu-circle-right .directory-details {
+  padding-bottom: 80px;
+}
+
 @media screen and (max-width:639px) {
   .directory-details {
     display: none;
@@ -423,8 +427,19 @@ body.fl-minimal-padding .directory-filters {
   padding-top: 44px;
 }
 
-body.fl-minimal-padding .directory-entries {
+.fl-minimal-padding .directory-entries {
   padding-bottom: 44px;
+}
+
+.fl-minimal-padding.fl-menu-circle-left .directory-entries,
+.fl-minimal-padding.fl-menu-circle-right .directory-entries {
+  padding-bottom: 80px;
+}
+
+@media screen and (min-width: 640px) {
+  .fl-minimal-padding.fl-menu-circle-right .directory-entries {
+    padding-bottom: 0px;
+  }
 }
 
 [data-directory][data-mode="search-result"] .directory-entries,

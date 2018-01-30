@@ -438,7 +438,7 @@ body.fl-minimal-padding .directory-filters {
 
 @media screen and (min-width: 640px) {
   .fl-minimal-padding.fl-menu-circle-right .directory-entries {
-    padding-bottom: 0px;
+    padding-bottom: 0;
   }
 }
 

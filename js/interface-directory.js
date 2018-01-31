@@ -161,6 +161,7 @@ var DataDirectoryForm = (function() {
         $('#manage-data').addClass('hidden');
         if (_this.source) {
           $('.options-no-columns').show();
+          $('#manage-data').removeClass('hidden');
         }
         $('.nav-tabs li#main-list-control').addClass('disabled');
         $('.nav-tabs li#details-control').addClass('disabled');

@@ -296,7 +296,7 @@ var DataDirectoryForm = (function() {
       }
 
       if (_this.directoryConfig.enable_chat) {
-        $('#chat-yes').prop('checked', true).trigger('change');;
+        $('#chat-yes').prop('checked', true).trigger('change');
         $('.chat-screen-selection').removeClass('hidden');
       } else {
         $('#chat-no').prop('checked', true).trigger('change');

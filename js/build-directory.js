@@ -251,8 +251,23 @@ DataDirectory.prototype.initialiseHandlebars = function() {
 
   Handlebars.registerHelper('entry_thumbnail_bg', function(entry) {
     var thumbnail = entry[_this.config.thumbnail_field];
-
-    if ((!thumbnail || !/^https?:\/\//.test(thumbnail)) && !Array.isArray(thumbnail)) {
+    
+    if (!thumbnail) {
+      return '';
+    }
+    
+    if (Array.isArray(thumbnail) && !thumbnail.length) {
+      return '';
+    }
+    
+    if (Array.isArray(thumbnail)) {
+      thumbnail = thumbnail[0];
+    }
+    
+    // Validate thumbnail against URL and Base64 patterns
+    var urlPattern = /^https?:\/\//i;
+    var base64Pattern = /^data:image\/[^;]+;base64,/i;
+    if (!urlPattern.test(thumbnail) && !base64Pattern.test(thumbnail)) {
       return '';
     }
 

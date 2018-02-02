@@ -75,8 +75,14 @@
 
 .directory-details ul,
 .overlay-directory ul {
-  padding: 0px;
+  padding: 0 0 0 20px;
+}
+
+.directory-details .list-default,
+.overlay-directory .list-default {
+  padding: 0;
   margin: 0;
+  list-style: none;
 }
 
 @media screen and (min-width: 640px) {
@@ -91,20 +97,20 @@
 }
 
 .directory-list li,
-.overlayPanel li {
+.overlayPanel .list-default li {
   list-style: none;
   border-bottom: 1px solid rgba(51, 51, 51, 0.2);
   padding: 10px 10px 10px 0;
   position: relative;
 }
 
-.directory-details li,
-.overlay-directory .overlayPanel li {
+.directory-details .list-default li,
+.overlay-directory .overlayPanel .list-default li {
   list-style: none;
 }
 
-.directory-list li.linked,
-.overlayPanel li.linked {
+.directory-list .list-default li.linked,
+.overlayPanel .list-default li.linked {
   padding: 10px 44px 10px 0;
 }
 

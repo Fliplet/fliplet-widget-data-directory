@@ -73,11 +73,6 @@
   font-size: 13px;
 }
 
-.directory-details ul,
-.overlay-directory ul {
-  padding: 0 0 0 20px;
-}
-
 .directory-details .list-default,
 .overlay-directory .list-default {
   padding: 0;

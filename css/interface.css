@@ -39,6 +39,10 @@ body {
 }
 
 /* FORMS */
+.select-holder {
+  margin-left: 25px;
+  margin-top: 8px;
+}
 
 table .select-proxy-display {
   font-size: 12px;
@@ -60,6 +64,10 @@ table .checkbox {
 
 table .checkbox label {
   padding-left: 0;
+}
+
+table .select-proxy-display>.hidden-select {
+  padding-right: 20px;
 }
 
 /* OTHER */

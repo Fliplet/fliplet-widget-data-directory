@@ -161,6 +161,7 @@ var DataDirectoryForm = (function() {
         $('#manage-data').addClass('hidden');
         if (_this.source) {
           $('.options-no-columns').show();
+          $('#manage-data').removeClass('hidden');
         }
         $('.nav-tabs li#main-list-control').addClass('disabled');
         $('.nav-tabs li#details-control').addClass('disabled');
@@ -296,7 +297,7 @@ var DataDirectoryForm = (function() {
       }
 
       if (_this.directoryConfig.enable_chat) {
-        $('#chat-yes').prop('checked', true).trigger('change');;
+        $('#chat-yes').prop('checked', true).trigger('change');
         $('.chat-screen-selection').removeClass('hidden');
       } else {
         $('#chat-no').prop('checked', true).trigger('change');

@@ -166,7 +166,7 @@ DataDirectory.prototype.initialiseHandlebars = function() {
   });
 
   Handlebars.registerHelper('moment', function(key, format, obj) {
-    return moment(obj[key]).format(format);
+    return moment(obj.data.root[key]).format(format);
   });
 
   Handlebars.registerHelper('alphabet_divider', function() {

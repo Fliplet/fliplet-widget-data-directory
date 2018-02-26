@@ -19,8 +19,6 @@
 .directory-wrapper {
   position: absolute;
   top: 0;
-  top: constant(safe-area-inset-top);
-  top: env(safe-area-inset-top);
   left: 0;
   right: 0;
   bottom: 0;
@@ -37,14 +35,10 @@
 
 .fl-with-top-menu .directory-wrapper {
   top: 44px;
-  top: calc(constant(safe-area-inset-top) + 44px);
-  top: calc(env(safe-area-inset-top) + 44px);
 }
 
 .fl-with-top-menu.fl-top-menu-hidden .directory-wrapper {
   top: 0;
-  top: constant(safe-area-inset-top);
-  top: env(safe-area-inset-top);
 }
 
 .directory-details {

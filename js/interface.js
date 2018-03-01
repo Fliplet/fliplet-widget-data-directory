@@ -2,7 +2,7 @@ var widgetId = Fliplet.Widget.getDefaultId();
 var data = Fliplet.Widget.getData(widgetId) || {};
 var dataDirectoryForm;
 var providerFilePickerInstance;
-var filePickerData = {};
+var filePickerData = data.folder || {};
 var folder;
 var addEntryLinkAction;
 var editEntryLinkAction;
@@ -152,6 +152,26 @@ function attahObservers() {
         $('#folder-select .select-folder').text('Replace folder');
         $('#folder-select .info-holder').removeClass('hidden');
         $('#folder-select .folder-title span').text(filePickerData.selectFiles[0].name);
+      }
+    });
+  });
+
+  $('.browse-files').on('click', function(e) {
+    e.preventDefault();
+    
+    Fliplet.Studio.emit('overlay', {
+      name: 'widget',
+      options: {
+        size: 'large',
+        package: 'com.fliplet.file-manager',
+        title: 'File Manager',
+        classes: 'data-source-overlay',
+        data: {
+          context: 'overlay',
+          appId: Fliplet.Env.get('appId'),
+          folder: filePickerData.selectFiles[0],
+          navStack: filePickerData.selectFiles[1]
+        }
       }
     });
   });

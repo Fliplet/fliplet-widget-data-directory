@@ -377,6 +377,24 @@ var DataDirectoryForm = (function() {
         }
       });
 
+      $('.browse-files').on('click', function(e) {
+        e.preventDefault();
+        
+        Fliplet.Studio.emit('overlay', {
+          name: 'widget',
+          options: {
+            size: 'large',
+            package: 'com.fliplet.file-manager',
+            title: 'File Manager',
+            classes: 'data-source-overlay',
+            data: {
+              context: 'overlay',
+              appId: Fliplet.Env.get('appId')
+            }
+          }
+        });
+      });
+
       Fliplet.Studio.onMessage(function(event) {
         if (event.data && event.data.event === 'overlay-close') {
           _this.reloadTables().then(function(dataSources) {

@@ -51,5 +51,8 @@
       "img/thumb-placeholder.png"
     ]
   },
-  "references": ["source:dataSource"]
+  "references": [
+    "source:dataSource",
+    "folder.selectFiles.$.id:mediaFolder"
+  ]
 }

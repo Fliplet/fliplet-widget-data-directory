@@ -272,20 +272,17 @@
 }
 
 @media screen and (min-width:640px) {
-  .directory-entries li.active,
-  .search-result li.active {
+  .directory-list .list-default li.active {
     margin-left: 0;
     padding-left: 10px;
     border-top: none;
     background-color: #337ab7;
     color: #FFF;
   }
-  .directory-entries li.active+li,
-  .search-result li.active+li {
+  .directory-list .list-default li.active+li {
     border-top: none;
   }
-  .directory-list .list-default ul>li.active .icon,
-  .search-result .list-default ul>li.active .icon {
+  .directory-list .list-default ul>li.active .icon {
     color: #FFF;
   }
 }

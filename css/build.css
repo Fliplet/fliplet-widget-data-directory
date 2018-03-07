@@ -1,7 +1,7 @@
 /* Compatbility with new Drag & Drop interface */
 
-.mode-interact [data-fl-edit],
-.mode-interact [data-fl-edit] .fl-widget-instance {
+[data-fl-edit],
+[data-fl-edit] .fl-widget-instance {
   position: static;
 }
 
@@ -1163,7 +1163,7 @@ body.fl-minimal-padding .directory-filters {
 .button-tray .edit-entry {
   width: auto !important;
   padding: 6px 12px !important;
-  font-size: 14px !important; 
+  font-size: 14px !important;
   line-height: 20px !important;
 }
 

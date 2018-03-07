@@ -378,7 +378,7 @@ var DataDirectoryForm = (function() {
       });
 
       Fliplet.Studio.onMessage(function(event) {
-        if (event.data && event.data.event === 'overlay-close') {
+        if (event.data && event.data.event === 'overlay-close' && event.data.data && event.data.data.dataSourceId) {
           _this.reloadTables().then(function(dataSources) {
             _this.tables = dataSources;
             _this.dataSourceChanged_(event);

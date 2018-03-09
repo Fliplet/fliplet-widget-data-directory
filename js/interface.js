@@ -206,8 +206,7 @@ Fliplet.DataSources.get({
 
 
 function save(notifyComplete) {
-  $('.alert.error').html('');
-  $('.alert.error').removeClass('show');
+  $('.alert.error').html('').removeClass('show');
   var errors = false;
 
   dataDirectoryForm.saveDataDirectoryForm_();

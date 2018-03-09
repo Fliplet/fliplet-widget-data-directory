@@ -170,7 +170,7 @@ function attahObservers() {
           context: 'overlay',
           appId: Fliplet.Env.get('appId'),
           folder: filePickerData.selectFiles[0],
-          navStack: filePickerData.selectFiles[1]
+          navStack: filePickerData.selectFiles[0].navStackRef || {}
         }
       }
     });

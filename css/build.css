@@ -558,6 +558,11 @@ body.fl-minimal-padding .directory-filters {
   transform: translate3d(100%, 0, 0);
   -webkit-transition: all 0.35s 0.03s ease;
   transition: all 0.35s 0.03s ease;
+  display: none;
+}
+
+.fl-top-menu-hidden .search-cancel {
+  display: block;
 }
 
 .search-cancel:active,
@@ -572,13 +577,6 @@ body.fl-minimal-padding .directory-filters {
   opacity: 1;
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
-}
-
-[data-directory][data-mode="filter-values"] .search,
-[data-directory][data-mode="search"] .search,
-[data-directory][data-mode="search-result"] .search,
-[data-directory][data-mode="search-result-entry"] .search {
-  margin-right: 60px;
 }
 
 .directory-filters label {

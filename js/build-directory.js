@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*****************  DataDirectory  *****************/
 /*****************  DataDirectory  *****************/
 /*****************  DataDirectory  *****************/
@@ -147,7 +148,6 @@ DataDirectory.prototype.refreshDirectory = function() {
   }
 
   this.init();
-  this.parseQueryVars();
 }
 
 DataDirectory.prototype.initialiseHandlebars = function() {
@@ -235,7 +235,7 @@ DataDirectory.prototype.initialiseHandlebars = function() {
       if (typeof tags === 'string') {
         splitTags = tags.split(",");
       }
-      
+
       return new Handlebars.SafeString(
         splitTags.map(function(tag) {
           tag = tag.trim();
@@ -251,19 +251,19 @@ DataDirectory.prototype.initialiseHandlebars = function() {
 
   Handlebars.registerHelper('entry_thumbnail_bg', function(entry) {
     var thumbnail = entry[_this.config.thumbnail_field];
-    
+
     if (!thumbnail) {
       return '';
     }
-    
+
     if (Array.isArray(thumbnail) && !thumbnail.length) {
       return '';
     }
-    
+
     if (Array.isArray(thumbnail)) {
       thumbnail = thumbnail[0];
     }
-    
+
     // Validate thumbnail against URL and Base64 patterns
     var urlPattern = /^https?:\/\//i;
     var base64Pattern = /^data:image\/[^;]+;base64,/i;
@@ -303,7 +303,9 @@ DataDirectory.prototype.init = function() {
   this.sortEntries();
 
   if (this.config.search_only) {
-    this.activateSearch();
+    this.activateSearch({
+      userTriggered: false
+    });
     setTimeout(function() {
       // _this.$container.find('.search').trigger( 'focus' );
     }, 0);
@@ -711,10 +713,17 @@ DataDirectory.prototype.attachObservers = function() {
   });
 };
 
-DataDirectory.prototype.activateSearch = function() {
-  this.$container.find('.search-cancel').css({
-    'top': this.config.search_only ? '-9999px' : ''
-  });
+DataDirectory.prototype.activateSearch = function(options) {
+  options = options || {};
+
+  if (!options.hasOwnProperty('userTriggered')) {
+    options.userTriggered = true;
+  }
+
+  if (options.userTriggered) {
+    document.body.classList.add('fl-top-menu-hidden');
+  }
+
   this.$container.find('.directory-screen').css({
     'opacity': this.config.search_only ? '0' : '',
     'pointer-events': this.config.search_only ? 'none' : ''
@@ -725,10 +734,8 @@ DataDirectory.prototype.activateSearch = function() {
   }
   if (!this.isMode('search') && !this.isMode('filter-values') && !this.isMode('search-result') && !this.isMode('search-result-entry')) {
     this.switchMode('search');
-  }
-
-  if (!this.config.search_only) {
-    document.body.classList.add('fl-top-menu-hidden');
+  } else {
+    this.resizeSearch();
   }
 
   this.flViewportRedraw();
@@ -766,7 +773,11 @@ DataDirectory.prototype.resizeSearch = function() {
     }
 
     if (_this.isMode('search') || _this.isMode('filter-values') || _this.isMode('search-result') || _this.isMode('search-result-entry')) {
-      _this.$container.find('.search').css('width', _this.$container.find('.directory-search').width() - _this.$container.find('.search-cancel').outerWidth() + 8);
+      var width = _this.$container.find('.directory-search').width();
+      if (_this.$container.find('.search-cancel').is(':visible')) {
+        width = width - _this.$container.find('.search-cancel').outerWidth() + 8;
+      }
+      _this.$container.find('.search').css('width', width);
     } else {
       _this.$container.find('.search').css('width', '');
     }
@@ -1040,7 +1051,7 @@ DataDirectory.prototype.getEntryField = function(entryIndex, fieldIndex, type) {
   if (this.config.hasOwnProperty('field_types') && this.config.field_types.hasOwnProperty(label)) {
     fieldType = this.config.field_types[label];
   }
-  
+
   if (fieldType === 'text') {
     try {
       var parsed = JSON.parse(value);
@@ -1048,10 +1059,10 @@ DataDirectory.prototype.getEntryField = function(entryIndex, fieldIndex, type) {
         value = parsed.join(', ');
       }
     } catch (e) {}
-    
+
     if (this.config.filter_fields.indexOf(label) > -1) {
       fieldType = 'filter';
-          
+
       value = {
         filter: label,
         value: value
@@ -1098,20 +1109,18 @@ DataDirectory.prototype.getEntryField = function(entryIndex, fieldIndex, type) {
 };
 
 DataDirectory.prototype.renderLiveSearch = function(value) {
-
-  this.flViewportRedraw();
-
   var _this = this;
-  if (this.liveSearchTimeout) {
-    clearTimeout(this.liveSearchTimeout);
-  }
-  this.liveSearchTimeout = setTimeout(function() {
-    _this.renderSearchResult({
-      type: 'search',
-      value: value
-    });
-  }, this.liveSearchInterval);
-
+  this.flViewportRedraw().then(function () {
+    if (_this.liveSearchTimeout) {
+      clearTimeout(_this.liveSearchTimeout);
+    }
+    _this.liveSearchTimeout = setTimeout(function() {
+      _this.renderSearchResult({
+        type: 'search',
+        value: value
+      });
+    }, _this.liveSearchInterval);
+  });
 };
 
 DataDirectory.prototype.renderSearchResult = function(options, callback) {
@@ -1121,7 +1130,12 @@ DataDirectory.prototype.renderSearchResult = function(options, callback) {
     options.userTriggered = true;
   }
 
-  if (options.userTriggered) this.activateSearch();
+  if (options.userTriggered) {
+    this.activateSearch(options);
+  } else {
+    this.setConfig('search_only', true);
+  }
+
   this.flViewportRedraw();
 
   // Return all results of search term is empty
@@ -1281,7 +1295,9 @@ DataDirectory.prototype.parseQueryVars = function() {
         if (query.field && query.value) {
           this.presetFilter(query.field, query.value);
         } else {
-          this.activateSearch();
+          this.activateSearch({
+            userTriggered: false
+          });
         }
         break;
       case 'open':
@@ -1324,10 +1340,15 @@ DataDirectory.prototype.directoryNotConfigured = function() {
 };
 
 DataDirectory.prototype.flViewportRedraw = function() {
-  $(document.body).css('-webkit-transform', 'scale(1)');
-  setTimeout(function() {
-    $(document.body).css('-webkit-transform', '');
-  }, 0);
+  return new Promise(function (resolve, reject) {
+    $(document.body).css('-webkit-transform', 'scale(1)');
+    setTimeout(function() {
+      $(document.body).css('-webkit-transform', '');
+      setTimeout(function () {
+        resolve();
+      }, 0);
+    }, 0);
+  });
 };
 
 /***************  END: DataDirectory  ***************/

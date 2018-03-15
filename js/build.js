@@ -51,7 +51,15 @@ Fliplet().then(function(){
           });
       }
 
-      Fliplet.App.Storage.get(storageKey)
+      function loadCache() {
+        if (config.cache === false) {
+          return Promise.resolve();
+        }
+
+        return Fliplet.App.Storage.get(storageKey);
+      }
+
+      loadCache
         .then(function (cache) {
           // Let's load cache if we have it
           if (cache) {
@@ -77,7 +85,9 @@ Fliplet().then(function(){
                 .then(function (rows) {
                   config.rows = rows;
                   // Store latest data with a new timestamp
-                  Fliplet.App.Storage.set(storageKey, { rows: rows, updatedAt: new Date().toISOString() });
+                  if (config.cache !== false) {
+                    Fliplet.App.Storage.set(storageKey, { rows: rows, updatedAt: new Date().toISOString() });
+                  }
 
                   // If directory was already initialised with cached data
                   if (dataDirectory[id]) {

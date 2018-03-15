@@ -51,13 +51,7 @@ Fliplet().then(function(){
           });
       }
 
-      function loadCache() {
-        if (config.cache === false) {
-          return Promise.resolve();
-        }
-
-        return Fliplet.App.Storage.get(storageKey);
-      }
+      var loadCache = config.cache === false ? Promise.resolve() : Fliplet.App.Storage.get(storageKey);
 
       loadCache
         .then(function (cache) {

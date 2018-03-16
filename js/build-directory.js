@@ -174,6 +174,7 @@ DataDirectory.prototype.initialiseHandlebars = function() {
 
     var entryTitleTemplate = Handlebars.compile("{{[" + _this.config.alphabetical_field + "]}}");
     var firstCharacterOfTitle;
+
     if (!entryTitleTemplate(this).length) {
       // Empty values are sorted at the beginning with the numbers and other symbols
       firstCharacterOfTitle = '#';
@@ -187,7 +188,6 @@ DataDirectory.prototype.initialiseHandlebars = function() {
     } else if (!firstCharacterOfTitle.match(/[A-z]/)) {
       // Other non-alphanumerical characters/symbols e.g. CJK characters
       // are sorted at the end with '·' as the divider
-      // 
       firstCharacterOfTitle = '·';
     }
 

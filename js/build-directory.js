@@ -176,19 +176,14 @@ DataDirectory.prototype.initialiseHandlebars = function() {
     var firstCharacterOfTitle;
 
     if (!entryTitleTemplate(this).length) {
-      // Empty values are sorted at the beginning with the numbers and other symbols
+      // Empty values are sorted with all other non-alphbetical values
       firstCharacterOfTitle = '#';
     } else {
       firstCharacterOfTitle = entryTitleTemplate(this)[0].toString().toUpperCase();
-    }
 
-    if (!!firstCharacterOfTitle.match(/[#0-9]/)) {
-      // Empty and numerical values are given the '#' character for the divider
-      firstCharacterOfTitle = '#';
-    } else if (!firstCharacterOfTitle.match(/[A-z]/)) {
-      // Other non-alphanumerical characters/symbols e.g. CJK characters
-      // are sorted at the end with '·' as the divider
-      firstCharacterOfTitle = '·';
+      if (!firstCharacterOfTitle.match(/[A-z]/)) {
+        firstCharacterOfTitle = '#';
+      }
     }
 
     if (firstCharacterOfTitle !== lastAlphabetIndex) {
@@ -361,7 +356,12 @@ DataDirectory.prototype.sortEntries = function() {
     var attr = _this.config.alphabetical_field;
     listData = _.sortBy(this.data, function (obj) {
       obj[attr] = obj[attr] || '';
-      return obj[attr].toString().toUpperCase();
+      var value = obj[attr].toString().toUpperCase();
+      // Push all non-alphabetical values to after the 'z' character
+      // based on Unicode values
+      return value.match(/[A-z]/)
+        ? value
+        : '{' + value;
     });
     this.$container.find('.directory-entries').addClass('list-index-enabled');
   }

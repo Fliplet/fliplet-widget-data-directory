@@ -348,7 +348,7 @@ DataDirectory.prototype.sortEntries = function() {
     var attr = _this.config.alphabetical_field;
     listData = _.sortBy(this.data, function (obj) {
       obj[attr] = obj[attr] || '';
-      return obj[attr].toString.toUpperCase();
+      return obj[attr].toString().toUpperCase();
     });
     this.$container.find('.directory-entries').addClass('list-index-enabled');
   }

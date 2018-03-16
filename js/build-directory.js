@@ -173,11 +173,19 @@ DataDirectory.prototype.initialiseHandlebars = function() {
     if (!_this.config.is_alphabetical) return '';
 
     var entryTitleTemplate = Handlebars.compile("{{[" + _this.config.alphabetical_field + "]}}");
+    var firstCharacterOfTitle;
     if (!entryTitleTemplate(this).length) {
-      return '#';
+      firstCharacterOfTitle = '#';
+    } else {
+      firstCharacterOfTitle = entryTitleTemplate(this)[0].toString().toUpperCase();
     }
-    var firstCharacterOfTitle = entryTitleTemplate(this)[0].toString().toUpperCase();
-    if ("1234567890".indexOf(firstCharacterOfTitle) > -1) firstCharacterOfTitle = '#';
+
+    if (!!firstCharacterOfTitle.match(/[#0-9]/)) {
+      firstCharacterOfTitle = '#';
+    } else if (!firstCharacterOfTitle.match(/[A-z]/)) {
+      firstCharacterOfTitle = '·';
+    }
+
     if (firstCharacterOfTitle !== lastAlphabetIndex) {
       lastAlphabetIndex = firstCharacterOfTitle;
       return Handlebars.templates.directoryListDivider(firstCharacterOfTitle);

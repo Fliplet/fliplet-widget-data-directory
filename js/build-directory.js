@@ -174,7 +174,7 @@ DataDirectory.prototype.initialiseHandlebars = function() {
 
     var entryTitleTemplate = Handlebars.compile("{{[" + _this.config.alphabetical_field + "]}}");
     if (!entryTitleTemplate(this).length) {
-      return '';
+      return '#';
     }
     var firstCharacterOfTitle = entryTitleTemplate(this)[0].toString().toUpperCase();
     if ("1234567890".indexOf(firstCharacterOfTitle) > -1) firstCharacterOfTitle = '#';
@@ -345,17 +345,10 @@ DataDirectory.prototype.sortEntries = function() {
   if (!this.config.is_alphabetical) {
     listData = this.data;
   } else {
-    listData = this.data.sort(function(a, b) {
-      var attr = _this.config.alphabetical_field;
-      if (!a[attr] || !b[attr]) {
-        return 0;
-      }
-
-      if (a[attr].toString().toUpperCase() < b[attr].toString().toUpperCase())
-        return -1;
-      if (a[attr].toString().toUpperCase() > b[attr].toString().toUpperCase())
-        return 1;
-      return 0;
+    var attr = _this.config.alphabetical_field;
+    listData = _.sortBy(this.data, function (obj) {
+      obj[attr] = obj[attr] || '';
+      return obj[attr].toString.toUpperCase();
     });
     this.$container.find('.directory-entries').addClass('list-index-enabled');
   }

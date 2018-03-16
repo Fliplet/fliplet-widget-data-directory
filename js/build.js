@@ -55,52 +55,54 @@ Fliplet().then(function(){
 
       loadCache
         .then(function (cache) {
+          var loadData;
+
           // Let's load cache if we have it
           if (cache) {
             config.rows = cache.rows;
             dataDirectory[id] = new DataDirectory(config, container);
+
+            loadData = Fliplet.DataSources.getById(config.source).then(function (dataSource) {
+              var dsUpdated = new Date(dataSource.updatedAt);
+              var cacheUpdated = new Date(cache.updatedAt);
+
+              if (dsUpdated <= cacheUpdated) {
+                // Cached data is up to date. Let's stop here
+                return;
+              }
+
+              return getData({ offline: false });
+            });
+          } else {
+            loadData = getData({ offline: false });
           }
 
-          // Let's check if there's is new data
-          Fliplet.DataSources.getById(config.source)
-            .then(function (dataSource) {
-              // Let's see if live data source was updated
-              if (cache) {
-                var dsUpdated = new Date(dataSource.updatedAt);
-                var cacheUpdated = new Date(cache.updatedAt);
-                if (dsUpdated <= cacheUpdated) {
-                  // Cached data is up to date. Let's stop here
-                  return;
-                }
-              }
+          return loadData.then(function (rows) {
+            config.rows = rows;
 
-              // Check live data for updates
-              return getData({ offline: false })
-                .then(function (rows) {
-                  config.rows = rows;
-                  // Store latest data with a new timestamp
-                  if (config.cache !== false) {
-                    Fliplet.App.Storage.set(storageKey, { rows: rows, updatedAt: new Date().toISOString() });
-                  }
+            // Store latest data with a new timestamp
+            if (config.cache !== false) {
+              Fliplet.App.Storage.set(storageKey, { rows: rows, updatedAt: new Date().toISOString() });
+            }
 
-                  // If directory was already initialised with cached data
-                  if (dataDirectory[id]) {
-                    // Let's just update data and initialise it again
-                    dataDirectory[id].data = rows;
-                    return dataDirectory[id].init();
-                  }
+            // If directory was already initialised with cached data
+            if (dataDirectory[id]) {
+              // Let's just update data and initialise it again
+              dataDirectory[id].data = rows;
+              return dataDirectory[id].init();
+            }
 
-                  return dataDirectory[id] = new DataDirectory(config, container);
-                })
-            })
-            .catch(function (error) {
-              // This catches: network errors/server is down/offline
-              // If we don't have cache(new direcotry) let's create new empty directory
-              if (!cache) {
-                return dataDirectory[id] = new DataDirectory(config, container);
-              }
-            });
-        })
+            return dataDirectory[id] = new DataDirectory(config, container);
+          }).catch(function (error) {
+            console.error(error);
+
+            // This catches: network errors/server is down/offline
+            // If we don't have cache (new directory) let's create new empty directory
+            if (!cache) {
+              return dataDirectory[id] = new DataDirectory(config, container);
+            }
+          });
+        });
     });
   });
 });

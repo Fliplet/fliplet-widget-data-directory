@@ -173,11 +173,19 @@ DataDirectory.prototype.initialiseHandlebars = function() {
     if (!_this.config.is_alphabetical) return '';
 
     var entryTitleTemplate = Handlebars.compile("{{[" + _this.config.alphabetical_field + "]}}");
+    var firstCharacterOfTitle;
+
     if (!entryTitleTemplate(this).length) {
-      return '';
+      // Empty values are sorted with all other non-alphbetical values
+      firstCharacterOfTitle = '#';
+    } else {
+      firstCharacterOfTitle = entryTitleTemplate(this)[0].toString().toUpperCase();
+
+      if (!firstCharacterOfTitle.match(/[A-Za-z]/)) {
+        firstCharacterOfTitle = '#';
+      }
     }
-    var firstCharacterOfTitle = entryTitleTemplate(this)[0].toString().toUpperCase();
-    if ("1234567890".indexOf(firstCharacterOfTitle) > -1) firstCharacterOfTitle = '#';
+
     if (firstCharacterOfTitle !== lastAlphabetIndex) {
       lastAlphabetIndex = firstCharacterOfTitle;
       return Handlebars.templates.directoryListDivider(firstCharacterOfTitle);
@@ -345,17 +353,15 @@ DataDirectory.prototype.sortEntries = function() {
   if (!this.config.is_alphabetical) {
     listData = this.data;
   } else {
-    listData = this.data.sort(function(a, b) {
-      var attr = _this.config.alphabetical_field;
-      if (!a[attr] || !b[attr]) {
-        return 0;
-      }
-
-      if (a[attr].toString().toUpperCase() < b[attr].toString().toUpperCase())
-        return -1;
-      if (a[attr].toString().toUpperCase() > b[attr].toString().toUpperCase())
-        return 1;
-      return 0;
+    var attr = _this.config.alphabetical_field;
+    listData = _.sortBy(this.data, function (obj) {
+      obj[attr] = obj[attr] || '';
+      var value = obj[attr].toString().toUpperCase();
+      // Push all non-alphabetical values to after the 'z' character
+      // based on Unicode values
+      return value.match(/[A-Za-z]/)
+        ? value
+        : '{' + value;
     });
     this.$container.find('.directory-entries').addClass('list-index-enabled');
   }

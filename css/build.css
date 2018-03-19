@@ -411,9 +411,6 @@ body.fl-minimal-padding .directory-filters {
   .list-index {
     margin-top: 50px;
   }
-  .directory-mobile-mode .list-index {
-    right: 0;
-  }
 }
 
 .list-index span {

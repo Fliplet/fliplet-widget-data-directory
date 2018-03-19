@@ -141,7 +141,9 @@ DataDirectory.prototype.setConfig = function(key, value) {
 
 DataDirectory.prototype.refreshDirectory = function() {
   this.checkMobileMode();
-  this.entryOverlay.close();
+  if (this.entryOverlayIsActive()) {
+    this.entryOverlay.close();;
+  }
 
   if (!this.config) {
     return this.directoryNotConfigured();
@@ -704,8 +706,8 @@ DataDirectory.prototype.attachObservers = function() {
             return connection.removeById(entryId);
           })
           .then(function onRemove() {
-            _this.data = _.remove(_this.data, function(entry) {
-              return entry.dataSourceEntryId !== parseInt(entryId, 10);
+            _.remove(_this.data, function(entry) {
+              return entry.dataSourceEntryId === parseInt(entryId, 10);
             });
             _this.refreshDirectory();
           });

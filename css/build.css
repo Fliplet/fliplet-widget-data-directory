@@ -1,5 +1,10 @@
 /* Compatbility with new Drag & Drop interface */
 
+body {
+  // Fix for Studio iPhone X rendering
+  position: static;
+}
+
 [data-fl-edit],
 [data-fl-edit] .fl-widget-instance {
   position: static;

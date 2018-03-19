@@ -389,7 +389,12 @@ DataDirectory.prototype.renderEntries = function() {
   this.renderIndexList();
 };
 
-DataDirectory.prototype.renderIndexList = function() {
+DataDirectory.prototype.placeIndexList = function () {
+  var $listIndex = this.$container.find('.directory-entries + .list-index');
+  $listIndex.css('left', Math.round($('.directory-entries ul').width()));
+};
+
+DataDirectory.prototype.renderIndexList = function () {
   if (!this.config.is_alphabetical) return;
 
   var $listIndex = this.$container.find('.directory-entries + .list-index');
@@ -402,6 +407,8 @@ DataDirectory.prototype.renderIndexList = function() {
   $(document).on('touchstart mousedown', '.list-index span', $.proxy(this.listIndexTouchStart, this))
     .on('touchmove  mousemove', '.list-index span', $.proxy(this.listIndexTouchMove, this))
     .on('touchend   mouseup', '.list-index span', $.proxy(this.listIndexTouchEnd, this));
+
+  this.placeIndexList();
 };
 
 DataDirectory.prototype.scrollToLetter = function(letter) {
@@ -577,6 +584,7 @@ DataDirectory.prototype.attachObservers = function() {
     _this.resizeSearch();
     _this.navHeight = $('.fl-viewport-header').height() || 0;
     _this.searchBarHeight = _this.$container.find('.directory-search').outerHeight();
+    _this.placeIndexList();
   });
   this.$container.find('.directory-search').on('click', function() {
     // Analytics - Track Event
@@ -1347,9 +1355,15 @@ DataDirectory.prototype.directoryNotConfigured = function() {
 
 DataDirectory.prototype.flViewportRedraw = function() {
   return new Promise(function (resolve, reject) {
-    $(document.body).css('-webkit-transform', 'scale(1)');
-    setTimeout(function() {
-      $(document.body).css('-webkit-transform', '');
+    $(document.body).css({
+      transform: 'scale(1)',
+      position: 'absolute'
+    });
+    setTimeout(function () {
+      $(document.body).css({
+        transform: '',
+        position: ''
+      });
       setTimeout(function () {
         resolve();
       }, 0);

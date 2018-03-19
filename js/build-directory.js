@@ -687,19 +687,29 @@ DataDirectory.prototype.attachObservers = function() {
   $(this.$container).on('click', '.delete-entry', function() {
     // @TODO: Confirm first, then delete entry
     //        Refresh to list view
-    var entryID = $(this).data('entry-id');
-    var confirmDelete = confirm("Are you sure you want to delete this entry?");
+    var entryId = $(this).data('entry-id');
 
-    if (confirmDelete == true) {
-      Fliplet.DataSources.connect(_this.config.source).then(function (connection) {
-        return connection.removeById(entryID);
-      }).then(function onRemove() {
-        _this.data = _.remove(_this.data, function(entry) {
-          return entry.dataSourceEntryId !== parseInt(entryID, 10);
-        });
-        _this.refreshDirectory();
+    Fliplet.Navigate.confirm({
+      title: 'Delete entry',
+      message: 'Are you sure you want to delete this entry?',
+      labels: ['Delete', 'Cancel']
+    })
+      .then(function(confirmed) {
+        if (!confirmed) {
+          return;
+        }
+
+        Fliplet.DataSources.connect(_this.config.source)
+          .then(function (connection) {
+            return connection.removeById(entryId);
+          })
+          .then(function onRemove() {
+            _this.data = _.remove(_this.data, function(entry) {
+              return entry.dataSourceEntryId !== parseInt(entryId, 10);
+            });
+            _this.refreshDirectory();
+          });
       });
-    }
   });
 
   document.addEventListener("flDirectoryEntryBeforeRender", function() {

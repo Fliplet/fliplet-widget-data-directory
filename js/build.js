@@ -58,7 +58,7 @@ Fliplet().then(function(){
           var loadData;
 
           // Let's load cache if we have it
-          if (cache) {
+          if (cache && cache.rows) {
             config.rows = cache.rows;
             dataDirectory[id] = new DataDirectory(config, container);
 

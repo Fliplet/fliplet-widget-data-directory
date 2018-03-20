@@ -78,6 +78,10 @@ Fliplet().then(function(){
           }
 
           return loadData.then(function (rows) {
+            if (typeof rows === 'undefined') {
+              return; // earlier promises already handled directory init  
+            }
+            
             config.rows = rows;
 
             // Store latest data with a new timestamp

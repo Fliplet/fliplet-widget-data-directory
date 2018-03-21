@@ -1,6 +1,6 @@
 /* Compatbility with new Drag & Drop interface */
 
-body {
+[data-simulator="iphone-x"] body {
   /* Fix for Studio iPhone X rendering */
   position: static;
 }

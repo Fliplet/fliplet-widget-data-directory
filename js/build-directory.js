@@ -1371,14 +1371,12 @@ DataDirectory.prototype.flViewportRedraw = function() {
       transform: 'scale(1)',
       position: 'absolute'
     });
+    $(document.body).css({
+      transform: '',
+      position: ''
+    });
     setTimeout(function () {
-      $(document.body).css({
-        transform: '',
-        position: ''
-      });
-      setTimeout(function () {
-        resolve();
-      }, 0);
+      resolve();
     }, 0);
   });
 };

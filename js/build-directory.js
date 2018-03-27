@@ -33,7 +33,8 @@ var DataDirectory = function(config, container) {
     directory_enabled: true,
     searchResultTemplate: "",
     directoryListTemplate: "",
-    directoryDetailsTemplate: ""
+    directoryDetailsTemplate: "",
+    emptyMessage: 'No data is found for the directory'
   }, config);
   this.data = config.rows;
   delete this.config.rows;
@@ -1362,7 +1363,7 @@ DataDirectory.prototype.presetFilter = function(field, value) {
 };
 
 DataDirectory.prototype.directoryNotConfigured = function() {
-  this.$container.find('.directory-entries').addClass('not-configured').html('No data is found for the directory');
+  this.$container.find('.directory-entries').addClass('not-configured').html(this.config.emptyMessage);
 };
 
 DataDirectory.prototype.flViewportRedraw = function() {

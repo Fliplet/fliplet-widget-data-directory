@@ -616,6 +616,10 @@ DataDirectory.prototype.attachObservers = function() {
     return false;
   });
   $(this.$container).on('click', '.search-result-clear', function() {
+    if (_this.liveSearchTimeout) {
+      clearTimeout(_this.liveSearchTimeout);
+      _this.liveSearchTimeout = null;
+    }
     _this.$container.find('.search').val('');
     _this.switchMode('search');
     return false;
@@ -1140,6 +1144,7 @@ DataDirectory.prototype.renderLiveSearch = function(value) {
   this.flViewportRedraw().then(function () {
     if (_this.liveSearchTimeout) {
       clearTimeout(_this.liveSearchTimeout);
+      _this.liveSearchTimeout = null;
     }
     _this.liveSearchTimeout = setTimeout(function() {
       _this.renderSearchResult({

@@ -476,7 +476,9 @@ DataDirectory.prototype.renderFilterValues = function(filter, inOverlay) {
   if (tags_field === filter) {
     this.data.forEach(function(record) {
       if (record[tags_field]) {
-        var entryTags = record[tags_field].split(',');
+        // Split a string by commas but ignore commas within double-quotes using Javascript
+        // https://stackoverflow.com/questions/11456850/split-a-string-by-commas-but-ignore-commas-within-double-quotes-using-javascript
+        var entryTags = record[tags_field].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
         entryTags.forEach(function(tag) {
           tag = tag.trim();
           if (tag !== "" && values.indexOf(tag) === -1) {
@@ -1210,7 +1212,9 @@ DataDirectory.prototype.renderSearchResult = function(options, callback) {
     case 'filter-value-tag':
       var filterByTag = function(value) {
         if (value[options.field]) {
-          var splitTags = value[options.field].split(',');
+          // Split a string by commas but ignore commas within double-quotes using Javascript
+          // https://stackoverflow.com/questions/11456850/split-a-string-by-commas-but-ignore-commas-within-double-quotes-using-javascript
+          var splitTags = value[options.field].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
           for (var i = 0; i < splitTags.length; i++) {
             if (splitTags[i].trim() === options.value.trim()) {
               return true;

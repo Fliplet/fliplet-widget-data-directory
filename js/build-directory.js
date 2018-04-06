@@ -244,7 +244,9 @@ DataDirectory.prototype.initialiseHandlebars = function() {
       }
 
       if (typeof tags === 'string') {
-        splitTags = tags.split(",");
+        // Split a string by commas but ignore commas within double-quotes using Javascript
+        // https://stackoverflow.com/questions/11456850/split-a-string-by-commas-but-ignore-commas-within-double-quotes-using-javascript
+        splitTags = str.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
       }
 
       return new Handlebars.SafeString(

@@ -84,8 +84,8 @@
   font-size: 13px;
 }
 
-.directory-details .list-default,
-.overlay-directory .list-default {
+.directory-details .list-default ul,
+.overlay-directory .list-default ul {
   padding: 0;
   margin: 0;
   list-style: none;

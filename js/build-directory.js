@@ -15,6 +15,16 @@ function html_entity_decode(html) {
   return txt.value;
 }
 
+function splitByCommas(str) {
+  if (typeof str !== 'string') {
+    return [];
+  }
+
+  // Split a string by commas but ignore commas within double-quotes using Javascript
+  // https://stackoverflow.com/questions/11456850/split-a-string-by-commas-but-ignore-commas-within-double-quotes-using-javascript
+  return str.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+}
+
 var DataDirectory = function(config, container) {
   var _this = this;
 
@@ -243,11 +253,7 @@ DataDirectory.prototype.initialiseHandlebars = function() {
         splitTags = tags;
       }
 
-      if (typeof tags === 'string') {
-        // Split a string by commas but ignore commas within double-quotes using Javascript
-        // https://stackoverflow.com/questions/11456850/split-a-string-by-commas-but-ignore-commas-within-double-quotes-using-javascript
-        splitTags = str.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-      }
+      splitTags = splitByCommas(str);
 
       return new Handlebars.SafeString(
         splitTags.map(function(tag) {
@@ -476,9 +482,7 @@ DataDirectory.prototype.renderFilterValues = function(filter, inOverlay) {
   if (tags_field === filter) {
     this.data.forEach(function(record) {
       if (record[tags_field]) {
-        // Split a string by commas but ignore commas within double-quotes using Javascript
-        // https://stackoverflow.com/questions/11456850/split-a-string-by-commas-but-ignore-commas-within-double-quotes-using-javascript
-        var entryTags = record[tags_field].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+        var entryTags = splitByCommas(record[tags_field]);
         entryTags.forEach(function(tag) {
           tag = tag.trim();
           if (tag !== "" && values.indexOf(tag) === -1) {
@@ -1212,9 +1216,7 @@ DataDirectory.prototype.renderSearchResult = function(options, callback) {
     case 'filter-value-tag':
       var filterByTag = function(value) {
         if (value[options.field]) {
-          // Split a string by commas but ignore commas within double-quotes using Javascript
-          // https://stackoverflow.com/questions/11456850/split-a-string-by-commas-but-ignore-commas-within-double-quotes-using-javascript
-          var splitTags = value[options.field].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+          var splitTags = splitByCommas(value[options.field]);
           for (var i = 0; i < splitTags.length; i++) {
             if (splitTags[i].trim() === options.value.trim()) {
               return true;

@@ -73,13 +73,17 @@ var DataDirectory = function(config, container) {
     _this.attachObservers();
   }
 
-  Fliplet.Media.Folders.get({ folderId: folderID }).then(function(response) {
-    response.files.forEach(renderThumb);
+  if (folderID) {
+    Fliplet.Media.Folders.get({ folderId: folderID }).then(function(response) {
+      response.files.forEach(renderThumb);
+      initialize();
+    }, function onMediaFolderError(err) {
+      console.error(err);
+      initialize();
+    });
+  } else {
     initialize();
-  }, function onMediaFolderError(err) {
-    console.error(err);
-    initialize();
-  });
+  }
 
   function renderThumb(file) {
     if (_this.data) {

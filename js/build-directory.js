@@ -30,7 +30,7 @@ function splitByCommas(str) {
   var arr = [];
   var res;
   while ((res = regexp.exec(str)) !== null) {
-    arr.push(res[0].replace(/(?:^")|(?:"$)/g, ''));
+    arr.push(res[0].replace(/(?:^")|(?:"$)/g, '').trim());
   }
   return arr;
 }

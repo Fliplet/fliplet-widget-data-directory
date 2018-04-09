@@ -22,7 +22,13 @@ function splitByCommas(str) {
 
   // Split a string by commas but ignore commas within double-quotes using Javascript
   // https://stackoverflow.com/questions/11456850/split-a-string-by-commas-but-ignore-commas-within-double-quotes-using-javascript
-  return str.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+  var regexp = /(".*?"|[^",\s]+)(?=\s*,|\s*$)/g;
+  var arr = [];
+  var res;
+  while ((res = regexp.exec(str)) !== null) {
+    arr.push(res[0].replace(/(?:^")|(?:"$)/g, ''));
+  }
+  return arr;
 }
 
 var DataDirectory = function(config, container) {
@@ -253,7 +259,7 @@ DataDirectory.prototype.initialiseHandlebars = function() {
         splitTags = tags;
       }
 
-      splitTags = splitByCommas(str);
+      splitTags = splitByCommas(tags);
 
       return new Handlebars.SafeString(
         splitTags.map(function(tag) {

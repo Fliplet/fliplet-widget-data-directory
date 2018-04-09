@@ -257,7 +257,7 @@ DataDirectory.prototype.initialiseHandlebars = function() {
         splitTags = tags;
       }
 
-      splitTags = splitByCommas(str);
+      splitTags = splitByCommas(tags);
 
       return new Handlebars.SafeString(
         splitTags.map(function(tag) {

@@ -773,7 +773,7 @@ DataDirectory.prototype.activateSearch = function(options) {
     options.userTriggered = true;
   }
 
-  if (options.userTriggered) {
+  if (options.userTriggered && !this.config.search_only) {
     document.body.classList.add('fl-top-menu-hidden');
   }
 
@@ -1349,6 +1349,7 @@ DataDirectory.prototype.parseQueryVars = function() {
         if (query.field && query.value) {
           this.presetFilter(query.field, query.value);
         } else {
+          this.setConfig('search_only', true);
           this.activateSearch({
             userTriggered: false
           });

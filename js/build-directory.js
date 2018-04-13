@@ -1356,6 +1356,14 @@ DataDirectory.prototype.parseQueryVars = function() {
         }
         break;
       case 'open':
+        if (query.entryId) {
+          var $entry = this.$container.find('[data-type="entry"][data-source-entry-id="' + query.entryId + '"]');
+          if (!$entry.length) {
+            break;
+          }
+
+          this.openDataEntry(parseInt($entry.attr('data-index'), 10), 'entry', false);
+        }
         break;
     }
   } else if (!this.config.mobile_mode && this.deviceIsTablet && !this.config.search_only) {

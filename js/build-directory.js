@@ -773,7 +773,7 @@ DataDirectory.prototype.activateSearch = function(options) {
     options.userTriggered = true;
   }
 
-  if (options.userTriggered) {
+  if (options.userTriggered && !this.config.search_only) {
     document.body.classList.add('fl-top-menu-hidden');
   }
 
@@ -1349,12 +1349,21 @@ DataDirectory.prototype.parseQueryVars = function() {
         if (query.field && query.value) {
           this.presetFilter(query.field, query.value);
         } else {
+          this.setConfig('search_only', true);
           this.activateSearch({
             userTriggered: false
           });
         }
         break;
       case 'open':
+        if (query.entryId) {
+          var $entry = this.$container.find('[data-type="entry"][data-source-entry-id="' + query.entryId + '"]');
+          if (!$entry.length) {
+            break;
+          }
+
+          this.openDataEntry(parseInt($entry.attr('data-index'), 10), 'entry', false);
+        }
         break;
     }
   } else if (!this.config.mobile_mode && this.deviceIsTablet && !this.config.search_only) {

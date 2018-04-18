@@ -54,7 +54,8 @@ table .select-proxy-display span.select-value-proxy {
 
 table .select-proxy-display .icon {
   width: 20px;
-  font-size: 14px;
+  font-size: 10px;
+  right: 3px;
 }
 
 table .checkbox {

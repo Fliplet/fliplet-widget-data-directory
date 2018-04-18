@@ -39,23 +39,10 @@ body {
 }
 
 /* FORMS */
+
 .select-holder {
   margin-left: 25px;
   margin-top: 8px;
-}
-
-table .select-proxy-display {
-  font-size: 12px;
-}
-
-table .select-proxy-display span.select-value-proxy {
-  width: calc(100% - 38px);
-}
-
-table .select-proxy-display .icon {
-  width: 20px;
-  font-size: 10px;
-  right: 3px;
 }
 
 table .checkbox {
@@ -65,10 +52,6 @@ table .checkbox {
 
 table .checkbox label {
   padding-left: 0;
-}
-
-table .select-proxy-display>.hidden-select {
-  padding-right: 20px;
 }
 
 /* OTHER */
@@ -93,6 +76,7 @@ table .select-proxy-display>.hidden-select {
 
 .table>tbody>tr>td {
   vertical-align: middle;
+  line-height: 1;
 }
 
 .no-data-source-prompt,
@@ -164,7 +148,6 @@ table .select-proxy-display>.hidden-select {
   height: 38px;
   line-height: 38px;
   text-align: center;
-  color: #00abd2;
 }
 
 .panel-default>.panel-heading+.panel-collapse>.panel-body {

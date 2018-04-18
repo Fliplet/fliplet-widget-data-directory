@@ -31,7 +31,6 @@
               <option value="">-- Please wait</option>
             </select>
             <span class="icon fa fa-chevron-down"></span>
-            <span class="select-value-proxy">-- Please wait</span>
           </label>
           <small id="manage-data" class="hidden"><a href="#">Edit data source</a></small>
         </div>
@@ -123,7 +122,6 @@
                 <div class="col-xs-12">
                   <label for="data-tags-fields-select" class="select-proxy-display">
                     <span class="icon fa fa-chevron-down"></span>
-                    <span class="select-value-proxy"></span>
                     <span id="data-tags-fields"></span>
                   </label>
                   <p class="help-block">Tags also work as filters. Multiple tags should be separated by commas <code>,</code>.</p>
@@ -146,7 +144,6 @@
               <div class="select-holder">
                 <label for="data-tags-fields-select" class="select-proxy-display">
                   <span class="icon fa fa-chevron-down"></span>
-                  <span class="select-value-proxy"></span>
                   <span id="data-alphabetical-fields"></span>
                 </label>
               </div>
@@ -230,7 +227,6 @@
                   <div class="col-sm-8">
                     <label for="data-tags-fields-select" class="select-proxy-display">
                       <span class="icon fa fa-chevron-down"></span>
-                      <span class="select-value-proxy"></span>
                       <span id="data-thumbnail-fields"></span>
                     </label>
                     <p class="help-block">Make sure the field contains an image file name <em>(eg.: image.jpg)</em> or full URL to an online image.</p>
@@ -423,24 +419,24 @@
 
 <!-- Templates -->
 <template id="data-type-selector-template">
-  <label class="select-proxy-display">
+  <label class="select-proxy-display minimal">
     <select class="hidden-select form-control">
       <optgroup label="Display as">
-      <option value="text">Text</option>
-      <option value="date">Date</option>
-      <option value="html">HTML</option>
-      <option value="image">Image</option>
-      <option value="accordion">Accordion</option>
+        <option value="text">Text</option>
+        <option value="date">Date</option>
+        <option value="html">HTML</option>
+        <option value="image">Image</option>
+        <option value="accordion">Accordion</option>
+        <!-- <option value="datetime">Date/time</option> -->
       <optgroup label="Link as">
-      <option value="tel">Phone number</option>
-      <option value="email">Email address</option>
-      <option value="url">Web address</option>
-      <option value="file">File</option>
-      <!-- <<option value="address">Address</option> -->
-      <!-- <option value="datetime">Date/time</option> -->
+        <option value="tel">Phone number</option>
+        <option value="email">Email address</option>
+        <option value="url">Web address</option>
+        <option value="file">File</option>
+        <!-- <<option value="address">Address</option> -->
+      </optgroup>
     </select>
     <span class="icon fa fa-chevron-down"></span>
-    <span class="select-value-proxy">Text</span>
   </label>
 </template>
 <!-- End of templates -->

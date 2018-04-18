@@ -46,7 +46,7 @@ var DataDirectoryForm = (function() {
     }
 
     if (typeof this.directoryConfig.enable_thumbs === 'undefined' && this.directoryConfig.thumbnail_field !== '') {
-      this.directoryConfig.enable_thumbs = true;
+      this.directoryConfig.enable_thumbs = false;
     }
 
     this.initialiseHandlebars();

@@ -1147,12 +1147,12 @@ DataDirectory.prototype.getEntryField = function(entryIndex, fieldIndex, type) {
     } else {
       if (this.config.field_types[label] === 'date') {
         value = moment(value).format("DD MMM YYYY");
-      } else if (this.config.field_types[label] === 'file' && Array.isArray(value)) {
-        value = value[0];
       }
 
       valueHTML = Handlebars.templates['directoryFieldType-' + fieldType](value);
     }
+  } else if (Array.isArray(value) && value.length && this.config.field_types[label] === 'file') {
+    valueHTML = Handlebars.templates['directoryFieldType-file'](value[0]);
   } else {
     valueHTML = '';
   }

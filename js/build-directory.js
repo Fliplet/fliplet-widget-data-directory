@@ -1202,10 +1202,10 @@ DataDirectory.prototype.renderSearchResult = function(options, callback) {
 
   this.switchMode('search-result');
   var data = {
-    has_thumbnail: this.config.show_thumb_list ? this.config.show_thumb_list : false,
+    has_thumbnail: (typeof this.config.enable_thumbs !== 'undefined' && typeof this.config.show_thumb_list !== 'undefined') ? !!this.config.enable_thumbs && !!this.config.show_thumb_list : false,
     thumbShape: this.config.thumbShape ? this.config.thumbShape : 'circular',
-    show_subtitle: this.config.show_subtitle ? this.config.show_subtitle : false,
-    show_tags: this.config.show_tags ? this.config.show_tags : false,
+    show_subtitle: typeof this.config.show_subtitle !== 'undefined' ? !!this.config.show_subtitle : false,
+    show_tags: typeof this.config.show_tags !== 'undefined' ? !!this.config.show_tags : false,
     type: options.type,
     result: []
   };

@@ -6,7 +6,8 @@
 }
 
 [data-fl-edit],
-[data-fl-edit] .fl-widget-instance {
+[data-fl-edit] .fl-widget-instance,
+.mode-interact .fl-widget-instance {
   position: static;
 }
 

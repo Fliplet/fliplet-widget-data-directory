@@ -615,7 +615,7 @@ DataDirectory.prototype.attachObservers = function() {
     // Analytics - Track Event
     Fliplet.Analytics.trackEvent({
       category: 'directory',
-      action: 'search'
+      action: 'search_activate'
     });
 
     _this.$container.find('.search').trigger('focus');
@@ -977,7 +977,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent) {
         Fliplet.Analytics.trackEvent({
           category: 'directory',
           action: 'entry_email',
-          title: title
+          label: title
         });
 
       } else if ($(e.target).attr("href").indexOf("tel") === 0) {
@@ -985,14 +985,14 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent) {
         Fliplet.Analytics.trackEvent({
           category: 'directory',
           action: 'entry_phone',
-          title: title
+          label: title
         });
       } else {
         // Analytics - Track Event
         Fliplet.Analytics.trackEvent({
           category: 'directory',
-          action: 'entry_email',
-          title: title
+          action: 'entry_url',
+          label: title
         });
       }
     });
@@ -1003,8 +1003,8 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent) {
       // Analytics - Track Event
       Fliplet.Analytics.trackEvent({
         category: 'directory',
-        action: 'entry_email',
-        title: filterType + ": " + filterValue
+        action: 'entry_filter',
+        label: filterType + ": " + filterValue
       });
     });
 
@@ -1046,7 +1046,7 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent) {
     Fliplet.Analytics.trackEvent({
       category: 'directory',
       action: 'entry_open',
-      title: title
+      label: title
     });
   }
 };
@@ -1226,7 +1226,7 @@ DataDirectory.prototype.renderSearchResult = function(options, callback) {
       Fliplet.Analytics.trackEvent({
         category: 'directory',
         action: 'filter',
-        title: options.type + ": " + options.value
+        label: options.type + ": " + options.value
       });
       break;
     case 'filter-value-tag':
@@ -1251,7 +1251,7 @@ DataDirectory.prototype.renderSearchResult = function(options, callback) {
       Fliplet.Analytics.trackEvent({
         category: 'directory',
         action: 'list_tag_filter',
-        title: options.type + ": " + options.value
+        label: options.type + ": " + options.value
       });
 
       break;
@@ -1265,7 +1265,7 @@ DataDirectory.prototype.renderSearchResult = function(options, callback) {
       Fliplet.Analytics.trackEvent({
         category: 'directory',
         action: 'search',
-        title: options.type + ": " + options.value
+        label: options.type + ": " + options.value
       });
 
       break;

@@ -940,6 +940,9 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent) {
     detailData['has_thumbnail'] = (typeof this.config.enable_thumbs !== 'undefined' && this.config.enable_thumbs && typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_detail ? this.config.show_thumb_detail : false);
     detailData['thumbShape'] = (typeof this.config.thumbShape !== 'undefined' && this.config.thumbShape ? this.config.thumbShape : 'circular');
     detailData['thumbnail'] = (type == 'search-result-entry') ? this.searchResultData[entryIndex][this.config.thumbnail_field] : this.data[entryIndex][this.config.thumbnail_field];
+    if (Fliplet.Media.authenticate) {
+      detailData['thumbnail'] = Fliplet.Media.authenticate(detailData['thumbnail']);
+    }
   }
 
   for (var fieldIndex = 0, l = this.config.detail_fields.length; fieldIndex < l; fieldIndex++) {

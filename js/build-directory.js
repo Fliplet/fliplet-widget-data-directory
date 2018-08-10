@@ -70,8 +70,11 @@ var DataDirectory = function(config, container) {
   this.entryOverlay = null;
   this.searchResultData = [];
   this.supportLiveSearch = true || this.data.length <= 500;
+  this.liveSearchTimeout = null;
   this.liveSearchInterval = 500;
-  this.currentEntry;
+  this.searchLogTimeout = null;
+  this.searchLogLimit = 1000;
+  this.currentEntry = null;
 
   this.checkMobileMode();
 
@@ -1175,6 +1178,7 @@ DataDirectory.prototype.renderLiveSearch = function(value) {
       _this.liveSearchTimeout = null;
     }
     _this.liveSearchTimeout = setTimeout(function() {
+      _this.liveSearchTimeout = null;
       _this.renderSearchResult({
         type: 'search',
         value: value
@@ -1184,6 +1188,7 @@ DataDirectory.prototype.renderLiveSearch = function(value) {
 };
 
 DataDirectory.prototype.renderSearchResult = function(options, callback) {
+  var _this = this;
   options = options || {};
 
   if (!options.hasOwnProperty('userTriggered')) {
@@ -1265,12 +1270,20 @@ DataDirectory.prototype.renderSearchResult = function(options, callback) {
       data.value = options.value;
       data.result = this.search(options.value);
 
-      // Analytics - Track Event
-      Fliplet.Analytics.trackEvent({
-        category: 'directory',
-        action: 'search',
-        label: options.type + ": " + options.value
-      });
+      if (this.searchLogTimeout) {
+        clearTimeout(this.searchLogTimeout);
+        this.searchLogTimeout = null;
+      }
+
+      this.searchLogTimeout = setTimeout(function () {
+        _this.searchLogTimeout = null;
+        // Analytics - Track Event
+        Fliplet.Analytics.trackEvent({
+          category: 'directory',
+          action: 'search',
+          label: options.value
+        });
+      }, this.searchLogLimit);
 
       break;
   }

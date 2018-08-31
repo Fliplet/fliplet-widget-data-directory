@@ -308,6 +308,9 @@ DataDirectory.prototype.initialiseHandlebars = function() {
     }
 
     if (/api\.fliplet\.(com|local)/.test(thumbnail)) {
+      // make sure images go through our CDN
+      thumbnail = thumbnail.replace('https://api.fliplet.com/', 'https://cdn.api.fliplet.com/');
+      
       // attach auth token
       thumbnail += (thumbnail.indexOf('?') === -1 ? '?' : '&') + 'auth_token=' + Fliplet.User.getAuthToken();
     }

@@ -310,7 +310,7 @@ DataDirectory.prototype.initialiseHandlebars = function() {
     if (/api\.fliplet\.(com|local)/.test(thumbnail)) {
       // make sure images go through our CDN
       thumbnail = thumbnail.replace('https://api.fliplet.com/', 'https://cdn.api.fliplet.com/');
-      
+
       // attach auth token
       thumbnail += (thumbnail.indexOf('?') === -1 ? '?' : '&') + 'auth_token=' + Fliplet.User.getAuthToken();
     }
@@ -1161,8 +1161,7 @@ DataDirectory.prototype.getEntryField = function(entryIndex, fieldIndex, type) {
       valueHTML = Handlebars.templates['directoryFieldType-' + fieldType](value);
     }
   } else if (Array.isArray(value) && value.length && this.config.field_types[label] === 'file') {
-    var url = Handlebars.templates['directoryFieldType-file'](value[0]);
-    valueHTML = Fliplet.Media.authenticate ? Fliplet.Media.authenticate(url) : url;
+    valueHTML = Handlebars.templates['directoryFieldType-file'](value[0]);
   } else {
     valueHTML = '';
   }

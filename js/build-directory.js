@@ -1161,7 +1161,8 @@ DataDirectory.prototype.getEntryField = function(entryIndex, fieldIndex, type) {
       valueHTML = Handlebars.templates['directoryFieldType-' + fieldType](value);
     }
   } else if (Array.isArray(value) && value.length && this.config.field_types[label] === 'file') {
-    valueHTML = Handlebars.templates['directoryFieldType-file'](value[0]);
+    var url = Handlebars.templates['directoryFieldType-file'](value[0]);
+    valueHTML = Fliplet.Media.authenticate ? Fliplet.Media.authenticate(url) : url;
   } else {
     valueHTML = '';
   }

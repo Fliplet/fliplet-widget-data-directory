@@ -106,7 +106,6 @@ table .checkbox label {
   padding: 10px 10px 0;
   margin-left: 25px;
   margin-top: 5px;
-  background-color: #d9e5e8;
   border-radius: 6px;
 }
 
@@ -130,8 +129,7 @@ table .checkbox label {
 .panel-default>.panel-heading {
   position: relative;
   cursor: pointer;
-  background-color: #e4e9eb;
-  border: 1px solid #e2e2e2;
+  border: 1px solid rgba(51, 51, 51, 0.1);
   padding: 10px 48px 10px 10px;
   border-radius: 0;
 }
@@ -152,8 +150,9 @@ table .checkbox label {
 
 .panel-default>.panel-heading+.panel-collapse>.panel-body {
   border: none;
-  border-right: 1px solid #e2e2e2;
-  border-bottom: 1px solid #e2e2e2;
-  border-left: 1px solid #e2e2e2;
+  border-right: 1px solid rgba(51, 51, 51, 0.1);
+  border-bottom: 1px solid rgba(51, 51, 51, 0.1);
+  border-left: 1px solid rgba(51, 51, 51, 0.1);
   padding: 15px 15px 0;
+  background-color: #f4f1f2;
 }

@@ -88,6 +88,13 @@ var DataDirectory = function(config, container) {
 
   if (folderID) {
     Fliplet.Media.Folders.get({ folderId: folderID }).then(function(response) {
+      
+      response.files.forEach(function (file) {
+        if (file.isEncrypted) {
+          file.url = Fliplet.Media.authenticate(file.url);
+        }
+      });
+      
       response.files.forEach(renderThumb);
       initialize();
     }, function onMediaFolderError(err) {

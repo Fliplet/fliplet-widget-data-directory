@@ -88,6 +88,13 @@ var DataDirectory = function(config, container) {
 
   if (folderID) {
     Fliplet.Media.Folders.get({ folderId: folderID }).then(function(response) {
+
+      response.files.forEach(function (file) {
+        if (file.isEncrypted) {
+          file.url = Fliplet.Media.authenticate(file.url);
+        }
+      });
+
       response.files.forEach(renderThumb);
       initialize();
     }, function onMediaFolderError(err) {
@@ -305,14 +312,6 @@ DataDirectory.prototype.initialiseHandlebars = function() {
     var base64Pattern = /^data:image\/[^;]+;base64,/i;
     if (!urlPattern.test(thumbnail) && !base64Pattern.test(thumbnail)) {
       return '';
-    }
-
-    if (/api\.fliplet\.(com|local)/.test(thumbnail)) {
-      // make sure images go through our CDN
-      thumbnail = thumbnail.replace('https://api.fliplet.com/', 'https://cdn.api.fliplet.com/');
-
-      // attach auth token
-      thumbnail += (thumbnail.indexOf('?') === -1 ? '?' : '&') + 'auth_token=' + Fliplet.User.getAuthToken();
     }
 
     return 'background-image:url('+thumbnail+')';

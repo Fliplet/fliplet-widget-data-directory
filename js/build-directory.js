@@ -1140,8 +1140,8 @@ DataDirectory.prototype.getEntryField = function(entryIndex, fieldIndex, type) {
     };
   }
 
-  var valueHTML;
-  if ((typeof value === 'object' && value && value.value && value.value.length) || (typeof value === 'string' && value.length) || (typeof value === 'number')) {
+  var valueHTML = '';
+  if ((typeof value === 'object' && value.value && value.value.length) || (typeof value === 'string' && value.length) || (typeof value === 'number')) {
     if (this.config.show_tags && this.config.tags_field === label && fieldType === 'filter') {
       valueHTML = splitByCommas(value.value).map(function(tag) {
         tag = tag.trim();
@@ -1159,11 +1159,19 @@ DataDirectory.prototype.getEntryField = function(entryIndex, fieldIndex, type) {
 
       valueHTML = Handlebars.templates['directoryFieldType-' + fieldType](value);
     }
-  } else if (Array.isArray(value) && value.length && this.config.field_types[label] === 'file') {
+  } else if (this.config.field_types[label] === 'file') {
+    if (!Array.isArray(value)) {
+      value = [value];
+    }
+
     var url = Handlebars.templates['directoryFieldType-file'](value[0]);
     valueHTML = Fliplet.Media.authenticate ? Fliplet.Media.authenticate(url) : url;
-  } else {
-    valueHTML = '';
+  } else if (this.config.field_types[label] === 'image') {
+    if (!Array.isArray(value)) {
+      value = [value];
+    }
+
+    valueHTML = Handlebars.templates['directoryFieldType-image'](Fliplet.Media.authenticate(value[0]));
   }
 
   return {

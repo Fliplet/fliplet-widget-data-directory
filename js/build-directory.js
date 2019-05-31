@@ -1102,7 +1102,7 @@ DataDirectory.prototype.getEntryField = function(entryIndex, fieldIndex, type) {
   var fieldType = 'text';
   var valueHTML = '';
 
-  if (typeof value === 'undefined') {
+  if (typeof value === 'undefined' || value === null) {
     return {
       'label': label,
       'value': ''

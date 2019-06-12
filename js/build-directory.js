@@ -1016,6 +1016,13 @@ DataDirectory.prototype.openDataEntry = function(entryIndex, type, trackEvent) {
       });
     });
 
+    if (_this.entryOverlay && _this.entryOverlay.overlayPanelContent) {
+      _this.entryOverlay.overlayPanelContent.scrollBy(0, 1);
+      setTimeout(function () {
+        _this.entryOverlay.overlayPanelContent.scrollBy(0, -1);
+      }, 0);
+    }
+
     // Custom event to fire after an entry is rendered in the detailed view.
     _this.trigger('flDirectoryEntryAfterRender', {
       detailData: detailData

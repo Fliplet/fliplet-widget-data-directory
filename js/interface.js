@@ -213,7 +213,7 @@ function save(notifyComplete) {
   dataDirectoryForm.directoryConfig.chatLinkAction = chatLinkAction;
   dataDirectoryForm.directoryConfig.addEntryLinkAction = addEntryLinkAction;
   dataDirectoryForm.directoryConfig.editEntryLinkAction = editEntryLinkAction;
-  dataDirectoryForm.directoryConfig.folder = filePickerData && !_.isEmpty(filePickerData) ? filePickerData : dataDirectoryForm.directoryConfig.folder;
+  dataDirectoryForm.directoryConfig.folder = filePickerData && !Fliplet.Utils.isEmpty(filePickerData) ? filePickerData : dataDirectoryForm.directoryConfig.folder;
 
   if (dataDirectoryForm.directoryConfig.enable_chat && (!dataDirectoryForm.directoryConfig.chatLinkAction || typeof dataDirectoryForm.directoryConfig.chatLinkAction.page === 'undefined' || dataDirectoryForm.directoryConfig.chatLinkAction.page === '')) {
     $('.alert.error').append('<p>- You need to select a Chat screen.</p>');

@@ -11,6 +11,7 @@
       "fliplet-core",
       "fliplet-media",
       "fliplet-datasources",
+      "fliplet-utils",
       "fliplet-studio-ui",
       "jquery",
       "jquery-ui",
@@ -29,6 +30,7 @@
     "dependencies": [
       "fliplet-core",
       "fliplet-media",
+      "fliplet-utils",
       "bootstrap-css",
       "jquery",
       "handlebars",

@@ -384,7 +384,7 @@ DataDirectory.prototype.sortEntries = function() {
     listData = this.data;
   } else {
     var attr = _this.config.alphabetical_field;
-    listData = _.sortBy(this.data, function (obj) {
+    listData = Fliplet.Utils.sortBy(this.data, function (obj) {
       obj[attr] = obj[attr] || '';
       var value = obj[attr].toString().toUpperCase();
       // Push all non-alphabetical values to after the 'z' character
@@ -511,7 +511,7 @@ DataDirectory.prototype.renderFilterValues = function(filter, inOverlay) {
       }
     });
 
-    values = _.sortBy(values);
+    values = Fliplet.Utils.sortBy(values);
   } else if (this.config.field_types[filter] === 'date') {
     var isMobile = Modernizr.mobile || Modernizr.tablet;
     var start_date;
@@ -738,7 +738,7 @@ DataDirectory.prototype.attachObservers = function() {
             return connection.removeById(entryId);
           })
           .then(function onRemove() {
-            _.remove(_this.data, function(entry) {
+            Fliplet.Utils.remove(_this.data, function(entry) {
               return entry.dataSourceEntryId === parseInt(entryId, 10);
             });
             _this.refreshDirectory();
@@ -1344,13 +1344,13 @@ DataDirectory.prototype.filter = function(field, value) {
   if (this.config.field_types[field] === 'date') {
     var startDate = value[0];
     var endDate = value[1];
-    var output = _.filter(this.data, function(o) {
+    var output = Fliplet.Utils.filter(this.data, function(o) {
       if (!o.hasOwnProperty(field) || !o[field]) {
         return false;
       }
       return moment(o[field]).isBetween(startDate, endDate, 'day', '[]');
     });
-    return _.sortBy(output, [function(o) {
+    return Fliplet.Utils.sortBy(output, [function(o) {
       return parseInt(moment(o[field]).format('x'));
     }]);
   }

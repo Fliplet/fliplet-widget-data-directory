@@ -12,11 +12,11 @@
       "fliplet-media",
       "fliplet-datasources",
       "fliplet-studio-ui",
+      "fliplet-utils",
       "jquery",
       "jquery-ui",
       "handlebars",
-      "bootstrap",
-      "lodash"
+      "bootstrap"
     ],
     "assets": [
       "js/interface-templates.js",
@@ -30,14 +30,14 @@
       "fliplet-core",
       "fliplet-media",
       "bootstrap-css",
+      "fliplet-utils",
       "jquery",
       "handlebars",
       "fliplet-datasources",
       "bootstrap",
       "font-awesome",
       "animate-css",
-      "moment",
-      "lodash"
+      "moment"
     ],
     "assets": [
       "vendor/jsonselect.js",

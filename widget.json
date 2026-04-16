@@ -16,8 +16,7 @@
       "jquery",
       "jquery-ui",
       "handlebars",
-      "bootstrap",
-      "lodash"
+      "bootstrap"
     ],
     "assets": [
       "js/interface-templates.js",
@@ -38,8 +37,7 @@
       "bootstrap",
       "font-awesome",
       "animate-css",
-      "moment",
-      "lodash"
+      "moment"
     ],
     "assets": [
       "vendor/jsonselect.js",

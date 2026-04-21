@@ -53,6 +53,12 @@
   },
   "references": [
     "source:dataSource",
-    "folder.selectFiles.$.id:mediaFolder"
+    "folder.selectFiles.$.id:mediaFolder",
+    "chatLinkAction.page:page",
+    "addEntryLinkAction.page:page",
+    "editEntryLinkAction.page:page",
+    "addEntry.dataSourceId:dataSource",
+    "editEntry.dataSourceId:dataSource",
+    "deleteEntry.dataSourceId:dataSource"
   ]
 }
